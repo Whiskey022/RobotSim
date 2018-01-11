@@ -10,7 +10,7 @@ public class Main extends Application{
 	
 	private int canvasSize = 512;
 	private int robotSize = 40;
-    private RobotArena robotArena;
+	private RobotArena robotArena;
     private RobotCanvasGroup robotCanvas;
 
 	public static void main(String[] args) {
@@ -27,8 +27,8 @@ public class Main extends Application{
 		BorderPane bp = new BorderPane();
 		
 		bp.setTop(new TopMenu().getMenuBar());
-	    bp.setCenter(robotCanvas.getGroup());		// put group in centre pane
-	    bp.setBottom(new BottomMenu(robotArena, robotCanvas).getMenuBar());					/// add button to bottom
+		bp.setCenter(robotCanvas.getGroup());		// put group in centre pane
+		bp.setBottom(new BottomMenu(robotArena, robotCanvas).getMenuBar());					/// add button to bottom
 		
 		Scene scene = new Scene(bp, canvasSize*1.4, canvasSize*1.2);
 		primaryStage.setScene(scene);

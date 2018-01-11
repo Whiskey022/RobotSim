@@ -39,11 +39,11 @@ public class RobotCanvasGroup {
 		this.robotSize = robotSize;
 		
 		root = new Group();
-	    canvas = new Canvas(canvasWidth, canvasHeight);
-	    root.getChildren().add(canvas);
-	    gc = canvas.getGraphicsContext2D();
-	    gc.setStroke(Color.BLACK);
-	    gc.strokeRect(0, 0, canvasWidth, canvasHeight);
+		canvas = new Canvas(canvasWidth, canvasHeight);
+		root.getChildren().add(canvas);
+		gc = canvas.getGraphicsContext2D();
+		gc.setStroke(Color.BLACK);
+		gc.strokeRect(0, 0, canvasWidth, canvasHeight);
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class RobotCanvasGroup {
    	public void drawRobots(Robot[] robots, int robotsCounter) {
    		gc.clearRect(0,  0,  canvasWidth,  canvasHeight);		// clear canvas
    		gc.setStroke(Color.BLACK);
-	    gc.strokeRect(0, 0, canvasWidth, canvasHeight);
+   		gc.strokeRect(0, 0, canvasWidth, canvasHeight);
    		for (int i=0; i<robotsCounter; i++) {
    			drawIt(robotImages[robots[i].getImageIndex()],
    					robots[i].getX()*robotSize,
@@ -122,15 +122,15 @@ public class RobotCanvasGroup {
 					robotSize);		 
    	}
    	
-   	/**
-     * drawIt ... draws object defined by given image at position and size
-     * @param i		image
-     * @param x		xposition
-     * @param y		yposition
-     * @param sz	size
-     */
+	/**
+	 * drawIt ... draws object defined by given image at position and size
+	 * @param i		image
+	 * @param x		xposition
+	 * @param y		yposition
+	 * @param sz	size
+	 */
 	private void drawIt (Image i, double x, double y, double sz) {
-			// to draw centred at x,y, give top left position and x,y size
+		// to draw centred at x,y, give top left position and x,y size
 		gc.drawImage(i, x - sz/2, y - sz/2, sz, sz);
 	}
 	
