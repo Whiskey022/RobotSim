@@ -11,7 +11,7 @@ public class Main extends Application{
 	private int canvasSize = 512;
 	private int robotSize = 40;
 	private RobotArena robotArena;
-    private RobotCanvasGroup robotCanvas;
+	private RobotCanvasGroup robotCanvas;
 
 	public static void main(String[] args) {
 		launch(args);

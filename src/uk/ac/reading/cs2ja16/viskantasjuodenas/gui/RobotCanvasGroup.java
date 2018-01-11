@@ -85,7 +85,7 @@ public class RobotCanvasGroup {
 	    			drawRobot(robots[i], currentNanoTime, startNanoTime, this);
 		   		}
 	    	}
-	    }.start();;
+	    }.start();
    	}
    	
    	
