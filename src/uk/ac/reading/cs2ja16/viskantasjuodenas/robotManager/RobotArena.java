@@ -1,7 +1,6 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
 import java.util.Random;
-import java.util.Scanner;
 
 public class RobotArena {
 
@@ -29,7 +28,11 @@ public class RobotArena {
 		}
 	}
 
-	public void addRobot() {
+	/**
+	 * Adds a new robot at random location with random image index
+	 * @param	robotImagesCount	Provide the count of how many robot images there are available to calculate a random image index
+	 */
+	public void addRobot(int robotImagesCount) {
 		if (robotsCounter >= maxRobots) {
 			System.out.println("ERROR: robots count has already reached max capacity");
 		} else {
@@ -55,7 +58,7 @@ public class RobotArena {
 
 				// If position not taken, add robot there
 				if (!posTaken) {
-					robots[robotsCounter] = new Robot(rx, ry, Direction.getRandomDirection(), this);
+					robots[robotsCounter] = new Robot(rx, ry, Direction.getRandomDirection(), this, rand.nextInt(robotImagesCount));
 					robotAdded = true;
 					robotsCounter++;
 				}
@@ -71,12 +74,6 @@ public class RobotArena {
 		}
 
 		return res;
-	}
-
-	public void showRobots(RobotInterface r) {
-		for (int i = 0; i < robotsCounter; i++) {
-			robots[i].displayRobot(r);
-		}
 	}
 
 	//Function to check if robot can mvove into position
@@ -163,29 +160,5 @@ public class RobotArena {
 		}
 		
 		return details;
-	}
-
-	public static void main(String[] args) {
-
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Provide arena's size and robots amount limit (as x y limit) >");
-
-		int width = scanner.nextInt();
-		int height = scanner.nextInt();
-		int maxRobots = scanner.nextInt();
-
-		RobotArena robotArena = new RobotArena(width, height, maxRobots);
-
-		System.out.println("How many robots to add? >");
-
-		int count = scanner.nextInt();
-
-		for (int i = 0; i < count; i++) {
-			robotArena.addRobot();
-		}
-
-		System.out.println(robotArena.toString());
-
-		scanner.close();
 	}
 }
