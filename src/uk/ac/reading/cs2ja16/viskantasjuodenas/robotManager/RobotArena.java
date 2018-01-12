@@ -8,10 +8,6 @@ public class RobotArena {
 	private int maxRobots;
 	private Robot[] robots;
 	private int robotsCounter = 0;
-	private boolean startMoving = false;
-	private boolean areMoving = false;
-	private boolean continuousMode = false;
-	private boolean areDrawn = false;
 	private String status = "stop";
 
 	/**
@@ -135,22 +131,6 @@ public class RobotArena {
 		this.robotsCounter = robotsCounter;
 	}
 	
-	public void setStartMoving(boolean startMoving) {
-		this.startMoving = startMoving;
-	}
-	
-	public void setAreMoving(boolean areMoving) {
-		this.areMoving = areMoving;
-	}
-	
-	public void setContinuousMode(boolean continuousMode) {
-		this.continuousMode = continuousMode;
-	}
-
-	public void setAreDrawn(boolean areDrawn) {
-		this.areDrawn = areDrawn;
-	}
-	
 	public void setStatus(String status) {
 		this.status = status;
 	}
@@ -173,22 +153,6 @@ public class RobotArena {
 
 	public int getRobotsCounter() {
 		return robotsCounter;
-	}
-	
-	public boolean getStartMoving(){
-		return startMoving;
-	}
-	
-	public boolean getAreMoving() {
-		return areMoving;
-	}
-	
-	public boolean getContinuousMode() {
-		return continuousMode;
-	}
-	
-	public boolean getAreDrawn() {
-		return areDrawn;
 	}
 	
 	public String getStatus() {

@@ -9,8 +9,7 @@ import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 public class BottomMenu {
 	
 	private HBox menuBox;
-	private RobotArena robotArena;
-	private RobotCanvasGroup robotCanvas;
+	private RobotArena robotArena;	
 	
 	/**
 	 * BottomMenu constructor, sets up a box of buttons
@@ -19,7 +18,6 @@ public class BottomMenu {
 	 */
 	BottomMenu(RobotArena robotArena, RobotCanvasGroup robotCanvas) {
 		this.robotArena= robotArena;
-		this.robotCanvas = robotCanvas;
 		
 		menuBox = setButtons();
 	}
@@ -36,8 +34,7 @@ public class BottomMenu {
     	randomRobotBtn.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
-    			robotArena.addRobot(robotCanvas.getRobotImages().length);
-    			robotArena.setStatus("not-drawn");
+    			robotArena.setStatus("add-robot");
     		}
     	});
     	

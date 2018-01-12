@@ -47,8 +47,7 @@ public class RobotCanvasGroup {
 		root.getChildren().add(canvas);
 		gc = canvas.getGraphicsContext2D();
 		gc.setStroke(Color.BLACK);
-		gc.strokeRect(0, 0, canvasWidth, canvasHeight);
-		
+   		gc.strokeRect(15, 15, canvasWidth-20, canvasHeight-20);
 		
 		animateRobots();
 	}
@@ -64,10 +63,11 @@ public class RobotCanvasGroup {
    		
 	    //Drawing animation
 	    new AnimationTimer() {
-	    	public void handle(long currentNanoTime) {
+	    	public void handle(long l) {
 	    		
 	    		switch(robotArena.getStatus()) {
-	    			case "not-drawn":
+	    			case "add-robot":
+	    				robotArena.addRobot(robotImages.length);
 	    				drawRobots();
 	    				break;
 	    			case "move-once":
@@ -209,9 +209,9 @@ public class RobotCanvasGroup {
    	 *  Reset canvas and stroke
    	 */
    	public void resetCanvas() {
-   		gc.clearRect(0,  0,  canvasWidth,  canvasHeight);		// clear canvas
+   		gc.clearRect(0,  0,  canvasWidth, canvasHeight);		// clear canvas
    		gc.setStroke(Color.BLACK);
-   		gc.strokeRect(0, 0, canvasWidth, canvasHeight);
+   		gc.strokeRect(15, 15, canvasWidth-20, canvasHeight-20);
    	}
 	
 	/**
