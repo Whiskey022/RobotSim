@@ -8,6 +8,11 @@ public class RobotArena {
 	private int maxRobots;
 	private Robot[] robots;
 	private int robotsCounter = 0;
+	private boolean startMoving = false;
+	private boolean areMoving = false;
+	private boolean continuousMode = false;
+	private boolean areDrawn = false;
+	private String status = "stop";
 
 	/**
 	 * RobotArena constructor
@@ -100,8 +105,13 @@ public class RobotArena {
 
 	//Try to move every robot
 	public void moveAllRobots() {
-		for (int i = 0; i < robotsCounter; i++) {
-			robots[i].tryToMove();
+		int countOfRobotsMoved = 0;
+		while (countOfRobotsMoved == 0) {
+			for (int i = 0; i < robotsCounter; i++) {
+				if (robots[i].tryToMove()) {
+					countOfRobotsMoved++;
+				}
+			}
 		}
 	}
 	
@@ -124,7 +134,27 @@ public class RobotArena {
 	public void setRobotsCounter(int robotsCounter) {
 		this.robotsCounter = robotsCounter;
 	}
+	
+	public void setStartMoving(boolean startMoving) {
+		this.startMoving = startMoving;
+	}
+	
+	public void setAreMoving(boolean areMoving) {
+		this.areMoving = areMoving;
+	}
+	
+	public void setContinuousMode(boolean continuousMode) {
+		this.continuousMode = continuousMode;
+	}
 
+	public void setAreDrawn(boolean areDrawn) {
+		this.areDrawn = areDrawn;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 	public int getXSize() {
 		return x;
 	}
@@ -143,6 +173,26 @@ public class RobotArena {
 
 	public int getRobotsCounter() {
 		return robotsCounter;
+	}
+	
+	public boolean getStartMoving(){
+		return startMoving;
+	}
+	
+	public boolean getAreMoving() {
+		return areMoving;
+	}
+	
+	public boolean getContinuousMode() {
+		return continuousMode;
+	}
+	
+	public boolean getAreDrawn() {
+		return areDrawn;
+	}
+	
+	public String getStatus() {
+		return status;
 	}
 	
 	//Convert all arena details to a string for saving into file

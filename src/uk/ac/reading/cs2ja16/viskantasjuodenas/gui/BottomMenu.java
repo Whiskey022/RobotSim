@@ -37,21 +37,38 @@ public class BottomMenu {
     		@Override
     		public void handle(ActionEvent event) {
     			robotArena.addRobot(robotCanvas.getRobotImages().length);
-    			robotCanvas.drawRobots(robotArena.getRobots(), robotArena.getRobotsCounter());
+    			robotArena.setStatus("not-drawn");
     		}
     	});
     	
-    	//"Button for moving robots
+    	//Button for moving robots only one position
+    	Button moveRobotsOnceBtn = new Button("Move Robots Once");
+    	moveRobotsOnceBtn.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent event) {
+    			robotArena.setStatus("move-once");
+    		}
+    	});
+    	
+    	//Button for moving robots continuously
     	Button moveRobotsBtn = new Button("Move Robots");
     	moveRobotsBtn.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
-    			robotArena.moveAllRobots();
-    			robotCanvas.moveRobots(robotArena.getRobots(), robotArena.getRobotsCounter());
+    			robotArena.setStatus("move-continuous");
     		}
     	});
     	
-    	menuBox.getChildren().addAll(randomRobotBtn, moveRobotsBtn);
+    	//Button to stop robots moving continuously
+    	Button stopRobotsBtn = new Button("Stop Robots");
+    	stopRobotsBtn.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent event) {
+    			robotArena.setStatus("stop-movement");
+    		}
+    	});
+    	
+    	menuBox.getChildren().addAll(randomRobotBtn, moveRobotsOnceBtn, moveRobotsBtn, stopRobotsBtn);
     	return menuBox;
     }
    	

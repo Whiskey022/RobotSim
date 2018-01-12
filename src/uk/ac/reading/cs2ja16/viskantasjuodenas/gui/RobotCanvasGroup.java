@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.Robot;
+import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 
 public class RobotCanvasGroup {
 	
@@ -15,7 +16,9 @@ public class RobotCanvasGroup {
 	private int canvasWidth;
 	private int canvasHeight;
 	private int robotSize;
+	private RobotArena robotArena;
 	private GraphicsContext gc;
+	private double step;
 	private Image[] robotImages = {
     		new Image(getClass().getResourceAsStream("robot_01.png")),
     		new Image(getClass().getResourceAsStream("robot_02.png")),
@@ -33,10 +36,11 @@ public class RobotCanvasGroup {
 	 * @param	canvasWidth		canvas width
 	 * @param	canvasHeight	canvas height
 	 */
-	RobotCanvasGroup(int canvasWidth, int canvasHeight, int robotSize) {
+	RobotCanvasGroup(int canvasWidth, int canvasHeight, int robotSize, RobotArena robotArena) {
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
 		this.robotSize = robotSize;
+		this.robotArena = robotArena;
 		
 		root = new Group();
 		canvas = new Canvas(canvasWidth, canvasHeight);
@@ -44,50 +48,101 @@ public class RobotCanvasGroup {
 		gc = canvas.getGraphicsContext2D();
 		gc.setStroke(Color.BLACK);
 		gc.strokeRect(0, 0, canvasWidth, canvasHeight);
+		
+		
+		animateRobots();
 	}
-	
-	/**
-   	 *  Draw robots
-   	 *  @param	robots	array of robots
-   	 *  @param	robotsCounter	count of robots added
-   	 */
-   	public void drawRobots(Robot[] robots, int robotsCounter) {
-   		gc.clearRect(0,  0,  canvasWidth,  canvasHeight);		// clear canvas
-   		gc.setStroke(Color.BLACK);
-   		gc.strokeRect(0, 0, canvasWidth, canvasHeight);
-   		for (int i=0; i<robotsCounter; i++) {
-   			drawIt(robotImages[robots[i].getImageIndex()],
-   					robots[i].getX()*robotSize,
-   					robots[i].getY()*robotSize,
-   					robotSize);
-   		}
-   	}
    	
    	/**
    	 *  Move robots by drawing them with animation
    	 *  @param	robots	array of robots to move
    	 *  @param	robotsCounter	robot count
    	 */
-   	public void moveRobots(Robot[] robots, int robotsCounter) {	   
-   		//Drawing start time
-	    final long startNanoTime = System.nanoTime();
-	    
+   	public void animateRobots() {	      		
+   		//Starting movement step
+   		step = 0.0;
+   		
 	    //Drawing animation
 	    new AnimationTimer() {
 	    	public void handle(long currentNanoTime) {
-	    		// clear canvas and reset stroke
-	       		gc.clearRect(0,  0,  canvasWidth,  canvasHeight);
-	       		gc.setStroke(Color.BLACK);
-	    	    gc.strokeRect(0, 0, canvasWidth, canvasHeight);
-	    	    
-	    	    //Loop to draw all robots
-	    		for (int i=0; i<robotsCounter; i++) {
-	    			drawRobot(robots[i], currentNanoTime, startNanoTime, this);
-		   		}
+	    		
+	    		switch(robotArena.getStatus()) {
+	    			case "not-drawn":
+	    				drawRobots();
+	    				break;
+	    			case "move-once":
+	    			case "move-continuous":
+	    				moveRobots();
+	    				break;
+	    			case "draw-movement":
+	    			case "draw-movement-continuous":
+	    			case "stop-movement":
+	    				animateMovingRobots();
+	    				break;
+    				default:
+    					break;
+	    		}
 	    	}
 	    }.start();
    	}
    	
+   	/**
+   	 * Draw standing robots
+   	 */
+   	private void drawRobots() {
+   		resetCanvas();
+   		//Draw each robot
+   		for (int i=0; i<robotArena.getRobotsCounter(); i++) {
+   			Robot robot = robotArena.getRobots()[i];
+	   		drawIt(robotImages[robot.getImageIndex()],
+						robot.getX()*robotSize,
+						robot.getY()*robotSize,
+						robotSize);
+   		}
+   		//Set areDrawn to true
+		robotArena.setStatus("stand");
+   	}
+   	
+   	/**
+   	 * Start moving robots
+   	 */
+   	private void moveRobots() {
+   		robotArena.moveAllRobots();
+   		if(robotArena.getStatus() == "move-once") {
+   			robotArena.setStatus("draw-movement");
+   		} else {
+   			robotArena.setStatus("draw-movement-continuous");
+   		}
+   	}
+   	
+   	/**
+   	 * Draw moving robots
+   	 */
+   	private void animateMovingRobots() {
+   		boolean positionReached = false;
+		step += 0.02;
+		
+		// clear canvas and reset stroke
+   		resetCanvas();
+	    
+	    //Loop to draw all robots
+		for (int i=0; i<robotArena.getRobotsCounter(); i++) {
+			if(drawMovingRobot(robotArena.getRobots()[i], step)) {
+				positionReached = true;
+			}
+   		}
+		
+		// If position reached
+		if (positionReached) {
+			if (robotArena.getStatus() == "draw-movement-continuous") {		//If move continuous, move robots again and reset movement step  
+				robotArena.moveAllRobots();
+    			step = 0.0;
+			} else {					//Else, stop animation
+				robotArena.setStatus("stop");
+    			step = 0.0;
+			}
+		}
+   	}
    	
    	/**
    	 * Function to draw robot moving animation
@@ -96,43 +151,68 @@ public class RobotCanvasGroup {
    	 * @param startNanoTime	time when started drawing
    	 * @param self	AnimationTimer object
    	 */
-   	private void drawRobot(Robot robot, long currentNanoTime, long startNanoTime, AnimationTimer self) {
+   	private boolean drawMovingRobot(Robot robot, double step) {
+   		//Boolean to check if robot already reached his position
+   		boolean positionReached = false;
    		
    		int oldX = robot.getOldX(), oldY = robot.getOldY();		//Previous coordinates
    		int newX = robot.getX(), newY = robot.getY();			//New coordinates
    		double xToDraw, yToDraw;								//Coordinates to draw at
    		
-   		//If robot has moved to new coordinates, calculate coordinates for drawing
-		if (robot.getRobotMoved()) {
-			xToDraw = oldX + (newX - oldX) * (currentNanoTime - startNanoTime) / 1000000000.0;
-			yToDraw = oldY + (newY - oldY) * (currentNanoTime - startNanoTime) / 1000000000.0;
-			//Stop if drawn coordinates are already very close to the robot's new coordinates
-			if (Math.abs(xToDraw - newX) < 0.05 && Math.abs(yToDraw - newY) < 0.05) {
-				self.stop();
-			}    				
-		} else {		//Else no need to calculate animations
-			xToDraw = newX;
-			yToDraw = newY;
-		}
+   		if (robot.getDidMove()) {
+	   		//If robot has moved to new coordinates, calculate coordinates for drawing
+			xToDraw = oldX + (newX - oldX) * step;
+			yToDraw = oldY + (newY - oldY) * step;
+			System.out.println(step + " " + newX + " ; " + oldX);
+			
+			//Check if coordinates reached
+			if (coordinateReached(xToDraw, newX) && coordinateReached(yToDraw, newY)) {
+				positionReached = true;
+			}
+   		} else {
+   			xToDraw = newX;
+   			yToDraw = newY;
+   		}
 		
 		//Draw robot
 		drawIt(robotImages[robot.getImageIndex()],
 					xToDraw * robotSize,
 					yToDraw * robotSize,
-					robotSize);		 
+					robotSize);
+		
+		return positionReached;
+   	}
+   	
+   	/**
+   	 * Function to check if coordinates are pretty much reached
+   	 * @param posToDraw	coordinate on which the object is being drawn (which keeps changing)
+   	 * @param posToReach	coordinate to reach
+   	 * @return	true if coordinate reached or if distance starts to increase
+   	 */
+   	private boolean coordinateReached(double posToDraw, int posToReach) {
+   		return Math.abs(posToDraw - posToReach) < 0.02 || Math.abs(posToDraw - posToReach) > 1;
    	}
    	
 	/**
 	 * drawIt ... draws object defined by given image at position and size
 	 * @param i		image
-	 * @param x		xposition
-	 * @param y		yposition
+	 * @param x		x position
+	 * @param y		y position
 	 * @param sz	size
 	 */
 	private void drawIt (Image i, double x, double y, double sz) {
 		// to draw centred at x,y, give top left position and x,y size
 		gc.drawImage(i, x - sz/2, y - sz/2, sz, sz);
 	}
+	
+	/**
+   	 *  Reset canvas and stroke
+   	 */
+   	public void resetCanvas() {
+   		gc.clearRect(0,  0,  canvasWidth,  canvasHeight);		// clear canvas
+   		gc.setStroke(Color.BLACK);
+   		gc.strokeRect(0, 0, canvasWidth, canvasHeight);
+   	}
 	
 	/**
 	 * @return	Group object of the canvas

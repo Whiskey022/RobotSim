@@ -9,7 +9,7 @@ public class Robot {
 	private Direction direction;
 	private RobotArena robotArena;
 	private int imageIndex;
-	private boolean robotMoved = false;
+	private boolean didMove = false;
 
 	/**
 	 * Robot constructor, sets up his location, direction, robotArena, Id, and imageIndex
@@ -52,7 +52,7 @@ public class Robot {
 	}
 
 	//Function to move
-	public void tryToMove() {
+	public boolean tryToMove() {
 		int nextX = x, nextY = y;
 		//Set next coordinates
 		switch (direction) {
@@ -75,10 +75,12 @@ public class Robot {
 			oldY = y;
 			x = nextX;
 			y = nextY;
-			robotMoved = true;
+			didMove = true;
+			return true;
 		} else {	//Otherwise, set direction to random
 			direction = direction.getNextDirection();
-			robotMoved = false;
+			didMove = false;
+			return false;
 		}
 	}
 	
@@ -138,7 +140,7 @@ public class Robot {
 		return imageIndex;
 	}
 	
-	public boolean getRobotMoved() {
-		return robotMoved;
+	public boolean getDidMove() {
+		return didMove;
 	}
 }
