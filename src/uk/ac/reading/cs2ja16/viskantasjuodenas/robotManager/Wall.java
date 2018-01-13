@@ -4,14 +4,18 @@ import javafx.scene.image.Image;
 
 public class Wall extends ArenaObject{
 	
-	Wall(int x, int y, RobotArena robotArena) {
+	private Image wallImage = new Image(getClass().getResourceAsStream("wall.png"));
+	
+	public Wall(int x, int y, RobotArena robotArena) {
 		this.x = x;
 		this.y = y;
 		this.robotArena = robotArena;
-		this.image = new Image(getClass().getResourceAsStream("wall.png"));
+		this.image = wallImage;
 		countId();
 	}
 
+	public Wall(){}
+	
 	@Override
 	public boolean tryToMove() {
 		// TODO Auto-generated method stub
@@ -22,5 +26,9 @@ public class Wall extends ArenaObject{
 	public boolean getDidMove() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public Image getImage() {
+		return wallImage;
 	}
 }

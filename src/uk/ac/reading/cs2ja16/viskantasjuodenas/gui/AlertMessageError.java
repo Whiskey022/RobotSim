@@ -7,7 +7,7 @@ public class AlertMessageError extends AlertMessage{
 	
 	private String content;
 	
-	AlertMessageError(String content){
+	public AlertMessageError(String content){
 		this.content = content;
 	}
 	

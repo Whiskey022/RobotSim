@@ -19,7 +19,7 @@ public class Robot extends ArenaObject {
 	 * @param	robotArena	robotArena the robot belongs to	
 	 * @param	imageIndex	robot's image index, stored to have a consistent image
 	 */
-	Robot(int x, int y, Direction direction, RobotArena robotArena, Image image) {
+	public Robot(int x, int y, Direction direction, RobotArena robotArena, Image image) {
 		this.initialX = x;
 		this.initialY = y;
 		this.x = x;

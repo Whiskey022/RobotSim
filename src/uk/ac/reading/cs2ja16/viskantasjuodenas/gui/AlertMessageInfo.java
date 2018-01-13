@@ -8,12 +8,12 @@ public class AlertMessageInfo extends AlertMessage{
 	private String content;
 	private String title = "Information";
 	
-	AlertMessageInfo(String title, String content) {
+	public AlertMessageInfo(String title, String content) {
 		this.title = title;
 		this.content = content;
 	}
 	
-	AlertMessageInfo(String content) {
+	public AlertMessageInfo(String content) {
 		this.content = content;
 	}
 	
