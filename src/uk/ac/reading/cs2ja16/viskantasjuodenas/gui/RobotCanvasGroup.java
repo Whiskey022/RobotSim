@@ -1,7 +1,5 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
-import java.util.ArrayList;
-
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
