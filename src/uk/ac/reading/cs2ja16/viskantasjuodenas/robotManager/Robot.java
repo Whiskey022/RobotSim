@@ -1,5 +1,7 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
+import javafx.scene.image.Image;
+
 public class Robot {
 
 	private int x, y;
@@ -8,7 +10,7 @@ public class Robot {
 	private int robotId;
 	private Direction direction;
 	private RobotArena robotArena;
-	private int imageIndex;
+	private Image image;
 	private boolean didMove = false;
 
 	/**
@@ -19,12 +21,12 @@ public class Robot {
 	 * @param	robotArena	robotArena the robot belongs to	
 	 * @param	imageIndex	robot's image index, stored to have a consistent image
 	 */
-	Robot(int x, int y, Direction direction, RobotArena robotArena, int imageIndex) {
+	Robot(int x, int y, Direction direction, RobotArena robotArena, Image image) {
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
 		this.robotArena = robotArena;
-		this.imageIndex = imageIndex;
+		this.image = image;
 		// Setting robot ID
 		robotsCount++;
 		robotId = robotsCount;
@@ -136,8 +138,8 @@ public class Robot {
 		return robotArena;
 	}
 	
-	public int getImageIndex() {
-		return imageIndex;
+	public Image getImage() {
+		return image;
 	}
 	
 	public boolean getDidMove() {

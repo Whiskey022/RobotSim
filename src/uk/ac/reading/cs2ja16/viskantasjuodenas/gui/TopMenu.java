@@ -25,10 +25,17 @@ public class TopMenu {
 	 */
 	private MenuBar setMenu() {
 		MenuBar menuBar = new MenuBar();		// create menu
+		
+		Menu mFile = new Menu("File");
+		MenuItem mExit = new MenuItem("Exit");
+		mExit.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent t) {
+		        System.exit(0);						// quit program
+		    }
+		});
+		mFile.getItems().addAll(mExit);
 
-		Menu mHelp = new Menu("Help");			// have entry for help
-				// then add sub menus for About and Help
-				// add the item and then the action to perform
+		Menu mHelp = new Menu("Help");
 		MenuItem mAbout = new MenuItem("About");
 		mAbout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -43,21 +50,11 @@ public class TopMenu {
             	showHelp();
             }	
 		});
-		mHelp.getItems().addAll(mAbout, miHelp); 	// add submenus to Help
+		mHelp.getItems().addAll(mAbout, miHelp); 	// add submenus to Help	
 		
-				// now add File menu, which here only has Exit
-		Menu mFile = new Menu("File");
-		MenuItem mExit = new MenuItem("Exit");
-		mExit.setOnAction(new EventHandler<ActionEvent>() {
-		    public void handle(ActionEvent t) {
-		        System.exit(0);						// quit program
-		    }
-		});
-		mFile.getItems().addAll(mExit);
+		menuBar.getMenus().addAll(mFile, mHelp);
 		
-		menuBar.getMenus().addAll(mFile, mHelp);	// menu has File and Help
-		
-		return menuBar;					// return the menu, so can be added
+		return menuBar;
 	}
 	
 	

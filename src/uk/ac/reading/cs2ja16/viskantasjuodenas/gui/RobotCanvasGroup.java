@@ -19,17 +19,6 @@ public class RobotCanvasGroup {
 	private RobotArena robotArena;
 	private GraphicsContext gc;
 	private double step;
-	private Image[] robotImages = {
-    		new Image(getClass().getResourceAsStream("robot_01.png")),
-    		new Image(getClass().getResourceAsStream("robot_02.png")),
-    		new Image(getClass().getResourceAsStream("robot_03.png")),
-    		new Image(getClass().getResourceAsStream("robot_04.png")),
-    		new Image(getClass().getResourceAsStream("robot_05.png")),
-    		new Image(getClass().getResourceAsStream("robot_06.png")),
-    		new Image(getClass().getResourceAsStream("robot_07.png")),
-    		new Image(getClass().getResourceAsStream("robot_08.png")),
-    		new Image(getClass().getResourceAsStream("robot_09.png")),
-    		};
 	
 	/**
 	 * RobotCanvas constructor, sets up a new canvas
@@ -67,7 +56,7 @@ public class RobotCanvasGroup {
 	    		
 	    		switch(robotArena.getStatus()) {
 	    			case "add-robot":
-	    				robotArena.addRobot(robotImages.length);
+	    				robotArena.addRobot();
 	    				drawRobots();
 	    				break;
 	    			case "move-once":
@@ -94,7 +83,7 @@ public class RobotCanvasGroup {
    		//Draw each robot
    		for (int i=0; i<robotArena.getRobotsCounter(); i++) {
    			Robot robot = robotArena.getRobots()[i];
-	   		drawIt(robotImages[robot.getImageIndex()],
+	   		drawIt(robot.getImage(),
 						robot.getX()*robotSize,
 						robot.getY()*robotSize,
 						robotSize);
@@ -175,7 +164,7 @@ public class RobotCanvasGroup {
    		}
 		
 		//Draw robot
-		drawIt(robotImages[robot.getImageIndex()],
+		drawIt(robot.getImage(),
 					xToDraw * robotSize,
 					yToDraw * robotSize,
 					robotSize);
@@ -226,12 +215,5 @@ public class RobotCanvasGroup {
 	 */
 	public Canvas getCanvas() {
 		return canvas;
-	}
-	
-	/**
-	 * @return	Image array for robots
-	 */
-	public Image[] getRobotImages() {
-		return robotImages;
 	}
 }
