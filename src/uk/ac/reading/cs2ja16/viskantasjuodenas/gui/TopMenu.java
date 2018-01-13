@@ -2,11 +2,9 @@ package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Alert.AlertType;
 
 public class TopMenu {
 	
@@ -40,50 +38,19 @@ public class TopMenu {
 		mAbout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-            	showAbout();				// show the about message
             }	
 		});
 		MenuItem miHelp = new MenuItem("Help");
 		miHelp.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-            	showHelp();
             }	
 		});
-		mHelp.getItems().addAll(mAbout, miHelp); 	// add submenus to Help	
+		mHelp.getItems().addAll(mAbout, miHelp); 	// add sub-menus to Help	
 		
 		menuBar.getMenus().addAll(mFile, mHelp);
 		
 		return menuBar;
-	}
-	
-	
-	/**
-	 * "Show About" message
-	 */
-	private void showAbout() {
-		showMessage("About", "RJM's BorderPane Demonstrator");
-	}
-	
-	/**
-	 * "Show Help" message
-	 */
-	private void showHelp() {
-		showMessage("Help", "Press Random Earth to draw an Earth at a random angle, or click on canvas to draw Earth there");
-	}
-	
-	/**
-	 * Sets up an alert message
-	 * @param	TStr	alert message title
-	 * @param	CStr	alert message content
-	 */
-	private void showMessage(String TStr, String CStr) {
-	    Alert alert = new Alert(AlertType.INFORMATION);
-	    alert.setTitle(TStr);
-	    alert.setHeaderText(null);
-	    alert.setContentText(CStr);
-
-	    alert.showAndWait();
 	}
 	
 	/**

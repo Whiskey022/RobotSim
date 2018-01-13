@@ -35,17 +35,18 @@ public class RobotArena {
 	 * Adds a new robot at random location with random image index
 	 * @param	robotImagesCount	Provide the count of how many robot images there are available to calculate a random image index
 	 */
-	public void addRobot() {
+	public String addRobot() {
 		if (robotsCounter >= maxRobots) {
 			System.out.println("ERROR: robots count has already reached max capacity");
+			return "Robot count already reached max capacity";
 		} else {
 			// Initialise some values for adding a robot
 			Random rand = new Random();
 			int rx, ry;
-			boolean robotAdded = false;
 
 			// Loop to find a position for a robot, and add him to arena
-			while (!robotAdded) {
+			// Attempts a certain count of times, so it doesn't get stuck on the loop
+			for (int j=0; j<x*y*10; j++) {
 				// Create random coordinates
 				rx = rand.nextInt(x) + 1;
 				ry = rand.nextInt(y) + 1;
@@ -62,16 +63,18 @@ public class RobotArena {
 				// If position not taken, add robot there
 				if (!posTaken) {
 					robots[robotsCounter] = new Robot(rx, ry, Direction.getRandomDirection(), this, new RobotImages().getRandomImage());
-					robotAdded = true;
 					robotsCounter++;
+					return "success";
 				}
 			}
+			return "Failed to add a robot";
 		}
 	}
 	
-	public void addRobot(int x, int y, Direction direction, Image image) {
+	public String addRobot(int x, int y, Direction direction, Image image) {
 		if (robotsCounter >= maxRobots) {
 			System.out.println("ERROR: robots count has already reached max capacity");
+			return "Robot count already reached max capacity";
 		} else {
 			
 			boolean posTaken = false;
@@ -100,8 +103,10 @@ public class RobotArena {
 				}
 				robots[robotsCounter] = new Robot(x, y, direction, this, image);
 				robotsCounter++;
+				return "success";
 			} else {
 				System.out.println("ERROR: position already taken");
+				return "Position already taken";
 			}
 		}
 	}

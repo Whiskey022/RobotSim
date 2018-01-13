@@ -55,10 +55,6 @@ public class RobotCanvasGroup {
 	    	public void handle(long l) {
 	    		
 	    		switch(robotArena.getStatus()) {
-	    			case "add-robot":
-	    				robotArena.addRobot();
-	    				drawRobots();
-	    				break;
 	    			case "not-drawn":
 	    				drawRobots();
 	    				break;

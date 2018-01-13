@@ -34,7 +34,7 @@ public class BottomMenu {
     	randomRobotBtn.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
-    			robotArena.setStatus("add-robot");
+    			addRobot();
     		}
     	});
     	
@@ -78,6 +78,17 @@ public class BottomMenu {
     	menuBox.getChildren().addAll(randomRobotBtn, customRobotBtn, moveRobotsOnceBtn, moveRobotsBtn, stopRobotsBtn);
     	return menuBox;
     }
+    
+    private void addRobot() {
+    	String addRobotOutput = robotArena.addRobot();
+    	if (addRobotOutput == "success") {
+			robotArena.setStatus("not-drawn");
+		} else {
+			AlertMessage alertMsg = new AlertMessageError(addRobotOutput);
+			alertMsg.show();
+		}
+    }
+    
    	/**
 	 * @return menuBox
 	 */

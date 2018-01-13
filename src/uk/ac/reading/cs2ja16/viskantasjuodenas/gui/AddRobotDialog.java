@@ -1,6 +1,5 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
-import java.util.Optional;
 import java.util.Random;
 
 import javafx.application.Platform;
@@ -134,13 +133,23 @@ public abstract class AddRobotDialog {
 		dialog.setResultConverter(dialogButton -> {
 		    if (dialogButton == addBtnType) {
 	    		setResults(xField.getText(), yField.getText(), dirBox.getValue(), imageBox.getValue());
-	    		robotArena.addRobot(x, y, direction, image);
+	    		addRobot();
 	    		robotArena.setStatus("not-drawn");
 		    }
 		    return null;
 		});
 		
 		dialog.showAndWait();
+    }
+    
+    private static void addRobot() {
+    	String addRobotOutput = robotArena.addRobot(x, y, direction, image);
+    	if (addRobotOutput == "success") {
+			robotArena.setStatus("not-drawn");
+		} else {
+			AlertMessage alertMsg = new AlertMessageError(addRobotOutput);
+			alertMsg.show();
+		}
     }
     
     /**
@@ -152,13 +161,13 @@ public abstract class AddRobotDialog {
      */
     private static void setResults(String xVal, String yVal, String dir, String imgIndex) {
     	//Set x
-    	if (xVal == "") {
+    	if (!isNumeric(xVal)) {
     		x = new Random().nextInt(robotArena.getXSize());
     	} else {
     		x = Integer.parseInt(xVal);
     	}
     	//Set y
-    	if (yVal == "") {
+    	if (!isNumeric(yVal)) {
     		y = new Random().nextInt(robotArena.getXSize());
     	} else {
     		y = Integer.parseInt(yVal);
@@ -191,5 +200,24 @@ public abstract class AddRobotDialog {
     		gc.drawImage(new RobotImages().getImage(Integer.parseInt(imageIndex)), x - sz/2, y - sz/2, sz, sz);
     	}
 	}
+    
+    /**
+     * Checks if string is numeric
+     * https://stackoverflow.com/questions/1102891/how-to-check-if-a-string-is-numeric-in-java
+     * @param str	String to check
+     * @return	if numeric, true
+     */
+    public static boolean isNumeric(String str)  
+    {  
+      try  
+      {  
+        int d = Integer.parseInt(str);  
+      }  
+      catch(NumberFormatException nfe)  
+      {  
+        return false;  
+      }  
+      return true;  
+    }
    	
 }
