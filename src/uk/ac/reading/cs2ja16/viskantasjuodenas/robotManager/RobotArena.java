@@ -86,7 +86,19 @@ public class RobotArena {
 
 			// If position not taken, add robot there
 			if (!posTaken) {
-				robots[robotsCounter] = new Robot(x, y, Direction.getRandomDirection(), this, image);
+				//Check if x value valid, change if necessary
+				if (x > this.x) {
+					x = this.x;
+				} else if (x < 1) {
+					x = 1;
+				}
+				//Check if y value valid, change if necessary
+				if (y > this.y) {
+					y = this.y;
+				} else if (y < 1) {
+					y = 1;
+				}
+				robots[robotsCounter] = new Robot(x, y, direction, this, image);
 				robotsCounter++;
 			} else {
 				System.out.println("ERROR: position already taken");
