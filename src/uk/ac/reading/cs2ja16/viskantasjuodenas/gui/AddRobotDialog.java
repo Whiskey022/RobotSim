@@ -211,7 +211,7 @@ public abstract class AddRobotDialog {
     {  
       try  
       {  
-        int d = Integer.parseInt(str);  
+        Integer.parseInt(str);  
       }  
       catch(NumberFormatException nfe)  
       {  

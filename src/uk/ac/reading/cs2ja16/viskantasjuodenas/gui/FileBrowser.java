@@ -1,4 +1,4 @@
-package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
+package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
 import java.io.BufferedReader;
 import java.io.File;
