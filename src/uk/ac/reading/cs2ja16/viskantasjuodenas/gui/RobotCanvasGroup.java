@@ -1,11 +1,14 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
+import java.util.ArrayList;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ArenaObject;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.Robot;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 
@@ -56,7 +59,7 @@ public class RobotCanvasGroup {
 	    		
 	    		switch(robotArena.getStatus()) {
 	    			case "not-drawn":
-	    				drawRobots();
+	    				drawObjects();
 	    				break;
 	    			case "move-once":
 	    			case "move-continuous":
@@ -77,14 +80,15 @@ public class RobotCanvasGroup {
    	/**
    	 * Draw standing robots
    	 */
-   	private void drawRobots() {
+   	private void drawObjects() {
    		resetCanvas();
    		//Draw each robot
-   		for (int i=0; i<robotArena.getRobotsCounter(); i++) {
-   			Robot robot = robotArena.getRobots()[i];
-	   		drawIt(robot.getImage(),
-						robot.getX()*robotSize,
-						robot.getY()*robotSize,
+   		for (int i=0; i<ArenaObject.getObjectsCount(); i++) {
+   			ArenaObject object = robotArena.getObjects().get(i);
+   			Image test = object.getImage();
+	   		drawIt(test,
+						object.getX()*robotSize,
+						object.getY()*robotSize,
 						robotSize);
    		}
    		//Set areDrawn to true
@@ -114,8 +118,8 @@ public class RobotCanvasGroup {
    		resetCanvas();
 	    
 	    //Loop to draw all robots
-		for (int i=0; i<robotArena.getRobotsCounter(); i++) {
-			if(drawMovingRobot(robotArena.getRobots()[i], step)) {
+		for (int i=0; i<ArenaObject.getObjectsCount(); i++) {
+			if(drawMovingRobot(robotArena.getObjects().get(i), step)) {
 				positionReached = true;
 			}
    		}
@@ -134,20 +138,20 @@ public class RobotCanvasGroup {
    	
    	/**
    	 * Function to draw robot moving animation
-   	 * @param robot	Robot to draw
+   	 * @param object	Robot to draw
    	 * @param currentNanoTime	current time
    	 * @param startNanoTime	time when started drawing
    	 * @param self	AnimationTimer object
    	 */
-   	private boolean drawMovingRobot(Robot robot, double step) {
+   	private boolean drawMovingRobot(ArenaObject object, double step) {
    		//Boolean to check if robot already reached his position
    		boolean positionReached = false;
    		
-   		int oldX = robot.getOldX(), oldY = robot.getOldY();		//Previous coordinates
-   		int newX = robot.getX(), newY = robot.getY();			//New coordinates
+   		int newX = object.getX(), newY = object.getY();			//New coordinates
    		double xToDraw, yToDraw;								//Coordinates to draw at
    		
-   		if (robot.getDidMove()) {
+   		if (object.getDidMove()) {
+   	   		int oldX = ((Robot) object).getOldX(), oldY = ((Robot) object).getOldY();		//Previous coordinates
 	   		//If robot has moved to new coordinates, calculate coordinates for drawing
 			xToDraw = oldX + (newX - oldX) * step;
 			yToDraw = oldY + (newY - oldY) * step;
@@ -163,7 +167,7 @@ public class RobotCanvasGroup {
    		}
 		
 		//Draw robot
-		drawIt(robot.getImage(),
+		drawIt(object.getImage(),
 					xToDraw * robotSize,
 					yToDraw * robotSize,
 					robotSize);

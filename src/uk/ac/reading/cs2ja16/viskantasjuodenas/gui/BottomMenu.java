@@ -3,6 +3,8 @@ package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 
@@ -10,7 +12,12 @@ public class BottomMenu {
 	
 	private HBox menuBox;
 	private RobotArena robotArena;
-	
+	private Image plusImage = new Image(getClass().getResourceAsStream("plus.png"));
+	private Image arrowImage = new Image(getClass().getResourceAsStream("arrow.png"));
+	private Image doubleArrowImage = new Image(getClass().getResourceAsStream("double_arrow.png"));
+	private Image pauseImage = new Image(getClass().getResourceAsStream("pause.png"));
+	private Image resetImage = new Image(getClass().getResourceAsStream("reset.png"));
+
 	/**
 	 * BottomMenu constructor, sets up a box of buttons
 	 * @param	RobotArena object
@@ -30,7 +37,8 @@ public class BottomMenu {
     	HBox menuBox = new HBox();
     	
     	//"Button for adding a random robot
-    	Button randomRobotBtn = new Button("Add Random Robot");
+    	Button randomRobotBtn = new Button("Random Robot");
+    	randomRobotBtn.setGraphic(new ImageView(plusImage));
     	randomRobotBtn.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
@@ -41,6 +49,7 @@ public class BottomMenu {
     	//"Button for adding a random robot
     	//https://stackoverflow.com/questions/31556373/javafx-dialog-with-2-input-fields
     	Button customRobotBtn = new Button("Add Custom Robot");
+    	customRobotBtn.setGraphic(new ImageView(plusImage));
     	customRobotBtn.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
@@ -48,8 +57,20 @@ public class BottomMenu {
     		}
     	});
     	
+    	//"Button for adding a random robot
+    	//https://stackoverflow.com/questions/31556373/javafx-dialog-with-2-input-fields
+    	Button randomObstacle = new Button("Random Obstacle");
+    	randomObstacle.setGraphic(new ImageView(plusImage));
+    	randomObstacle.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent event) {
+    			addObstacle();
+    		}
+    	});
+    	
     	//Button for moving robots only one position
     	Button moveRobotsOnceBtn = new Button("Move Robots Once");
+    	moveRobotsOnceBtn.setGraphic(new ImageView(arrowImage));
     	moveRobotsOnceBtn.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
@@ -59,6 +80,7 @@ public class BottomMenu {
     	
     	//Button for moving robots continuously
     	Button moveRobotsBtn = new Button("Move Robots");
+    	moveRobotsBtn.setGraphic(new ImageView(doubleArrowImage));
     	moveRobotsBtn.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
@@ -68,6 +90,7 @@ public class BottomMenu {
     	
     	//Button to stop robots moving continuously
     	Button stopRobotsBtn = new Button("Stop Robots");
+    	stopRobotsBtn.setGraphic(new ImageView(pauseImage));
     	stopRobotsBtn.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
@@ -75,12 +98,22 @@ public class BottomMenu {
     		}
     	});
     	
-    	menuBox.getChildren().addAll(randomRobotBtn, customRobotBtn, moveRobotsOnceBtn, moveRobotsBtn, stopRobotsBtn);
+    	menuBox.getChildren().addAll(randomRobotBtn, customRobotBtn, randomObstacle, moveRobotsOnceBtn, moveRobotsBtn, stopRobotsBtn);
     	return menuBox;
     }
     
     private void addRobot() {
     	String addRobotOutput = robotArena.addRobot();
+    	if (addRobotOutput == "success") {
+			robotArena.setStatus("not-drawn");
+		} else {
+			AlertMessage alertMsg = new AlertMessageError(addRobotOutput);
+			alertMsg.show();
+		}
+    }
+    
+    private void addObstacle() {
+    	String addRobotOutput = robotArena.addObstacle();
     	if (addRobotOutput == "success") {
 			robotArena.setStatus("not-drawn");
 		} else {

@@ -1,5 +1,6 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.image.Image;
@@ -8,7 +9,7 @@ public class RobotArena {
 
 	private int x, y;
 	private int maxRobots;
-	private Robot[] robots;
+	private ArrayList<ArenaObject> objects;
 	private int robotsCounter = 0;
 	private String status = "stop";
 
@@ -27,7 +28,7 @@ public class RobotArena {
 			this.x = x;
 			this.y = y;
 			this.maxRobots = maxRobots;
-			robots = new Robot[maxRobots];
+			objects = new ArrayList<ArenaObject>();
 		}
 	}
 
@@ -54,7 +55,7 @@ public class RobotArena {
 
 				// Loop to check if position taken
 				for (int i = 0; i < robotsCounter; i++) {
-					if (robots[i].getX() == rx && robots[i].getY() == ry) {
+					if (objectIsHere(y, x)) {
 						posTaken = true;
 						break;
 					}
@@ -62,7 +63,8 @@ public class RobotArena {
 
 				// If position not taken, add robot there
 				if (!posTaken) {
-					robots[robotsCounter] = new Robot(rx, ry, Direction.getRandomDirection(), this, new RobotImages().getRandomImage());
+					ArenaObject newRobot = new Robot(rx, ry, Direction.getRandomDirection(), this, new RobotImages().getRandomImage());
+					objects.add(newRobot);
 					robotsCounter++;
 					return "success";
 				}
@@ -81,7 +83,7 @@ public class RobotArena {
 
 			// Loop to check if position taken
 			for (int i = 0; i < robotsCounter; i++) {
-				if (robots[i].getX() == x && robots[i].getY() == y) {
+				if (objectIsHere(x, y)) {
 					posTaken = true;
 					break;
 				}
@@ -101,7 +103,7 @@ public class RobotArena {
 				} else if (y < 1) {
 					y = 1;
 				}
-				robots[robotsCounter] = new Robot(x, y, direction, this, image);
+				objects.add(new Robot(x, y, direction, this, image));
 				robotsCounter++;
 				return "success";
 			} else {
@@ -111,11 +113,44 @@ public class RobotArena {
 		}
 	}
 
+	public String addObstacle() {
+		// Initialise some values for adding a robot
+		Random rand = new Random();
+		int rx, ry;
+
+		// Loop to find a position for an object, and add it to arena
+		// Attempts a certain count of times, so it doesn't get stuck on the loop
+		for (int j=0; j<x*y*10; j++) {
+			// Create random coordinates
+			rx = rand.nextInt(x) + 1;
+			ry = rand.nextInt(y) + 1;
+			boolean posTaken = false;
+
+			// Loop to check if position taken
+			for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
+				if (objectIsHere(y, x)) {
+					posTaken = true;
+					break;
+				}
+			}
+
+			// If position not taken, add robot there
+			if (!posTaken) {
+				ArenaObject newRobot = randomObstacle(rx, ry);
+				objects.add(newRobot);
+				robotsCounter++;
+				return "success";
+			}
+		}
+		return "Failed to add a robot";
+	}
+
+
 	public String toString() {
 		String res = "";
 
 		for (int i = 0; i < robotsCounter; i++) {
-			res += robots[i].toString() + "\n";
+			res += "\n";
 		}
 
 		return res;
@@ -127,32 +162,57 @@ public class RobotArena {
 		if (x > this.x || y > this.y || x <= 0 || y <= 0) {
 			return false;
 		//Check if a robot is in front
-		} else if (robotIsHere(x, y)) {
+		} else if (objectIsBlocking(x, y)) {
 			return false;
 		}
 		return true;
 	}
 
 	//Function to check if robot is at position
-	private boolean robotIsHere(int x, int y) {
+	private boolean objectIsHere(int x, int y) {
 		for (int i = 0; i < robotsCounter; i++) {
-			if (robots[i].isHere(x, y)) {
+			if (objects.get(i).isHere(x, y)) {
 				return true;
 			}
 		}
 		return false;
 	}
+	
+	//Function to check if robot is at position
+		private boolean objectIsBlocking(int x, int y) {
+			for (int i = 0; i < robotsCounter; i++) {
+				if (objects.get(i).isHere(x, y) && (isRobot(objects.get(i)) || isWall(objects.get(i)))) {
+					return true;
+				}
+			}
+			return false;
+		}
 
 	//Try to move every robot
 	public void moveAllRobots() {
 		int countOfRobotsMoved = 0;
 		while (countOfRobotsMoved == 0) {
 			for (int i = 0; i < robotsCounter; i++) {
-				if (robots[i].tryToMove()) {
+				if (isRobot(objects.get(i)) && objects.get(i).tryToMove()) {
 					countOfRobotsMoved++;
 				}
 			}
 		}
+	}
+	
+	private ArenaObject randomObstacle(int x, int y) {
+		switch(new Random().nextInt() % 1) {
+		default:
+			return new Wall(x, y, this);
+		}
+	}
+	
+	private boolean isRobot(ArenaObject object) {
+		return object.getClass() == Robot.class;
+	}
+	
+	private boolean isWall(ArenaObject object) {
+		return object.getClass() == Wall.class;
 	}
 	
 	public void setXSize(int x) {
@@ -165,10 +225,6 @@ public class RobotArena {
 	
 	public void setMaxRobots(int maxRobots) {
 		this.maxRobots = maxRobots;
-	}
-	
-	public void setRobots(Robot[] robots) {
-		this.robots = robots;
 	}
 
 	public void setRobotsCounter(int robotsCounter) {
@@ -191,12 +247,12 @@ public class RobotArena {
 		return maxRobots;
 	}
 	
-	public Robot[] getRobots() {
-		return robots;
+	public ArrayList<ArenaObject> getObjects() {
+		return objects;
 	}
 
-	public int getRobotsCounter() {
-		return robotsCounter;
+	public int getObjectCount() {
+		return ArenaObject.getObjectsCount();
 	}
 	
 	public String getStatus() {
@@ -213,8 +269,8 @@ public class RobotArena {
 		
 		//Robots details
 		for (int i=0 ;i<robotsCounter; i++) {
-			details += robots[i].getId() + ":" + robots[i].getX() + ":"
-					+ robots[i].getY() + ":" + robots[i].getDirection().toString() + "|";
+			details += objects.get(i).getId() + ":" + objects.get(i).getX() + ":"
+					+ objects.get(i).getY() + "|";
 		}
 		
 		return details;

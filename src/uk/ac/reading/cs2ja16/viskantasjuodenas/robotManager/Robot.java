@@ -2,16 +2,14 @@ package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
 import javafx.scene.image.Image;
 
-public class Robot {
+public class Robot extends ArenaObject {
 
-	private int x, y;
-	private int oldX, oldY;
-	private static int robotsCount = 0; // Robots counter, to help calculate IDs
-	private int robotId;
-	private Direction direction;
-	private RobotArena robotArena;
-	private Image image;
-	private boolean didMove = false;
+	protected int initialX, initialY;		//To keep starting positions
+	protected int oldX, oldY;
+	protected static int robotsCount = 0; // Robots counter, to help calculate IDs
+	protected Direction direction;
+	protected RobotArena robotArena;
+	protected boolean didMove = false;
 
 	/**
 	 * Robot constructor, sets up his location, direction, robotArena, Id, and imageIndex
@@ -22,38 +20,18 @@ public class Robot {
 	 * @param	imageIndex	robot's image index, stored to have a consistent image
 	 */
 	Robot(int x, int y, Direction direction, RobotArena robotArena, Image image) {
+		this.initialX = x;
+		this.initialY = y;
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
 		this.robotArena = robotArena;
 		this.image = image;
-		// Setting robot ID
-		robotsCount++;
-		robotId = robotsCount;
-	}
-
-	Robot() {
-		x = 5;
-		y = 5;
-		// Setting robot ID
-		robotsCount++;
-		robotId = robotsCount;
-	}
-
-	public String toString() {
-		return "Robot ID: " + robotId + ". Current position x: " + x + ", y: " + y + ". Current direction: "
-				+ direction;
-	}
-
-	public boolean isHere(int x, int y) {
-		if (this.x == x && this.y == y) {
-			return true;
-		} else {
-			return false;
-		}
+		countId();
 	}
 
 	//Function to move
+	@Override
 	public boolean tryToMove() {
 		int nextX = x, nextY = y;
 		//Set next coordinates
@@ -95,7 +73,7 @@ public class Robot {
 	}
 
 	public void setId(int robotId) {
-		this.robotId = robotId;
+		this.id = robotId;
 	}
 	
 	public void setDirection(Direction direction) {
@@ -109,14 +87,6 @@ public class Robot {
 	public static void setRobotsCount(int count) {
 		robotsCount = count;
 	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
 	
 	public int getOldX() {
 		return oldX;
@@ -125,10 +95,6 @@ public class Robot {
 	public int getOldY() {
 		return oldY;
 	}
-
-	public int getId() {
-		return robotId;
-	}
 	
 	public Direction getDirection() {
 		return direction;
@@ -136,10 +102,6 @@ public class Robot {
 	
 	public RobotArena getRobotArena() {
 		return robotArena;
-	}
-	
-	public Image getImage() {
-		return image;
 	}
 	
 	public boolean getDidMove() {
