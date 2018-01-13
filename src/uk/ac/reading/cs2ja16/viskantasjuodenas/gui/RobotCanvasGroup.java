@@ -59,6 +59,9 @@ public class RobotCanvasGroup {
 	    				robotArena.addRobot();
 	    				drawRobots();
 	    				break;
+	    			case "not-drawn":
+	    				drawRobots();
+	    				break;
 	    			case "move-once":
 	    			case "move-continuous":
 	    				moveRobots();

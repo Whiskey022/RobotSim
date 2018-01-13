@@ -2,6 +2,8 @@ package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
 import java.util.Random;
 
+import javafx.scene.image.Image;
+
 public class RobotArena {
 
 	private int x, y;
@@ -63,6 +65,31 @@ public class RobotArena {
 					robotAdded = true;
 					robotsCounter++;
 				}
+			}
+		}
+	}
+	
+	public void addRobot(int x, int y, Direction direction, Image image) {
+		if (robotsCounter >= maxRobots) {
+			System.out.println("ERROR: robots count has already reached max capacity");
+		} else {
+			
+			boolean posTaken = false;
+
+			// Loop to check if position taken
+			for (int i = 0; i < robotsCounter; i++) {
+				if (robots[i].getX() == x && robots[i].getY() == y) {
+					posTaken = true;
+					break;
+				}
+			}
+
+			// If position not taken, add robot there
+			if (!posTaken) {
+				robots[robotsCounter] = new Robot(x, y, Direction.getRandomDirection(), this, image);
+				robotsCounter++;
+			} else {
+				System.out.println("ERROR: position already taken");
 			}
 		}
 	}
