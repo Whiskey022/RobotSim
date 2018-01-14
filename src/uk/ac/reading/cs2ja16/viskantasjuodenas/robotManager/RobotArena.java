@@ -45,7 +45,7 @@ public class RobotArena {
 
 			// If position not taken, add robot there
 			if (!objectIsHere(x, y)) {
-				objects.add(new RobotOne(x, y, Direction.getRandomDirection(), this));
+				objects.add(RobotType.getRobotObject(x, y, Direction.getRandomDirection(), RobotType.getRandom(), this));
 				return "success";
 			}
 		}
@@ -67,7 +67,7 @@ public class RobotArena {
 			} else if (y < 1) {
 				y = 1;
 			}
-			objects.add(newRobot(x, y, direction, robotType));
+			objects.add(RobotType.getRobotObject(x, y, direction, robotType, this));
 			return "success";
 		}
 		System.out.println("ERROR: position already taken");
@@ -162,13 +162,14 @@ public class RobotArena {
 
 	// Try to move every robot
 	public void moveAllRobots() {
-		int countOfRobotsMoved = 0;
-		while (countOfRobotsMoved == 0) {
+		int countOfRobotsMoved = 0, timesTried= 0;
+		while (countOfRobotsMoved == 0 && timesTried < 10) {
 			for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
 				if (objects.get(i).isRobot() && objects.get(i).tryToMove()) {
 					countOfRobotsMoved++;
 				}
 			}
+			timesTried++;
 		}
 	}
 
@@ -185,13 +186,6 @@ public class RobotArena {
 			return new Wall(x, y, this);
 		default:
 			return randomObstacle(x, y);
-		}
-	}
-	
-	private Robot newRobot(int x, int y, Direction direction, String type) {
-		switch(type) {
-		default:
-			return new RobotOne(x, y, direction, this);
 		}
 	}
 

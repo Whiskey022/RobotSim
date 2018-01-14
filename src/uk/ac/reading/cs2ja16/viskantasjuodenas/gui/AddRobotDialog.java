@@ -21,6 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.Direction;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
+import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotType;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ArenaImage;
 
 /**
@@ -34,7 +35,6 @@ public class AddRobotDialog {
 	private static Direction direction;
 	private static String robotSelection;
 	private static RobotArena robotArena;
-	private static String[] robots = {"RobotOne"};
 
 	/**
 	 * Open "Add Custom Robot" dialog
@@ -102,8 +102,8 @@ public class AddRobotDialog {
 		// Create a list of images indexes
 		ObservableList<String> robotList = FXCollections.observableArrayList();
 		robotList.add("Random");
-		for (int i=0; i<robots.length; i++) {
-			robotList.add(robots[i]);
+		for (int i=0; i<RobotType.getCount(); i++) {
+			robotList.add(RobotType.get(i));
 		}
 		robotBox.setItems(robotList);
 		robotBox.setValue("Random");
@@ -188,7 +188,7 @@ public class AddRobotDialog {
 		}
 		// Set robot type selection
 		if (typeSelection == "Random") {
-			robotSelection = randomRobotType();
+			robotSelection = RobotType.getRandom();
 		} else {
 			robotSelection = typeSelection;
 		}
@@ -210,7 +210,7 @@ public class AddRobotDialog {
 		gc.clearRect(0, 0, 90, 50); // clear canvas
 		if (robotName != "Random") {
 			// to draw centred at x,y, give top left position and x,y size
-			gc.drawImage(new ArenaImage().getRobotImage(Arrays.asList(robots).indexOf(robotName)), x - sz / 2, y - sz / 2, sz, sz);
+			gc.drawImage(new ArenaImage().getRobotImage(RobotType.getIndex(robotName)), x - sz / 2, y - sz / 2, sz, sz);
 		}
 	}
 
@@ -229,13 +229,6 @@ public class AddRobotDialog {
 			return false;
 		}
 		return true;
-	}
-	
-	private static String randomRobotType() {
-		switch(new Random().nextInt(robots.length)) {
-			default:
-				return "RobotOne";
-		}
 	}
 
 }
