@@ -99,4 +99,8 @@ public abstract class Robot extends ArenaObject {
 	public boolean getDidMove() {
 		return didMove;
 	}
+	
+	public int getChargeLevel() {
+		return charge;
+	}
 }

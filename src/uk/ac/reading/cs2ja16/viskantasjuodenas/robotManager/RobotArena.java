@@ -8,6 +8,7 @@ public class RobotArena {
 	private int x, y;
 	private ArrayList<ArenaObject> objects;
 	private String status = "stop";
+	private String message = "";
 
 	/**
 	 * RobotArena constructor
@@ -40,8 +41,8 @@ public class RobotArena {
 		// Attempts a certain count of times, so it doesn't get stuck on the loop
 		for (int j = 0; j < this.x * this.y * 100; j++) {
 			// Create random coordinates
-			x = rand.nextInt(this.x) + 1;
-			y = rand.nextInt(this.y) + 1;
+			x = rand.nextInt(this.x);
+			y = rand.nextInt(this.y);
 
 			// If position not taken, add robot there
 			if (!objectIsHere(x, y)) {
@@ -83,12 +84,12 @@ public class RobotArena {
 		// Attempts a certain count of times, so it doesn't get stuck on the loop
 		for (int j = 0; j < this.x * this.y * 10; j++) {
 			// Create random coordinates
-			x = rand.nextInt(this.x) + 1;
-			y = rand.nextInt(this.y) + 1;
+			x = rand.nextInt(this.x);
+			y = rand.nextInt(this.y);
 
 			// If position not taken, add robot there
 			if (!objectIsHere(x, y)) {
-				objects.add(randomItem(x, y));
+				objects.add(ItemType.getItemObject(x, y, ItemType.getRandom(), this));
 				return "success";
 			}
 		}
@@ -110,11 +111,16 @@ public class RobotArena {
 			} else if (y < 1) {
 				y = 1;
 			}
-			objects.add(newItem(x, y, type));
+			objects.add(ItemType.getItemObject(x, y, type, this));
 			return "success";
 		}
 		System.out.println("ERROR: position already taken");
 		return "Position already taken";
+	}
+	
+	public void removeObject(ArenaObject obj, int index) {
+		objects.remove(index);
+		ArenaObject.setObjectCount(ArenaObject.getObjectsCount() - 1);
 	}
 
 	public String toString() {
@@ -130,7 +136,7 @@ public class RobotArena {
 	// Function to check if robot can move into position
 	public boolean canMoveHere(int x, int y) {
 		// Check if its a wall in front
-		if (x > this.x || y > this.y || x <= 0 || y <= 0) {
+		if (x >= this.x || y >= this.y || x < 0 || y < 0) {
 			return false;
 			// Check if a robot is in front
 		} else if (objectIsBlocking(x, y)) {
@@ -162,19 +168,24 @@ public class RobotArena {
 
 	// Try to move every robot
 	public void moveAllRobots() {
-		checkCollisions();
 		int countOfRobotsMoved = 0, timesTried= 0;
 		while (countOfRobotsMoved == 0 && timesTried < 10) {
-			for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
-				if (objects.get(i).isRobot() && objects.get(i).tryToMove()) {
-					countOfRobotsMoved++;
+			for (ArenaObject object : objects) {
+				if (object.isRobot()) {
+					if (object.tryToMove()) {
+						countOfRobotsMoved++;
+					} else if (((Robot) object).getChargeLevel() < 1){
+						message = "Robot run out of juice at x: " + object.getX() + ", y: " + object.getY();
+					}
 				}
+				
 			}
 			timesTried++;
 		}
 	}
 	
-	private void checkCollisions(){
+	public boolean checkCollisions(){
+		boolean collisionsFound = false;
 		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
 			for (int j=i+1; j < ArenaObject.getObjectsCount(); j++) {
 				ArenaObject obj1 = objects.get(i);
@@ -182,23 +193,18 @@ public class RobotArena {
 				if (obj1.isHere(obj2.getX(), obj2.getY())) {
 					if (obj1.isRobot() && obj2.isCharger()) {
 						obj1.increaseCharge();
+						message = "Robot charged at x: " + obj1.getX() + ", y: " + obj1.getY();
+						removeObject(obj2, j);
+					} else if (obj2.isRobot() && obj1.isCharger()) {
+						obj2.increaseCharge();
+						message = "Robot charged at x: " + obj2.getX() + ", y: " + obj2.getY();
+						removeObject(obj1, i);
 					}
+					collisionsFound = true;
 				}
 			}
 		}
-	}
-
-	private ArenaObject randomItem(int x, int y) {
-		return ItemType.getItemObject(x, y, ItemType.getRandom(), this);
-	}
-
-	private ArenaObject newItem(int x, int y, String type) {
-		switch (type) {
-		case "wall":
-			return new Wall(x, y, this);
-		default:
-			return randomItem(x, y);
-		}
+		return collisionsFound;
 	}
 
 	public void setXSize(int x) {
@@ -231,6 +237,10 @@ public class RobotArena {
 
 	public String getStatus() {
 		return status;
+	}
+	
+	public String getMessage() {
+		return message;
 	}
 
 	// Convert all arena details to a string for saving into file

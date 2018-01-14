@@ -33,6 +33,10 @@ public abstract class ArenaObject {
 		return false;
 	}
 	
+	public static void setObjectCount(int count) {
+		objectsCount = count;
+	}
+	
 	public int getX() {
 		return x;
 	}
