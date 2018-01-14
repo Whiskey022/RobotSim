@@ -1,8 +1,6 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
-import java.util.Arrays;
 import java.util.Random;
-
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;

@@ -22,12 +22,11 @@ import javafx.util.Pair;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ArenaImage;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ItemType;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
-import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.Wall;
 
 /**
  * Class to open "Add Custom Robot" dialog
  */
-public class AddObstacleDialog {
+public class AddItemDialog {
 
 	private static GraphicsContext gc;
 	private static int x;
@@ -42,7 +41,7 @@ public class AddObstacleDialog {
 		robotArena = arena;
 		// Create the custom dialog.
 		Dialog<Pair<String, String>> dialog = new Dialog<>();
-		dialog.setTitle("Add a custom obstacle");
+		dialog.setTitle("Add a custom item");
 
 		// Set the button types.
 		ButtonType addBtnType = new ButtonType("Add", ButtonData.APPLY);
@@ -105,7 +104,7 @@ public class AddObstacleDialog {
 		objectPane.add(root, 2, 0);
 
 		// Add all grid panes to the parent pane
-		parentPane.add(new Label("Input obstacle coordinates"), 0, 0);
+		parentPane.add(new Label("Input item coordinates"), 0, 0);
 		parentPane.add(positionPane, 0, 1);
 		parentPane.add(objectPane, 0, 2);
 

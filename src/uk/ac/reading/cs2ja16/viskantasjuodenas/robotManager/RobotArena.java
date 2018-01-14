@@ -95,7 +95,7 @@ public class RobotArena {
 		return "Failed to add a robot";
 	}
 
-	public String addItem(int y, int x, String type) {
+	public String addItem(int x, int y, String type) {
 		// If position not taken, add robot there
 		if (!objectIsHere(x, y)) {
 			// Check if x value valid, change if necessary

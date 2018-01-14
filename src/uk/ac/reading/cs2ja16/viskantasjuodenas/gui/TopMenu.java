@@ -47,7 +47,7 @@ public class TopMenu {
 		MenuItem miObstacle = new MenuItem("Add custom Obstacle");
 		miObstacle.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
-				AddObstacleDialog.open(robotArena); // Open Dialog
+				AddItemDialog.open(robotArena); // Open Dialog
 			}
 		});
 		mObject.getItems().addAll(miRobot, miObstacle);
