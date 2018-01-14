@@ -57,7 +57,7 @@ public class BottomToolbar {
 		randomObstacle.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				addObstacle();
+				addItem();
 			}
 		});
 
@@ -105,8 +105,8 @@ public class BottomToolbar {
 		}
 	}
 
-	private void addObstacle() {
-		String addRobotOutput = robotArena.addObstacle();
+	private void addItem() {
+		String addRobotOutput = robotArena.addItem();
 		if (addRobotOutput == "success") {
 			robotArena.setStatus("not-drawn");
 		} else {

@@ -23,39 +23,43 @@ public class RobotThree extends Robot{
 	//Function to move
 		@Override
 		public boolean tryToMove() {
-			for (int i=0; i<8; i++) {
-				//Set next coordinates
-				int nextX = x, nextY = y;
-				switch (direction) {
-				case NORTH:
-					nextY--;
-					break;
-				case EAST:
-					nextX++;
-					break;
-				case SOUTH:
-					nextY++;
-					break;
-				case WEST:
-					nextX--;
-					break;
-				}
-				//If robot can move there, set next coordinates to current
-				if (robotArena.canMoveHere(nextX, nextY)) {
-					oldX = x;
-					oldY = y;
-					x = nextX;
-					y = nextY;
-					didMove = true;
-					return true;
-				}
-				//First 4 attempts try to get random direction
-				if (i < 4) {
-					direction = Direction.getRandomDirection();
-				} else {
-					direction = direction.getNextDirection();
+			if (charge > 0) {
+				for (int i=0; i<8; i++) {
+					//Set next coordinates
+					int nextX = x, nextY = y;
+					switch (direction) {
+					case NORTH:
+						nextY--;
+						break;
+					case EAST:
+						nextX++;
+						break;
+					case SOUTH:
+						nextY++;
+						break;
+					case WEST:
+						nextX--;
+						break;
+					}
+					//If robot can move there, set next coordinates to current
+					if (robotArena.canMoveHere(nextX, nextY)) {
+						charge--;
+						oldX = x;
+						oldY = y;
+						x = nextX;
+						y = nextY;
+						didMove = true;
+						return true;
+					}
+					//First 4 attempts try to get random direction
+					if (i < 4) {
+						direction = Direction.getRandomDirection();
+					} else {
+						direction = direction.getNextDirection();
+					}
 				}
 			}
+			charge--;
 			didMove = false;
 			return false;
 		}

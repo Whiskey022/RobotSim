@@ -74,7 +74,7 @@ public class RobotArena {
 		return "Position already taken";
 	}
 
-	public String addObstacle() {
+	public String addItem() {
 		// Initialise some values for adding a robot
 		Random rand = new Random();
 		int x, y;
@@ -88,14 +88,14 @@ public class RobotArena {
 
 			// If position not taken, add robot there
 			if (!objectIsHere(x, y)) {
-				objects.add(randomObstacle(x, y));
+				objects.add(randomItem(x, y));
 				return "success";
 			}
 		}
 		return "Failed to add a robot";
 	}
 
-	public String addObstacle(int y, int x, String type) {
+	public String addItem(int y, int x, String type) {
 		// If position not taken, add robot there
 		if (!objectIsHere(x, y)) {
 			// Check if x value valid, change if necessary
@@ -110,7 +110,7 @@ public class RobotArena {
 			} else if (y < 1) {
 				y = 1;
 			}
-			objects.add(newObstacle(x, y, type));
+			objects.add(newItem(x, y, type));
 			return "success";
 		}
 		System.out.println("ERROR: position already taken");
@@ -162,6 +162,7 @@ public class RobotArena {
 
 	// Try to move every robot
 	public void moveAllRobots() {
+		checkCollisions();
 		int countOfRobotsMoved = 0, timesTried= 0;
 		while (countOfRobotsMoved == 0 && timesTried < 10) {
 			for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
@@ -172,20 +173,31 @@ public class RobotArena {
 			timesTried++;
 		}
 	}
-
-	private ArenaObject randomObstacle(int x, int y) {
-		switch (new Random().nextInt() % 1) {
-		default:
-			return new Wall(x, y, this);
+	
+	private void checkCollisions(){
+		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
+			for (int j=i+1; j < ArenaObject.getObjectsCount(); j++) {
+				ArenaObject obj1 = objects.get(i);
+				ArenaObject obj2 = objects.get(j);
+				if (obj1.isHere(obj2.getX(), obj2.getY())) {
+					if (obj1.isRobot() && obj2.isCharger()) {
+						obj1.increaseCharge();
+					}
+				}
+			}
 		}
 	}
 
-	private ArenaObject newObstacle(int x, int y, String type) {
+	private ArenaObject randomItem(int x, int y) {
+		return ItemType.getItemObject(x, y, ItemType.getRandom(), this);
+	}
+
+	private ArenaObject newItem(int x, int y, String type) {
 		switch (type) {
 		case "wall":
 			return new Wall(x, y, this);
 		default:
-			return randomObstacle(x, y);
+			return randomItem(x, y);
 		}
 	}
 

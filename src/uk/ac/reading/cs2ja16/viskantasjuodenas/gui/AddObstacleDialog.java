@@ -19,6 +19,8 @@ import javafx.scene.image.Image;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
+import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ArenaImage;
+import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ItemType;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.Wall;
 
@@ -84,7 +86,9 @@ public class AddObstacleDialog {
 		// Create a list of directions
 		ObservableList<String> objectList = FXCollections.observableArrayList();
 		objectList.add("Random");
-		objectList.add("Wall");
+		for (int i=0; i<ItemType.getCount(); i++) {
+			objectList.add(ItemType.get(i));
+		}
 		objectBox.setItems(objectList);
 		objectBox.setValue("Random");
 		// https://stackoverflow.com/questions/14522680/javafx-choicebox-events
@@ -125,7 +129,7 @@ public class AddObstacleDialog {
 	}
 
 	private static void addRobot() {
-		String addRobotOutput = robotArena.addObstacle(x, y, objectType);
+		String addRobotOutput = robotArena.addItem(x, y, objectType);
 		if (addRobotOutput == "success") {
 			robotArena.setStatus("not-drawn");
 		} else {
@@ -184,7 +188,9 @@ public class AddObstacleDialog {
 	private static Image getImage(String objectType) {
 		switch(objectType) {
 		default:
-			return new Wall().getImage();
+			return new ArenaImage().getWallImage();
+		case "Charger":
+			return new ArenaImage().getChargerImage();
 		}
 	}
 

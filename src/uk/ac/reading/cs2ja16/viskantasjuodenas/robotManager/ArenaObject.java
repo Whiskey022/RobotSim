@@ -52,4 +52,13 @@ public abstract class ArenaObject {
 	public static int getObjectsCount() {
 		return objectsCount;
 	}
+
+	public boolean isCharger() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void increaseCharge() {
+		// TODO Auto-generated method stub
+	}
 }
