@@ -1,6 +1,5 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import javafx.application.Platform;
@@ -16,25 +15,23 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
-import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.Direction;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
-import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ArenaImage;
+import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.Wall;
 
 /**
  * Class to open "Add Custom Robot" dialog
  */
-public class AddRobotDialog {
+public class AddObstacleDialog {
 
 	private static GraphicsContext gc;
 	private static int x;
 	private static int y;
-	private static Direction direction;
-	private static String robotSelection;
+	private static String objectType;
 	private static RobotArena robotArena;
-	private static String[] robots = {"RobotOne"};
 
 	/**
 	 * Open "Add Custom Robot" dialog
@@ -43,7 +40,7 @@ public class AddRobotDialog {
 		robotArena = arena;
 		// Create the custom dialog.
 		Dialog<Pair<String, String>> dialog = new Dialog<>();
-		dialog.setTitle("Add a custom Robot");
+		dialog.setTitle("Add a custom obstacle");
 
 		// Set the button types.
 		ButtonType addBtnType = new ButtonType("Add", ButtonData.APPLY);
@@ -81,50 +78,32 @@ public class AddRobotDialog {
 		positionPane.add(new Label("   Y:  "), 2, 0);
 		positionPane.add(yField, 3, 0);
 
-		// Set up direction selection box
-		GridPane directionPane = new GridPane();
-		ChoiceBox<String> dirBox = new ChoiceBox<String>();
+		// Set up object selection box
+		GridPane objectPane = new GridPane();
+		ChoiceBox<String> objectBox = new ChoiceBox<String>();
 		// Create a list of directions
-		ObservableList<String> dirList = FXCollections.observableArrayList();
-		dirList.add("Random");
-		for (int i = 0; i < Direction.values().length; i++) {
-			dirList.add(Direction.values()[i].toString());
-		}
-		dirBox.setItems(dirList);
-		dirBox.setValue("Random");
-		// Add direction box to direction grid pane
-		directionPane.add(new Label("Select robot's direction:    "), 0, 0);
-		directionPane.add(dirBox, 1, 0);
-
-		// Set up a grid pane of robot selection
-		GridPane robotPane = new GridPane();
-		ChoiceBox<String> robotBox = new ChoiceBox<String>();
-		// Create a list of images indexes
-		ObservableList<String> robotList = FXCollections.observableArrayList();
-		robotList.add("Random");
-		for (int i=0; i<robots.length; i++) {
-			robotList.add(robots[i]);
-		}
-		robotBox.setItems(robotList);
-		robotBox.setValue("Random");
+		ObservableList<String> objectList = FXCollections.observableArrayList();
+		objectList.add("Random");
+		objectList.add("Wall");
+		objectBox.setItems(objectList);
+		objectBox.setValue("Random");
 		// https://stackoverflow.com/questions/14522680/javafx-choicebox-events
-		robotBox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable,
+		objectBox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable,
 				String oldValue, String newValue) -> drawIt(newValue, 40, 20, 40));
 		// Set up Group object to draw robot image
 		Group root = new Group();
 		Canvas canvas = new Canvas(90, 50);
 		root.getChildren().add(canvas);
 		gc = canvas.getGraphicsContext2D();
-		// Add image box to images grid pane
-		robotPane.add(new Label("Select robot image index: "), 0, 0);
-		robotPane.add(robotBox, 1, 0);
-		robotPane.add(root, 2, 0);
+		// Add direction box to direction grid pane
+		objectPane.add(new Label("Select object type:    "), 0, 0);
+		objectPane.add(objectBox, 1, 0);
+		objectPane.add(root, 2, 0);
 
 		// Add all grid panes to the parent pane
-		parentPane.add(new Label("Input robot coordinates"), 0, 0);
+		parentPane.add(new Label("Input obstacle coordinates"), 0, 0);
 		parentPane.add(positionPane, 0, 1);
-		parentPane.add(directionPane, 0, 2);
-		parentPane.add(robotPane, 0, 3);
+		parentPane.add(objectPane, 0, 2);
 
 		dialog.getDialogPane().setContent(parentPane);
 
@@ -135,7 +114,7 @@ public class AddRobotDialog {
 		// clicked.
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == addBtnType) {
-				setResults(xField.getText(), yField.getText(), dirBox.getValue(), robotBox.getValue());
+				setResults(xField.getText(), yField.getText(), objectBox.getValue());
 				addRobot();
 				robotArena.setStatus("not-drawn");
 			}
@@ -146,7 +125,7 @@ public class AddRobotDialog {
 	}
 
 	private static void addRobot() {
-		String addRobotOutput = robotArena.addRobot(x, y, direction, robotSelection);
+		String addRobotOutput = robotArena.addObstacle(x, y, objectType);
 		if (addRobotOutput == "success") {
 			robotArena.setStatus("not-drawn");
 		} else {
@@ -162,12 +141,10 @@ public class AddRobotDialog {
 	 *            x coordinate
 	 * @param yVal
 	 *            y coordinate
-	 * @param dir
-	 *            direction
-	 * @param imgIndex
-	 *            image index
+	 * @param type
+	 *            object type
 	 */
-	private static void setResults(String xVal, String yVal, String dir, String typeSelection) {
+	private static void setResults(String xVal, String yVal, String type) {
 		// Set x
 		if (!isNumeric(xVal)) {
 			x = new Random().nextInt(robotArena.getXSize());
@@ -180,25 +157,15 @@ public class AddRobotDialog {
 		} else {
 			y = Integer.parseInt(yVal);
 		}
-		// Set direction
-		if (dir == "Random") {
-			direction = Direction.getRandomDirection();
-		} else {
-			direction = Direction.valueOf(dir);
-		}
-		// Set robot type selection
-		if (typeSelection == "Random") {
-			robotSelection = randomRobotType();
-		} else {
-			robotSelection = typeSelection;
-		}
+		// Set object type
+		objectType = type;
 	}
 
 	/**
 	 * drawIt ... draws object defined by given image at position and size
 	 * 
-	 * @param i
-	 *            image
+	 * @param objectType
+	 *            object type to get image
 	 * @param x
 	 *            x position
 	 * @param y
@@ -206,11 +173,18 @@ public class AddRobotDialog {
 	 * @param sz
 	 *            size
 	 */
-	private static void drawIt(String robotName, double x, double y, double sz) {
+	private static void drawIt(String objectType, double x, double y, double sz) {
 		gc.clearRect(0, 0, 90, 50); // clear canvas
-		if (robotName != "Random") {
+		if (objectType != "Random") {
 			// to draw centred at x,y, give top left position and x,y size
-			gc.drawImage(new ArenaImage().getRobotImage(Arrays.asList(robots).indexOf(robotName)), x - sz / 2, y - sz / 2, sz, sz);
+			gc.drawImage(getImage(objectType), x - sz / 2, y - sz / 2, sz, sz);
+		}
+	}
+	
+	private static Image getImage(String objectType) {
+		switch(objectType) {
+		default:
+			return new Wall().getImage();
 		}
 	}
 
@@ -229,13 +203,6 @@ public class AddRobotDialog {
 			return false;
 		}
 		return true;
-	}
-	
-	private static String randomRobotType() {
-		switch(new Random().nextInt(robots.length)) {
-			default:
-				return "RobotOne";
-		}
 	}
 
 }

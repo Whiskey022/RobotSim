@@ -11,7 +11,7 @@ public class Main extends Application {
 	private int canvasSize = 512;
 	private int robotSize = 40;
 	private RobotArena robotArena;
-	private RobotCanvasGroup robotCanvas;
+	private ArenaCanvas robotCanvas;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -20,7 +20,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		robotArena = new RobotArena(canvasSize / (int) robotSize, canvasSize / robotSize);
-		robotCanvas = new RobotCanvasGroup(canvasSize, canvasSize, robotSize, robotArena);
+		robotCanvas = new ArenaCanvas(canvasSize, canvasSize, robotSize, robotArena);
 
 		primaryStage.setTitle("Robot Simulator");
 

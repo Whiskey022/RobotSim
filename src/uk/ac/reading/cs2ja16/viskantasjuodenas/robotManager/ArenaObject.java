@@ -26,6 +26,12 @@ public abstract class ArenaObject {
 	}
 	
 	public abstract boolean tryToMove();
+	public abstract boolean isRobot();
+	public abstract boolean getDidMove();
+	
+	public boolean isWall() {
+		return false;
+	}
 	
 	public int getX() {
 		return x;
@@ -46,6 +52,4 @@ public abstract class ArenaObject {
 	public static int getObjectsCount() {
 		return objectsCount;
 	}
-
-	public abstract boolean getDidMove();
 }

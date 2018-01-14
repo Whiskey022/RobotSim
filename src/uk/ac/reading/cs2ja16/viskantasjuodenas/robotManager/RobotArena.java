@@ -3,8 +3,6 @@ package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javafx.scene.image.Image;
-
 public class RobotArena {
 
 	private int x, y;
@@ -47,14 +45,14 @@ public class RobotArena {
 
 			// If position not taken, add robot there
 			if (!objectIsHere(x, y)) {
-				objects.add(new Robot(x, y, Direction.getRandomDirection(), this, new RobotImages().getRandomImage()));
+				objects.add(new RobotOne(x, y, Direction.getRandomDirection(), this));
 				return "success";
 			}
 		}
 		return "Failed to add a robot";
 	}
 
-	public String addRobot(int x, int y, Direction direction, Image image) {
+	public String addRobot(int x, int y, Direction direction, String robotType) {
 		// If position not taken, add robot there
 		if (!objectIsHere(x, y)) {
 			// Check if x value valid, change if necessary
@@ -69,7 +67,7 @@ public class RobotArena {
 			} else if (y < 1) {
 				y = 1;
 			}
-			objects.add(new Robot(x, y, direction, this, image));
+			objects.add(newRobot(x, y, direction, robotType));
 			return "success";
 		}
 		System.out.println("ERROR: position already taken");
@@ -90,8 +88,7 @@ public class RobotArena {
 
 			// If position not taken, add robot there
 			if (!objectIsHere(x, y)) {
-				ArenaObject newRobot = randomObstacle(x, y);
-				objects.add(newRobot);
+				objects.add(randomObstacle(x, y));
 				return "success";
 			}
 		}
@@ -155,7 +152,8 @@ public class RobotArena {
 	// Function to check if robot is at position
 	private boolean objectIsBlocking(int x, int y) {
 		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
-			if (objects.get(i).isHere(x, y) && (isRobot(objects.get(i)) || isWall(objects.get(i)))) {
+			ArenaObject object = objects.get(i);
+			if (object.isHere(x, y) && (object.isRobot() || object.isWall())) {
 				return true;
 			}
 		}
@@ -167,7 +165,7 @@ public class RobotArena {
 		int countOfRobotsMoved = 0;
 		while (countOfRobotsMoved == 0) {
 			for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
-				if (isRobot(objects.get(i)) && objects.get(i).tryToMove()) {
+				if (objects.get(i).isRobot() && objects.get(i).tryToMove()) {
 					countOfRobotsMoved++;
 				}
 			}
@@ -189,13 +187,12 @@ public class RobotArena {
 			return randomObstacle(x, y);
 		}
 	}
-
-	private boolean isRobot(ArenaObject object) {
-		return object.getClass() == Robot.class;
-	}
-
-	private boolean isWall(ArenaObject object) {
-		return object.getClass() == Wall.class;
+	
+	private Robot newRobot(int x, int y, Direction direction, String type) {
+		switch(type) {
+		default:
+			return new RobotOne(x, y, direction, this);
+		}
 	}
 
 	public void setXSize(int x) {

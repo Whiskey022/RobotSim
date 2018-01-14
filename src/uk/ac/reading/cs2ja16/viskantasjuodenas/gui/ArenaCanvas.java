@@ -10,7 +10,7 @@ import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ArenaObject;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.Robot;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 
-public class RobotCanvasGroup {
+public class ArenaCanvas {
 
 	private Group root;
 	private Canvas canvas;
@@ -29,7 +29,7 @@ public class RobotCanvasGroup {
 	 * @param canvasHeight
 	 *            canvas height
 	 */
-	public RobotCanvasGroup(int canvasWidth, int canvasHeight, int robotSize, RobotArena robotArena) {
+	public ArenaCanvas(int canvasWidth, int canvasHeight, int robotSize, RobotArena robotArena) {
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
 		this.robotSize = robotSize;

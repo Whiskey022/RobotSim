@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 /**
  * Simple class to easily store and retrieve robot images 
  */
-public class RobotImages {
+public class ArenaImage {
 	
 	private Image[] robotImages = {
     		new Image(getClass().getResourceAsStream("robot_01.png")),
@@ -19,14 +19,23 @@ public class RobotImages {
     		new Image(getClass().getResourceAsStream("robot_08.png")),
     		new Image(getClass().getResourceAsStream("robot_09.png")),
     		};
+	private Image wallImage = new Image(getClass().getResourceAsStream("wall.png"));
 		
 	/**
 	 * Get image with provided index
 	 * @param	index	provide image index
 	 * @return	return robot image
 	 */
-	public Image getImage(int index) {
+	public Image getRobotImage(int index) {
 		return robotImages[index];
+	}
+	
+	/**
+	 * 
+	 * @return	Image of a wall
+	 */
+	public Image getWallImage() {
+		return wallImage;
 	}
 	
 	/**

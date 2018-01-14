@@ -1,8 +1,7 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
-import javafx.scene.image.Image;
 
-public class Robot extends ArenaObject {
+public abstract class Robot extends ArenaObject {
 
 	protected int initialX, initialY;		//To keep starting positions
 	protected int oldX, oldY;
@@ -10,25 +9,6 @@ public class Robot extends ArenaObject {
 	protected Direction direction;
 	protected RobotArena robotArena;
 	protected boolean didMove = false;
-
-	/**
-	 * Robot constructor, sets up his location, direction, robotArena, Id, and imageIndex
-	 * @param	x	x coordinate
-	 * @param	y	y coordinate
-	 * @param	direction	robot's initial direction
-	 * @param	robotArena	robotArena the robot belongs to	
-	 * @param	imageIndex	robot's image index, stored to have a consistent image
-	 */
-	public Robot(int x, int y, Direction direction, RobotArena robotArena, Image image) {
-		this.initialX = x;
-		this.initialY = y;
-		this.x = x;
-		this.y = y;
-		this.direction = direction;
-		this.robotArena = robotArena;
-		this.image = image;
-		countId();
-	}
 
 	//Function to move
 	@Override
@@ -62,6 +42,11 @@ public class Robot extends ArenaObject {
 			didMove = false;
 			return false;
 		}
+	}
+	
+	@Override
+	public boolean isRobot() {
+		return true;
 	}
 	
 	public void setX(int x) {
