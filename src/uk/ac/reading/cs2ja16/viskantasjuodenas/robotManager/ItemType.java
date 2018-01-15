@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class ItemType {
 
-	private static String[] items = { "Wall", "Charger"};
+	private static String[] items = { "Wall", "Charger", "Trap"};
 
 	public static int getCount() {
 		return items.length;
@@ -29,6 +29,8 @@ public class ItemType {
 			return new Wall(x, y, robotArena);
 		case "Charger":
 			return new Charger(x, y, robotArena);
+		case "Trap":
+			return new Trap(x, y, robotArena);
 		}
 	}
 }

@@ -19,6 +19,25 @@ public class ArenaImage {
 			new Image(getClass().getResourceAsStream("robot_09.png")), };
 	private Image wallImage = new Image(getClass().getResourceAsStream("wall.png"));
 	private Image chargerImage = new Image(getClass().getResourceAsStream("charger.png"));
+	private Image trapImage = new Image(getClass().getResourceAsStream("trap.png"));
+	
+	/**
+	 * Get image with provided with item type
+	 * 
+	 * @param index
+	 *            provide item type to get image for
+	 * @return return item image
+	 */
+	public Image getByItemType(String itemType) {
+		switch(itemType) {
+		default:
+			return wallImage;
+		case "Charger":
+			return chargerImage;
+		case "Trap":
+			return trapImage;
+		}
+	}
 
 	/**
 	 * Get image with provided index
@@ -45,6 +64,14 @@ public class ArenaImage {
 	 */
 	public Image getChargerImage() {
 		return chargerImage;
+	}
+	
+	/**
+	 * 
+	 * @return Image of a trap
+	 */
+	public Image getTrapImage() {
+		return trapImage;
 	}
 
 	/**

@@ -33,6 +33,14 @@ public abstract class ArenaObject {
 		return false;
 	}
 	
+	public boolean isCharger() {
+		return false;
+	}
+	
+	public boolean isTrap() {
+		return false;
+	}
+	
 	public static void setObjectCount(int count) {
 		objectsCount = count;
 	}
@@ -55,11 +63,6 @@ public abstract class ArenaObject {
 	
 	public static int getObjectsCount() {
 		return objectsCount;
-	}
-
-	public boolean isCharger() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public void increaseCharge() {

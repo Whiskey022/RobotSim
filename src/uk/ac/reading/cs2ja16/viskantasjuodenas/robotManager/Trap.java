@@ -1,17 +1,17 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
-public class Wall extends ArenaObject{
+public class Trap extends ArenaObject{
 		
-	public Wall(int x, int y, RobotArena robotArena) {
+	public Trap(int x, int y, RobotArena robotArena) {
 		this.x = x;
 		this.y = y;
 		this.robotArena = robotArena;
-		this.image = new ArenaImage().getWallImage();
+		this.image = new ArenaImage().getTrapImage();
 		countId();
 	}
 	
 	@Override
-	public boolean isWall() {
+	public boolean isTrap() {
 		return true;
 	}
 	

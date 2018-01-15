@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.util.Pair;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.Direction;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
@@ -33,6 +34,7 @@ public class AddRobotDialog {
 	private static Direction direction;
 	private static String robotSelection;
 	private static RobotArena robotArena;
+	private static Label descLabel = new Label("Description: ");
 
 	/**
 	 * Open "Add Custom Robot" dialog
@@ -51,7 +53,8 @@ public class AddRobotDialog {
 		GridPane parentPane = new GridPane();
 		parentPane.setHgap(10);
 		parentPane.setVgap(10);
-		parentPane.setPadding(new Insets(20, 150, 10, 10));
+		parentPane.setMinWidth(550);
+		parentPane.setPadding(new Insets(20, 0, 10, 10));
 
 		// Grid pane for coordinates
 		GridPane positionPane = new GridPane();
@@ -107,7 +110,7 @@ public class AddRobotDialog {
 		robotBox.setValue("Random");
 		// https://stackoverflow.com/questions/14522680/javafx-choicebox-events
 		robotBox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable,
-				String oldValue, String newValue) -> drawIt(newValue, 40, 20, 40));
+				String oldValue, String newValue) -> {drawIt(newValue, 40, 20, 40); setDescription(newValue);});
 		// Set up Group object to draw robot image
 		Group root = new Group();
 		Canvas canvas = new Canvas(90, 50);
@@ -117,12 +120,19 @@ public class AddRobotDialog {
 		robotPane.add(new Label("Select robot image index: "), 0, 0);
 		robotPane.add(robotBox, 1, 0);
 		robotPane.add(root, 2, 0);
+		
+		//Description grid pane
+		GridPane descPane = new GridPane();
+		descLabel.setWrapText(true);
+		GridPane.setHgrow(descLabel, Priority.ALWAYS);
+		descPane.add(descLabel, 0, 0);
 
 		// Add all grid panes to the parent pane
 		parentPane.add(new Label("Input robot coordinates"), 0, 0);
 		parentPane.add(positionPane, 0, 1);
 		parentPane.add(directionPane, 0, 2);
 		parentPane.add(robotPane, 0, 3);
+		parentPane.add(descLabel, 0, 4);
 
 		dialog.getDialogPane().setContent(parentPane);
 
@@ -210,6 +220,10 @@ public class AddRobotDialog {
 			// to draw centred at x,y, give top left position and x,y size
 			gc.drawImage(new ArenaImage().getRobotImage(RobotType.getIndex(robotName)), x - sz / 2, y - sz / 2, sz, sz);
 		}
+	}
+	
+	private static void setDescription(String robotName) {
+		descLabel.setText(RobotType.getDescription(RobotType.getIndex(robotName)));
 	}
 
 	/**

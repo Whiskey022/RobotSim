@@ -6,6 +6,15 @@ import java.util.Random;
 public class RobotType {
 
 	private static String[] robots = { "RobotOne", "RobotTwo", "RobotThree", "RobotFour" };
+	private static String[] robotDescriptions = {
+			"Robot changes direction clockwise. Takes a turn to change a direction.",
+			"Robot changes direction clockwise. Changes direction instantly.",
+			"Robot changes direction randomly. Changes direction instantly",
+			"Robot changes direction clockwise, but can change at a random time. Changes direction instantly.",
+			"Robot changes direction clockwise. Has extra charge. Takes a turn to change direction",
+			"Robot changes direction clockwise. Removes traps. Takes a turn to change direction",
+			"Robot changes direction clockwise, can steer towards a light. Changes direction instantly",
+			"Robot changes direcction clockwise, can destroy walls. Takes a turn to change direction"};
 
 	public static int getCount() {
 		return robots.length;
@@ -17,6 +26,10 @@ public class RobotType {
 
 	public static String get(int index) {
 		return robots[index];
+	}
+	
+	public static String getDescription(int index) {
+		return robotDescriptions[index];
 	}
 
 	public static int getIndex(String name) {

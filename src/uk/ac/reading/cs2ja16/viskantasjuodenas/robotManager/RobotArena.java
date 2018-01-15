@@ -9,6 +9,7 @@ public class RobotArena {
 	private ArrayList<ArenaObject> objects;
 	private String status = "stop";
 	private String message = "";
+	private Boolean goodMessage = true;
 
 	/**
 	 * RobotArena constructor
@@ -119,8 +120,8 @@ public class RobotArena {
 		return "Position already taken";
 	}
 
-	public void removeObject(ArenaObject obj, int index) {
-		objects.remove(index);
+	public void removeObject(ArenaObject obj) {
+		objects.remove(objects.indexOf(obj));
 		ArenaObject.setObjectCount(ArenaObject.getObjectsCount() - 1);
 	}
 
@@ -176,7 +177,8 @@ public class RobotArena {
 					if (object.tryToMove()) {
 						countOfRobotsMoved++;
 					} else if (((Robot) object).getChargeLevel() < 1) {
-						message = "Robot run out of juice at x: " + object.getX() + ", y: " + object.getY();
+						message = "Robot ran out of juice at x: " + object.getX() + ", y: " + object.getY();
+						goodMessage = false;
 					}
 				}
 
@@ -195,11 +197,18 @@ public class RobotArena {
 					if (obj1.isRobot() && obj2.isCharger()) {
 						obj1.increaseCharge();
 						message = "Robot charged at x: " + obj1.getX() + ", y: " + obj1.getY();
-						removeObject(obj2, j);
+						goodMessage = true;
+						removeObject(obj2);
 					} else if (obj2.isRobot() && obj1.isCharger()) {
 						obj2.increaseCharge();
 						message = "Robot charged at x: " + obj2.getX() + ", y: " + obj2.getY();
-						removeObject(obj1, i);
+						goodMessage = true;
+						removeObject(obj1);
+					} else if ((obj1.isRobot() && obj2.isTrap()) || (obj2.isRobot() && obj1.isTrap())) {
+						message = "Robot removed by trap at x: " + obj1.getX() + ", y: " + obj1.getY();
+						goodMessage = false;
+						removeObject(obj1);
+						removeObject(obj2);
 					}
 					collisionsFound = true;
 				}
@@ -244,6 +253,10 @@ public class RobotArena {
 		return message;
 	}
 
+	public boolean isGoodMessage() {
+		return goodMessage;
+	}
+	
 	// Convert all arena details to a string for saving into file
 	public String getDetails() {
 		String details = "";

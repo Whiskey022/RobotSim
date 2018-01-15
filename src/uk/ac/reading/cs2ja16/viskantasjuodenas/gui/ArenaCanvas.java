@@ -22,6 +22,7 @@ public class ArenaCanvas {
 	private GraphicsContext gc;
 	private double step;
 	Label arenaLabel = new Label();
+	private String defaultLabelStyle = "-fx-label-padding: -20px 20px 0px, 0px";
 
 	/**
 	 * RobotCanvas constructor, sets up a new canvas
@@ -40,7 +41,6 @@ public class ArenaCanvas {
 		root = new Group();
 		canvas = new Canvas(canvasWidth, canvasHeight);
 		Canvas gridCanvas = createCanvasGrid(canvasWidth, canvasHeight);
-		arenaLabel.setStyle("-fx-label-padding: -20px 20px 0px, 0px; -fx-text-fill: red");
 		root.getChildren().addAll(arenaLabel, gridCanvas, canvas);
 		gc = canvas.getGraphicsContext2D();
 
@@ -96,8 +96,9 @@ public class ArenaCanvas {
 			ArenaObject object = robotArena.getObjects().get(i);
 			drawIt(object.getImage(), object.getX() * robotSize, object.getY() * robotSize, robotSize);
 		}
-		// Set areDrawn to true
-		robotArena.setStatus("stand");
+		if (robotArena.getStatus() != "draw-movement-continuous") {
+			robotArena.setStatus("stand");
+		}
 	}
 
 	/**
@@ -135,7 +136,9 @@ public class ArenaCanvas {
 		// If position reached
 		if (positionReached) {
 			//Check if any of the robots stepped on an item, update them if necessary
-			robotArena.checkCollisions();
+			if (robotArena.checkCollisions()) {
+				drawObjects();
+			}
 			
 			//Reset step
 			step = 0.0;
@@ -175,7 +178,6 @@ public class ArenaCanvas {
 			// If robot has moved to new coordinates, calculate coordinates for drawing
 			xToDraw = oldX + (newX - oldX) * step;
 			yToDraw = oldY + (newY - oldY) * step;
-			System.out.println(step + " " + newX + " ; " + oldX);
 
 			// Check if coordinates reached
 			if (coordinateReached(xToDraw, newX) && coordinateReached(yToDraw, newY)) {
@@ -194,6 +196,11 @@ public class ArenaCanvas {
 	
 	private void updateArenaLabel() {
 		arenaLabel.setText(robotArena.getMessage());
+		if (robotArena.isGoodMessage()) {
+			arenaLabel.setStyle(defaultLabelStyle + "; -fx-text-fill: blue");
+		} else {
+			arenaLabel.setStyle(defaultLabelStyle + "; -fx-text-fill: red");
+		}
 	}
 
 	/**

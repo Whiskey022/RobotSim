@@ -14,9 +14,9 @@ public class Main extends Application {
 
 	private int arenaWidth = 15;
 	private int arenaHeight = 15;
-	private int robotSize = (int) (150/Math.sqrt((Math.sqrt(arenaHeight * arenaWidth))));
-	private int canvasWitdh = arenaWidth*robotSize;
-	private int canvasHeight = arenaHeight*robotSize;
+	private int objectSize = (int) (150/Math.sqrt((Math.sqrt(arenaHeight * arenaWidth))));
+	private int canvasWitdh = arenaWidth*objectSize;
+	private int canvasHeight = arenaHeight*objectSize;
 	private RobotArena robotArena;
 	private ArenaCanvas robotCanvas;
 
@@ -30,7 +30,7 @@ public class Main extends Application {
 		calculateDimensions();
 		
 		robotArena = new RobotArena(arenaWidth, arenaHeight);
-		robotCanvas = new ArenaCanvas(canvasWitdh, canvasHeight, robotSize, robotArena);
+		robotCanvas = new ArenaCanvas(canvasWitdh, canvasHeight, objectSize, robotArena);
 
 		primaryStage.setTitle("Robot Simulator");
 
