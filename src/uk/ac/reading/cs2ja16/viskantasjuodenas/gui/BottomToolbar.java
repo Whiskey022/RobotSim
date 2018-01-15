@@ -16,7 +16,7 @@ public class BottomToolbar {
 	private Image arrowImage = new Image(getClass().getResourceAsStream("arrow.png"));
 	private Image doubleArrowImage = new Image(getClass().getResourceAsStream("double_arrow.png"));
 	private Image pauseImage = new Image(getClass().getResourceAsStream("pause.png"));
-	private Image resetImage = new Image(getClass().getResourceAsStream("reset.png"));
+	private double defaultSpeed = 0.02;
 
 	/**
 	 * BottomMenu constructor, sets up a box of buttons
@@ -28,6 +28,7 @@ public class BottomToolbar {
 	 */
 	public BottomToolbar(RobotArena robotArena, ArenaCanvas robotCanvas) {
 		this.robotArena = robotArena;
+		robotArena.setSpeed(defaultSpeed);
 
 		menuBox = setButtons();
 	}
@@ -91,7 +92,27 @@ public class BottomToolbar {
 			}
 		});
 
-		menuBox.getChildren().addAll(randomRobotBtn, randomObstacle, moveRobotsOnceBtn, moveRobotsBtn, stopRobotsBtn);
+		// Button to speed up robots
+		Button speedUpButton = new Button("Speed Up");
+		speedUpButton.setGraphic(new ImageView(pauseImage));
+		speedUpButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				robotArena.setSpeed(robotArena.getSpeed() + defaultSpeed);
+			}
+		});
+
+		// Button to reset speed
+		Button resetSpeedButton = new Button("Reset speed");
+		resetSpeedButton.setGraphic(new ImageView(pauseImage));
+		resetSpeedButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				robotArena.setSpeed(defaultSpeed);
+			}
+		});
+
+		menuBox.getChildren().addAll(randomRobotBtn, randomObstacle, moveRobotsOnceBtn, moveRobotsBtn, stopRobotsBtn, speedUpButton, resetSpeedButton);
 		return menuBox;
 	}
 

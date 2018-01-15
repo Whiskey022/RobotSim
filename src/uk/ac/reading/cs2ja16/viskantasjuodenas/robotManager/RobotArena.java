@@ -10,6 +10,7 @@ public class RobotArena {
 	private String status = "stop";
 	private String message = "";
 	private Boolean goodMessage = true;
+	private double speed = 0.02;
 
 	/**
 	 * RobotArena constructor
@@ -228,6 +229,10 @@ public class RobotArena {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
 
 	public int getXSize() {
 		return x;
@@ -255,6 +260,10 @@ public class RobotArena {
 
 	public boolean isGoodMessage() {
 		return goodMessage;
+	}
+	
+	public double getSpeed() {
+		return speed;
 	}
 	
 	// Convert all arena details to a string for saving into file

@@ -20,6 +20,7 @@ public class ArenaImage {
 	private Image wallImage = new Image(getClass().getResourceAsStream("wall.png"));
 	private Image chargerImage = new Image(getClass().getResourceAsStream("charger.png"));
 	private Image trapImage = new Image(getClass().getResourceAsStream("trap.png"));
+	private Image lightImage = new Image(getClass().getResourceAsStream("light.png"));
 	
 	/**
 	 * Get image with provided with item type
@@ -36,6 +37,8 @@ public class ArenaImage {
 			return chargerImage;
 		case "Trap":
 			return trapImage;
+		case "Light":
+			return lightImage;
 		}
 	}
 
@@ -73,6 +76,15 @@ public class ArenaImage {
 	public Image getTrapImage() {
 		return trapImage;
 	}
+	
+	/**
+	 * 
+	 * @return Image of a light
+	 */
+	public Image getLightImage() {
+		return lightImage;
+	}
+
 
 	/**
 	 * Get a random robot image

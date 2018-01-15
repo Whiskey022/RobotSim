@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class ItemType {
 
-	private static String[] items = { "Wall", "Charger", "Trap"};
+	private static String[] items = { "Wall", "Charger", "Trap", "Light" };
 
 	public static int getCount() {
 		return items.length;
@@ -24,13 +24,16 @@ public class ItemType {
 	}
 
 	public static ArenaObject getItemObject(int x, int y, String type, RobotArena robotArena) {
-		switch(type) {
+		switch (type) {
 		default:
 			return new Wall(x, y, robotArena);
 		case "Charger":
 			return new Charger(x, y, robotArena);
 		case "Trap":
 			return new Trap(x, y, robotArena);
+		case "Light":
+			return new Light(x, y, robotArena);
 		}
+
 	}
 }

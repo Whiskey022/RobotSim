@@ -29,18 +29,6 @@ public abstract class ArenaObject {
 	public abstract boolean isRobot();
 	public abstract boolean getDidMove();
 	
-	public boolean isWall() {
-		return false;
-	}
-	
-	public boolean isCharger() {
-		return false;
-	}
-	
-	public boolean isTrap() {
-		return false;
-	}
-	
 	public static void setObjectCount(int count) {
 		objectsCount = count;
 	}
@@ -67,5 +55,21 @@ public abstract class ArenaObject {
 
 	public void increaseCharge() {
 		// TODO Auto-generated method stub
+	}
+	
+	public boolean isWall() {
+		return false;
+	}
+	
+	public boolean isCharger() {
+		return false;
+	}
+	
+	public boolean isTrap() {
+		return false;
+	}
+	
+	public boolean isLight() {
+		return false;
 	}
 }

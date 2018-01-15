@@ -121,7 +121,7 @@ public class ArenaCanvas {
 	 */
 	private void animateMovingRobots() {
 		boolean positionReached = false;
-		step += 0.02;
+		step += robotArena.getSpeed();
 
 		// clear canvas and reset stroke
 		resetCanvas();
@@ -180,7 +180,7 @@ public class ArenaCanvas {
 			yToDraw = oldY + (newY - oldY) * step;
 
 			// Check if coordinates reached
-			if (coordinateReached(xToDraw, newX) && coordinateReached(yToDraw, newY)) {
+			if (step > 1 || coordinateReached(xToDraw, newX) && coordinateReached(yToDraw, newY)) {
 				positionReached = true;
 			}
 		} else {
