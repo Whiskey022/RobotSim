@@ -8,6 +8,7 @@ public class Wall extends ArenaObject{
 		this.robotArena = robotArena;
 		this.image = new ArenaImage().getWallImage();
 		countId();
+		type = "Wall";
 	}
 	
 	@Override

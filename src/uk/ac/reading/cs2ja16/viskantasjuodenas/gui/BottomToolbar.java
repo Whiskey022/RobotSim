@@ -52,7 +52,6 @@ public class BottomToolbar {
 		});
 
 		// "Button for adding a random robot
-		// https://stackoverflow.com/questions/31556373/javafx-dialog-with-2-input-fields
 		Button randomObstacle = new Button("Random Obstacle");
 		randomObstacle.setGraphic(new ImageView(plusImage));
 		randomObstacle.setOnAction(new EventHandler<ActionEvent>() {
@@ -94,7 +93,6 @@ public class BottomToolbar {
 
 		// Button to speed up robots
 		Button speedUpButton = new Button("Speed Up");
-		speedUpButton.setGraphic(new ImageView(pauseImage));
 		speedUpButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -104,7 +102,6 @@ public class BottomToolbar {
 
 		// Button to reset speed
 		Button resetSpeedButton = new Button("Reset speed");
-		resetSpeedButton.setGraphic(new ImageView(pauseImage));
 		resetSpeedButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -113,8 +110,7 @@ public class BottomToolbar {
 		});
 		
 		// Button to reset speed
-		Button resetChargeButton = new Button("Reset speed");
-		resetChargeButton.setGraphic(new ImageView(pauseImage));
+		Button resetChargeButton = new Button("Reset charge");
 		resetChargeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {

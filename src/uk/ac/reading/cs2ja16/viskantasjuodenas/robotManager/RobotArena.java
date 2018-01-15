@@ -7,7 +7,7 @@ public class RobotArena {
 
 	private int x, y;
 	private ArrayList<ArenaObject> objects;
-	private String status = "stop";
+	private String status;
 	private String message = "";
 	private Boolean goodMessage = true;
 	private double speed = 0.02;
@@ -24,6 +24,8 @@ public class RobotArena {
 		this.x = x;
 		this.y = y;
 		objects = new ArrayList<ArenaObject>();
+		status = "not-drawn";
+		ArenaObject.setObjectCount(0);
 	}
 
 	/**
@@ -57,10 +59,10 @@ public class RobotArena {
 	}
 
 	public String addRobot(int x, int y, Direction direction, String robotType) {
-		
+
 		x = checkIfValidX(x);
 		y = checkIfValidY(y);
-		
+
 		// If position not taken, add robot there
 		if (!objectIsHere(x, y)) {
 			objects.add(RobotType.getRobotObject(x, y, direction, robotType, this));
@@ -92,10 +94,10 @@ public class RobotArena {
 	}
 
 	public String addItem(int x, int y, String type) {
-		
+
 		x = checkIfValidX(x);
 		y = checkIfValidY(y);
-		
+
 		// If position not taken, add robot there
 		if (!objectIsHere(x, y)) {
 			objects.add(ItemType.getItemObject(x, y, type, this));
@@ -209,7 +211,64 @@ public class RobotArena {
 		}
 		return collisionsFound;
 	}
-	
+
+	// Function to open browser in load mode, and update arena details
+	public void loadArena(String loadedData) {
+		String[] lines = loadedData.split("\\|");
+
+		// Extract arena details
+		String[] values = lines[0].split(":");
+
+		objects.clear();
+		
+		// Loop to create new robots with extracted details
+		for (int i = 0; i < lines.length - 2; i++) {
+			values = lines[i + 1].split(":");
+			objects.add(generateObject(Integer.parseInt(values[0]), Integer.parseInt(values[1]),
+					Integer.parseInt(values[2]), values[3], values[4], values[5]));
+		}
+	}
+
+	private ArenaObject generateObject(int Id, int x, int y, String type, String direction, String charge) {
+		ArenaObject object = null;
+		switch (type) {
+		case "Wall":
+			object = new Wall(x, y, this);
+			break;
+		case "Charger":
+			object = new Charger(x, y, this);
+			break;
+		case "Trap":
+			object = new Trap(x, y, this);
+			break;
+		case "Light":
+			object = new Light(x, y, this);
+			break;
+		case "RobotOne":
+			object = new RobotOne(x, y, Direction.valueOf(direction), this);
+			break;
+		case "RobotTwo":
+			object = new RobotTwo(x, y, Direction.valueOf(direction), this);
+			break;
+		case "RobotThree":
+			object = new RobotThree(x, y, Direction.valueOf(direction), this);
+			break;
+		case "RobotFour":
+			object = new RobotFour(x, y, Direction.valueOf(direction), this);
+			break;
+		case "RobotEight":
+			object = new RobotEight(x, y, Direction.valueOf(direction), this);
+			break;
+		}
+		if (object.isRobot()) {
+			((Robot) object).setCharge(Integer.parseInt(charge));
+		}
+		if (object != null) {
+			object.setId(Id);
+		}
+		return object;
+	}
+
 	private int checkIfValidX(int x) {
 		if (x >= this.x) {
 			x = this.x;
@@ -218,7 +277,7 @@ public class RobotArena {
 		}
 		return x;
 	}
-	
+
 	private int checkIfValidY(int y) {
 		if (y >= this.y) {
 			y = this.y;
@@ -227,7 +286,7 @@ public class RobotArena {
 		}
 		return y;
 	}
-	
+
 	public void resetCharge() {
 		for (ArenaObject object : objects) {
 			if (object.isRobot()) {
@@ -235,6 +294,15 @@ public class RobotArena {
 			}
 		}
 		message = "Charge reset for all robots.";
+		goodMessage = true;
+	}
+
+	public void reset() {
+		objects = new ArrayList<ArenaObject>();
+		ArenaObject.setObjectCount(0);
+		speed = 0.02;
+		status = "not-drawn";
+		message = "";
 		goodMessage = true;
 	}
 
@@ -249,7 +317,7 @@ public class RobotArena {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	public void setSpeed(double speed) {
 		this.speed = speed;
 	}
@@ -281,21 +349,28 @@ public class RobotArena {
 	public boolean isGoodMessage() {
 		return goodMessage;
 	}
-	
+
 	public double getSpeed() {
 		return speed;
 	}
-	
+
 	// Convert all arena details to a string for saving into file
 	public String getDetails() {
 		String details = "";
 
 		// Arena details
-		details += x + ":" + y + "|";
+		details += x + ":" + y + ":" + "|";
 
-		// Robots details
-		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
-			details += objects.get(i).getId() + ":" + objects.get(i).getX() + ":" + objects.get(i).getY() + "|";
+		// Object details
+		for (ArenaObject object : objects) {
+			String direction = "None";
+			String charge = "None";
+			if (object.isRobot()) {
+				direction = ((Robot) object).getDirection().toString();
+				charge = String.valueOf(((Robot) object).getChargeLevel());
+			}
+			details += object.getId() + ":" + object.getX() + ":" + object.getY() + ":" + object.getType() + ":"
+					+ direction + ":" + charge + "|";
 		}
 
 		return details;

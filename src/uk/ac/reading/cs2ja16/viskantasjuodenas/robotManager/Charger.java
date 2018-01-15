@@ -8,6 +8,7 @@ public class Charger extends ArenaObject {
 		this.robotArena = robotArena;
 		this.image = new ArenaImage().getChargerImage();
 		countId();
+		type = "Charger";
 	}
 	
 	public boolean isCharger() {

@@ -3,7 +3,7 @@ package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 import java.util.Random;
 
 public class RobotFour extends Robot {
-
+	
 	/**
 	 * Robot constructor, sets up his location, direction, robotArena, Id, and
 	 * imageIndex
@@ -28,6 +28,7 @@ public class RobotFour extends Robot {
 		this.robotArena = robotArena;
 		this.image = new ArenaImage().getRobotImage(3);
 		countId();
+		type = "RobotFour";
 	}
 
 	// Function to move

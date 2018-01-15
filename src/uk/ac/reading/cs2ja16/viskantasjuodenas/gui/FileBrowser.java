@@ -1,5 +1,7 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
+import java.awt.Component;
+import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
@@ -42,7 +45,18 @@ public class FileBrowser {
 	
 	//Function to open file browser
 	public void browse(BrowserMode browserMode) {
-		JFileChooser chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser() {
+			 @Override
+             protected JDialog createDialog(Component parent)
+                     throws HeadlessException {
+                 JDialog dialog = super.createDialog(parent);
+                 // config here as needed - just to see a difference
+                 dialog.setLocationByPlatform(true);
+                 // might help - can't know because I can't reproduce the problem
+                 dialog.setAlwaysOnTop(true);
+                 return dialog;
+             }
+		};
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setFileFilter(filter);
 		int returnVal = 0;

@@ -8,6 +8,7 @@ public class Trap extends ArenaObject{
 		this.robotArena = robotArena;
 		this.image = new ArenaImage().getTrapImage();
 		countId();
+		type = "Trap";
 	}
 	
 	@Override

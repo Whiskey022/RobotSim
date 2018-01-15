@@ -1,6 +1,7 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
 public class RobotThree extends Robot{
+
 	/**
 	 * Robot constructor, sets up his location, direction, robotArena, Id, and imageIndex
 	 * @param	x	x coordinate
@@ -18,6 +19,7 @@ public class RobotThree extends Robot{
 		this.robotArena = robotArena;
 		this.image = new ArenaImage().getRobotImage(2);
 		countId();
+		type = "RobotThree";
 	}
 	
 	//Function to move

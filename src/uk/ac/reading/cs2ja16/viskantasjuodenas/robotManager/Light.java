@@ -1,13 +1,14 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
 public class Light extends ArenaObject{
-		
+			
 	public Light(int x, int y, RobotArena robotArena) {
 		this.x = x;
 		this.y = y;
 		this.robotArena = robotArena;
 		this.image = new ArenaImage().getLightImage();
 		countId();
+		type = "Light";
 	}
 	
 	@Override

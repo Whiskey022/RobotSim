@@ -26,5 +26,6 @@ public class RobotOne extends Robot {
 		this.robotArena = robotArena;
 		this.image = new ArenaImage().getRobotImage(0);
 		countId();
+		type = "RobotOne";
 	}
 }

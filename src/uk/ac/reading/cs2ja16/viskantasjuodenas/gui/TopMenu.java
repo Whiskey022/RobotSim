@@ -11,12 +11,15 @@ public class TopMenu {
 
 	private MenuBar menuBar;
 	private RobotArena robotArena;
+	private ArenaCanvas arenaCanvas;
+	private FileBrowser fileBrowser = new FileBrowser();
 
 	/**
 	 * MenuBar constructor, sets up MenuBar
 	 */
-	public TopMenu(RobotArena robotArena) {
+	public TopMenu(RobotArena robotArena, ArenaCanvas arenaCanvas) {
 		this.robotArena = robotArena;
+		this.arenaCanvas = arenaCanvas;
 		menuBar = setMenu();
 	}
 
@@ -28,14 +31,35 @@ public class TopMenu {
 	private MenuBar setMenu() {
 		MenuBar menuBar = new MenuBar(); // create menu
 
-		Menu mFile = new Menu("File");
-		MenuItem mExit = new MenuItem("Exit");
-		mExit.setOnAction(new EventHandler<ActionEvent>() {
+		Menu mArena = new Menu("Arena");
+		MenuItem miNew = new MenuItem("New Arena");
+		miNew.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
-				System.exit(0); // quit program
+				NewArenaDialog.open(arenaCanvas);
 			}
 		});
-		mFile.getItems().addAll(mExit);
+		MenuItem miSave = new MenuItem("Save Arena");
+		miSave.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				fileBrowser.browse(FileBrowser.BrowserMode.SAVE);
+				fileBrowser.saveFile(robotArena.getDetails());
+			}
+		});
+		MenuItem miLoad = new MenuItem("Load Arena");
+		miLoad.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				fileBrowser.browse(FileBrowser.BrowserMode.LOAD);
+				String loadedData = fileBrowser.loadFile();
+				if (loadedData.length() > 0) {
+					String[] lines = loadedData.split("\\|");
+					// Extract arena details
+					String[] values = lines[0].split(":");
+					arenaCanvas.newArena(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					robotArena.loadArena(loadedData);
+				}
+			}
+		});
+		mArena.getItems().addAll(miNew, miSave, miLoad);
 
 		Menu mObject = new Menu("Add Object");
 		MenuItem miRobot = new MenuItem("Add custom Robot");
@@ -67,7 +91,7 @@ public class TopMenu {
 		});
 		mHelp.getItems().addAll(mAbout, miHelp); // add sub-menus to Help
 
-		menuBar.getMenus().addAll(mFile, mObject, mHelp);
+		menuBar.getMenus().addAll(mArena, mObject, mHelp);
 
 		return menuBar;
 	}

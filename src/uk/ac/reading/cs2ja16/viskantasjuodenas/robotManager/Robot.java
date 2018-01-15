@@ -62,7 +62,7 @@ public abstract class Robot extends ArenaObject {
 	}
 	
 	public void increaseCharge() {
-		charge += 10;
+		charge += defaultCharge;
 	}
 
 	@Override
@@ -84,6 +84,10 @@ public abstract class Robot extends ArenaObject {
 
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+	
+	public void setCharge(int charge) {
+		this.charge = charge;
 	}
 
 	public void setRobotArena(RobotArena robotArena) {

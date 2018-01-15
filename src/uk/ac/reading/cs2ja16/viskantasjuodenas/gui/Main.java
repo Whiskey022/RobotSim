@@ -19,13 +19,16 @@ public class Main extends Application {
 	private int canvasHeight = arenaHeight*objectSize;
 	private RobotArena robotArena;
 	private ArenaCanvas robotCanvas;
+	private static Stage primaryStage;
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage stage) throws Exception {
+		
+		primaryStage = stage;
 		
 		calculateDimensions();
 		
@@ -36,7 +39,7 @@ public class Main extends Application {
 
 		BorderPane bp = new BorderPane();
 
-		bp.setTop(new TopMenu(robotArena).getMenuBar());
+		bp.setTop(new TopMenu(robotArena, robotCanvas).getMenuBar());
 		bp.setCenter(robotCanvas.getGroup()); // put group in centre pane
 		bp.setBottom(new BottomToolbar(robotArena, robotCanvas).getMenuBar()); /// add button to bottom
 
@@ -44,6 +47,16 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setMaximized(true);
 		primaryStage.show();
+	}
+	
+	public void newArena(int arenaWidth, int arenaHeight) {
+		this.arenaWidth = arenaWidth;
+		this.arenaHeight = arenaHeight;
+		robotArena = new RobotArena(arenaWidth, arenaHeight);
+	}
+	
+	public static Stage getPrimaryStage() {
+		return primaryStage;
 	}
 	
 	private void calculateDimensions() {

@@ -15,11 +15,13 @@ public class ArenaCanvas {
 
 	private Group root;
 	private Canvas canvas;
+	private Canvas gridCanvas;
 	private int canvasWidth;
 	private int canvasHeight;
-	private int robotSize;
+	private int objectSize;
 	private RobotArena robotArena;
 	private GraphicsContext gc;
+	private GraphicsContext gcGrid;
 	private double step;
 	Label arenaLabel = new Label();
 	private String defaultLabelStyle = "-fx-label-padding: -20px 20px 0px, 0px";
@@ -35,19 +37,20 @@ public class ArenaCanvas {
 	public ArenaCanvas(int canvasWidth, int canvasHeight, int robotSize, RobotArena robotArena) {
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
-		this.robotSize = robotSize;
+		this.objectSize = robotSize;
 		this.robotArena = robotArena;
 
 		root = new Group();
 		canvas = new Canvas(canvasWidth, canvasHeight);
-		Canvas gridCanvas = createCanvasGrid(canvasWidth, canvasHeight);
+		gridCanvas = new Canvas(canvasWidth, canvasHeight);
+		gcGrid = gridCanvas.getGraphicsContext2D();
+		createCanvasGrid(canvasWidth, canvasHeight);
 		root.getChildren().addAll(arenaLabel, gridCanvas, canvas);
 		gc = canvas.getGraphicsContext2D();
 
 		animateRobots();
 	}
 
-	
 	/**
 	 * Move robots by drawing them with animation
 	 * 
@@ -80,7 +83,7 @@ public class ArenaCanvas {
 				default:
 					break;
 				}
-				
+
 				updateArenaLabel();
 			}
 		}.start();
@@ -94,7 +97,7 @@ public class ArenaCanvas {
 		// Draw each robot
 		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
 			ArenaObject object = robotArena.getObjects().get(i);
-			drawIt(object.getImage(), object.getX() * robotSize, object.getY() * robotSize, robotSize);
+			drawIt(object.getImage(), object.getX() * objectSize, object.getY() * objectSize, objectSize);
 		}
 		if (robotArena.getStatus() != "draw-movement-continuous") {
 			robotArena.setStatus("stand");
@@ -106,7 +109,7 @@ public class ArenaCanvas {
 	 */
 	private void moveRobots() {
 		robotArena.moveAllRobots();
-		switch(robotArena.getStatus()) {
+		switch (robotArena.getStatus()) {
 		default:
 			robotArena.setStatus("draw-movement-continuous");
 			break;
@@ -135,19 +138,19 @@ public class ArenaCanvas {
 
 		// If position reached
 		if (positionReached) {
-			//Check if any of the robots stepped on an item, update them if necessary
+			// Check if any of the robots stepped on an item, update them if necessary
 			if (robotArena.checkCollisions()) {
 				drawObjects();
 			}
-			
-			//Reset step
+
+			// Reset step
 			step = 0.0;
-			
-			switch(robotArena.getStatus()) {
+
+			switch (robotArena.getStatus()) {
 			case "draw-movement-continuous":
-				robotArena.moveAllRobots();					// If move continuous, move robots again
+				robotArena.moveAllRobots(); // If move continuous, move robots again
 				break;
-			default:										 // Else, stop animation
+			default: // Else, stop animation
 				robotArena.setStatus("stop");
 				break;
 			}
@@ -189,11 +192,11 @@ public class ArenaCanvas {
 		}
 
 		// Draw robot
-		drawIt(object.getImage(), xToDraw * robotSize, yToDraw * robotSize, robotSize);
+		drawIt(object.getImage(), xToDraw * objectSize, yToDraw * objectSize, objectSize);
 
 		return positionReached;
 	}
-	
+
 	private void updateArenaLabel() {
 		arenaLabel.setText(robotArena.getMessage());
 		if (robotArena.isGoodMessage()) {
@@ -233,31 +236,29 @@ public class ArenaCanvas {
 		// to draw centred at x,y, give top left position and x,y size
 		gc.drawImage(i, x, y, sz, sz);
 	}
-	
-	//https://stackoverflow.com/questions/27846659/how-to-draw-an-1-pixel-line-using-javafx-canvas
-	private Canvas createCanvasGrid(int width, int height) {
-        Canvas canvas = new Canvas(width, height);
-        GraphicsContext gc = canvas.getGraphicsContext2D() ;
-        gc.setLineWidth(1.0);
-        for (int x = 0; x < width; x+=robotSize) {
-            gc.moveTo(x+0.5, 0);
-            gc.lineTo(x+0.5, height);
-            gc.stroke();
-        }
 
-        for (int y = 0; y < height; y+=robotSize) {
-            
-            gc.moveTo(0, y+0.5);
-            gc.lineTo(width, y+0.5);
-            gc.stroke();
-        }
-        
-		gc.setStroke(Color.BLACK);
-		gc.strokeRect(1, 1, canvasWidth-2, canvasHeight-2);
-        
-        return canvas ;
-    }
+	// https://stackoverflow.com/questions/27846659/how-to-draw-an-1-pixel-line-using-javafx-canvas
+	private void createCanvasGrid(int width, int height) {
+		gcGrid.setLineWidth(1.0);
 
+		gcGrid.beginPath();
+		gcGrid.clearRect(0, 0, canvasWidth, canvasHeight);
+
+		for (int x = 0; x < width; x += objectSize) {
+			gcGrid.moveTo(x + 0.5, 0);
+			gcGrid.lineTo(x + 0.5, height);
+			gcGrid.stroke();
+		}
+
+		for (int y = 0; y < height; y += objectSize) {
+
+			gcGrid.moveTo(0, y + 0.5);
+			gcGrid.lineTo(width, y + 0.5);
+			gcGrid.stroke();
+		}
+		gcGrid.setStroke(Color.BLACK);
+		gcGrid.strokeRect(1, 1, canvasWidth - 2, canvasHeight - 2);
+	}
 
 	/**
 	 * Reset canvas and stroke
@@ -266,6 +267,26 @@ public class ArenaCanvas {
 		gc.clearRect(0, 0, canvasWidth, canvasHeight); // clear canvas
 		gc.setStroke(Color.BLACK);
 		gc.strokeRect(0, 0, canvasWidth, canvasHeight);
+	}
+
+	public void newArena(int arenaWidth, int arenaHeight) {
+		objectSize = (int) (140 / Math.sqrt((Math.sqrt(arenaHeight * arenaWidth))));
+		canvasWidth = arenaWidth * objectSize;
+		canvasHeight = arenaHeight * objectSize;
+
+		robotArena.reset();
+		robotArena.setXSize(arenaWidth);
+		robotArena.setYSize(arenaHeight);
+		canvas.setHeight(canvasWidth);
+		canvas.setWidth(canvasWidth);
+		gridCanvas.setHeight(canvasWidth);
+		gridCanvas.setWidth(canvasWidth);
+		gc = canvas.getGraphicsContext2D();
+		gcGrid = gridCanvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, canvasWidth, canvasHeight);
+		createCanvasGrid(canvasWidth, canvasHeight);
+
+		ArenaObject.setObjectCount(0);
 	}
 
 	/**

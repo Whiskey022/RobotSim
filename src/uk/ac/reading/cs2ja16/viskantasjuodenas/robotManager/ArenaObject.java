@@ -11,6 +11,7 @@ public abstract class ArenaObject {
 	protected Image image;
 	protected static int objectsCount = 0;
 	protected RobotArena robotArena;
+	protected String type;
 	
 	public void countId() {
 		objectsCount++;
@@ -28,6 +29,10 @@ public abstract class ArenaObject {
 	public abstract boolean tryToMove();
 	public abstract boolean isRobot();
 	public abstract boolean getDidMove();
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	public static void setObjectCount(int count) {
 		objectsCount = count;
@@ -51,6 +56,10 @@ public abstract class ArenaObject {
 	
 	public static int getObjectsCount() {
 		return objectsCount;
+	}
+	
+	public String getType() {
+		return type;
 	}
 
 	public void increaseCharge() {

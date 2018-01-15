@@ -19,6 +19,7 @@ public class RobotTwo extends Robot{
 		this.robotArena = robotArena;
 		this.image = new ArenaImage().getRobotImage(1);
 		countId();
+		type = "RobotTwo";
 	}
 	
 	//Function to move

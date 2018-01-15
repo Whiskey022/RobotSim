@@ -33,6 +33,7 @@ public class RobotEight extends Robot {
 		this.robotArena = robotArena;
 		this.image = new ArenaImage().getRobotImage(7);
 		countId();
+		type = "RobotEight";
 	}
 
 	// Function to move
