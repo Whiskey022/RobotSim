@@ -73,13 +73,19 @@ public class ArenaCanvas {
 					drawObjects();
 					break;
 				case "move-once":
-				case "move-continuous":
 					moveRobots();
+					break;
+				case "move-continuous":
+					if (step == 0)
+						moveRobots();
 					break;
 				case "draw-movement":
 				case "draw-movement-continuous":
-				case "stop-movement":
 					animateMovingRobots();
+					break;
+				case "stop-movement":
+					if (step > 0)
+						animateMovingRobots();
 					break;
 				default:
 					break;
@@ -110,21 +116,19 @@ public class ArenaCanvas {
 	 */
 	private void moveRobots() {
 		robotArena.moveAllRobots();
-		switch (robotArena.getStatus()) {
-		default:
-			robotArena.setStatus("draw-movement-continuous");
-			break;
-		case "move-once":
+		if (robotArena.getStatus() == "move-once") {
 			robotArena.setStatus("draw-movement");
-			break;
+		} else {
+			robotArena.setStatus("draw-movement-continuous");
 		}
+		
 	}
 
 	/**
 	 * Draw moving robots
 	 */
 	private void animateMovingRobots() {
-		boolean positionReached = false;
+		int robotsMoving = ArenaObject.getObjectsCount();
 		step += robotArena.getSpeed();
 
 		// clear canvas and reset stroke
@@ -133,12 +137,12 @@ public class ArenaCanvas {
 		// Loop to draw all robots
 		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
 			if (drawMovingRobot(robotArena.getObjects().get(i), step)) {
-				positionReached = true;
+				robotsMoving--;
 			}
 		}
 
 		// If position reached
-		if (positionReached) {
+		if (robotsMoving == 0) {
 			// Check if any of the robots stepped on an item, update them if necessary
 			if (robotArena.checkCollisions()) {
 				drawObjects();
@@ -149,7 +153,7 @@ public class ArenaCanvas {
 
 			switch (robotArena.getStatus()) {
 			case "draw-movement-continuous":
-				robotArena.moveAllRobots(); // If move continuous, move robots again
+				robotArena.setStatus("move-continuous"); // If move continuous, move robots again
 				break;
 			default: // Else, stop animation
 				robotArena.setStatus("stop");
@@ -190,6 +194,7 @@ public class ArenaCanvas {
 		} else {
 			xToDraw = newX;
 			yToDraw = newY;
+			positionReached = true;
 		}
 
 		// Draw robot
