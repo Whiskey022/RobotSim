@@ -69,44 +69,14 @@ public class RobotEight extends Robot {
 	}
 
 	private int lightDetected() {
-		int index;
-		switch (direction) {
-		case NORTH:
-			index = 0;
-			for (int[] viewToCheck : northView) {
-				if (lightIsHere(viewToCheck[0], viewToCheck[1])) {
-					return index;
-				}
-				index++;
+		int index = 0;
+		for (int[] viewToCheck : getView()) {
+			if (lightIsHere(viewToCheck[0], viewToCheck[1])) {
+				return index;
 			}
-		case EAST:
-			index = 0;
-			for (int[] viewToCheck : eastView) {
-				if (lightIsHere(viewToCheck[0], viewToCheck[1])) {
-					return index;
-				}
-				index++;
-			}
-		case SOUTH:
-			index = 0;
-			for (int[] viewToCheck : southView) {
-				if (lightIsHere(viewToCheck[0], viewToCheck[1])) {
-					return index;
-				}
-				index++;
-			}
-		case WEST:
-			index = 0;
-			for (int[] viewToCheck : westView) {
-				if (lightIsHere(viewToCheck[0], viewToCheck[1])) {
-					return index;
-				}
-				index++;
-			}
-		default:
-			return -1;
+			index++;
 		}
-		
+		return -1;		
 	}
 
 	private boolean lightIsHere(int x, int y) {
@@ -121,6 +91,7 @@ public class RobotEight extends Robot {
 	}
 	
 	private Direction moveTowardsLight(int index) {
+		//If light one move away, move onto it
 		if (index < 3) {
 			if (index == 0)
 				return direction.getNextDirection().getNextDirection().getNextDirection();
@@ -129,10 +100,31 @@ public class RobotEight extends Robot {
 			if (index == 2)
 				return direction.getNextDirection();
 		}
-		if (index < 6) {
-			
+		//If light is 2 moves away on its left
+		else if (index == 3 && !viewBlocked(3)){
+			return direction.getNextDirection().getNextDirection().getNextDirection();
+		}
+		//If light is 2 moves away on its right
+		else if (index == 4 && !viewBlocked(4)) {
+			return direction.getNextDirection();
 		}
 		return direction;
+	}
+	
+	private boolean viewBlocked(int index) {
+		int viewIndexToCheck;
+		if (index == 3) {
+			viewIndexToCheck = 0;
+		} else {
+			viewIndexToCheck = 2;
+		}
+		for (ArenaObject object : robotArena.getObjects()) {
+			if ((object.isRobot() || object.isWall()) && 
+					object.isHere(getView()[viewIndexToCheck][0], getView()[viewIndexToCheck][1])) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void setViews() {
@@ -140,37 +132,38 @@ public class RobotEight extends Robot {
 			{x-1, y},
 			{x, y-1},
 			{x+1, y},
-			{x-1, y-1},
-			{x, y-2},
-			{x+1, y-1},
-			{x-1, y-2},
-			{x+1, y-2}};
+			{x-2, y},
+			{x+2, y}};
 		eastView = new int[][] {
 			{x, y-1},
 			{x+1, y},
 			{x, y+1},
-			{x+1, y-1},
-			{x+2, y},
-			{x+1, y+1},
-			{x+2, y-1},
-			{x+2, y+1}};
+			{x, y-2},
+			{x, y+2}};
 		southView = new int[][] {
 			{x+1, y},
 			{x, y+1},
 			{x-1, y},
-			{x+1, y+1},
-			{x, y+2},
-			{x-1, y+1},
-			{x+1, y+2},
-			{x-1, y+2}};
+			{x+2, y},
+			{x-2, y}};
 		westView = new int[][] {
 			{x, y+1},
 			{x-1, y},
 			{x, y-1},
-			{x-1, y+1},
-			{x-2, y},
-			{x-1, y-1},
-			{x-2, y+1},
-			{x-2, y-1}};
+			{x, y+2},
+			{x, y-2}};
+	}
+	
+	private int[][] getView() {
+		switch(direction) {
+		case NORTH:
+			return northView;
+		case EAST:
+			return eastView;
+		case SOUTH:
+			return southView;
+		default:
+			return westView;
+		}
 	}
 }
