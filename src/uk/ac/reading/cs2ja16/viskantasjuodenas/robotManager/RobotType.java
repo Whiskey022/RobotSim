@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class RobotType {
 
-	private static String[] robots = { "RobotOne", "RobotTwo", "RobotThree", "RobotFour" };
+	private static String[] robots = { "RobotOne", "RobotTwo", "RobotThree", "RobotFour", "RobotEight"};
 	private static String[] robotDescriptions = {
 			"Robot changes direction clockwise. Takes a turn to change a direction.",
 			"Robot changes direction clockwise. Changes direction instantly.",
@@ -14,7 +14,7 @@ public class RobotType {
 			"Robot changes direction clockwise. Has extra charge. Takes a turn to change direction",
 			"Robot changes direction clockwise. Removes traps. Takes a turn to change direction",
 			"Robot changes direction clockwise, can steer towards a light. Changes direction instantly",
-			"Robot changes direcction clockwise, can destroy walls. Takes a turn to change direction"};
+			"Robot changes direction clockwise, can destroy walls. Takes a turn to change direction"};
 
 	public static int getCount() {
 		return robots.length;
@@ -46,6 +46,8 @@ public class RobotType {
 			return new RobotThree(x, y, direction, robotArena);
 		case "RobotFour":
 			return new RobotFour(x, y, direction, robotArena);
+		case "RobotEight":
+			return new RobotEight(x, y, direction, robotArena);
 		}
 	}
 }

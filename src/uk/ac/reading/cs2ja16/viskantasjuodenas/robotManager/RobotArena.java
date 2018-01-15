@@ -57,20 +57,12 @@ public class RobotArena {
 	}
 
 	public String addRobot(int x, int y, Direction direction, String robotType) {
+		
+		x = checkIfValidX(x);
+		y = checkIfValidY(y);
+		
 		// If position not taken, add robot there
 		if (!objectIsHere(x, y)) {
-			// Check if x value valid, change if necessary
-			if (x > this.x) {
-				x = this.x;
-			} else if (x < 1) {
-				x = 1;
-			}
-			// Check if y value valid, change if necessary
-			if (y > this.y) {
-				y = this.y;
-			} else if (y < 1) {
-				y = 1;
-			}
 			objects.add(RobotType.getRobotObject(x, y, direction, robotType, this));
 			return "success";
 		}
@@ -100,20 +92,12 @@ public class RobotArena {
 	}
 
 	public String addItem(int x, int y, String type) {
+		
+		x = checkIfValidX(x);
+		y = checkIfValidY(y);
+		
 		// If position not taken, add robot there
 		if (!objectIsHere(x, y)) {
-			// Check if x value valid, change if necessary
-			if (x > this.x) {
-				x = this.x;
-			} else if (x < 1) {
-				x = 1;
-			}
-			// Check if y value valid, change if necessary
-			if (y > this.y) {
-				y = this.y;
-			} else if (y < 1) {
-				y = 1;
-			}
 			objects.add(ItemType.getItemObject(x, y, type, this));
 			return "success";
 		}
@@ -210,12 +194,48 @@ public class RobotArena {
 						goodMessage = false;
 						removeObject(obj1);
 						removeObject(obj2);
+					} else if ((obj1.getClass() == RobotEight.class) && obj2.isLight()) {
+						message = "Robot removed light at x: " + obj1.getX() + ", y: " + obj1.getY();
+						goodMessage = true;
+						removeObject(obj2);
+					} else if ((obj2.getClass() == RobotEight.class) && obj1.isLight()) {
+						message = "Robot removed light at x: " + obj1.getX() + ", y: " + obj1.getY();
+						goodMessage = true;
+						removeObject(obj1);
 					}
 					collisionsFound = true;
 				}
 			}
 		}
 		return collisionsFound;
+	}
+	
+	private int checkIfValidX(int x) {
+		if (x >= this.x) {
+			x = this.x;
+		} else if (x < 0) {
+			x = 0;
+		}
+		return x;
+	}
+	
+	private int checkIfValidY(int y) {
+		if (y >= this.y) {
+			y = this.y;
+		} else if (y < 0) {
+			y = 0;
+		}
+		return y;
+	}
+	
+	public void resetCharge() {
+		for (ArenaObject object : objects) {
+			if (object.isRobot()) {
+				((Robot) object).resetCharge();
+			}
+		}
+		message = "Charge reset for all robots.";
+		goodMessage = true;
 	}
 
 	public void setXSize(int x) {

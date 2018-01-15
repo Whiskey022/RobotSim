@@ -111,8 +111,19 @@ public class BottomToolbar {
 				robotArena.setSpeed(defaultSpeed);
 			}
 		});
+		
+		// Button to reset speed
+		Button resetChargeButton = new Button("Reset speed");
+		resetChargeButton.setGraphic(new ImageView(pauseImage));
+		resetChargeButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				robotArena.resetCharge();
+			}
+		});
 
-		menuBox.getChildren().addAll(randomRobotBtn, randomObstacle, moveRobotsOnceBtn, moveRobotsBtn, stopRobotsBtn, speedUpButton, resetSpeedButton);
+		menuBox.getChildren().addAll(randomRobotBtn, randomObstacle, moveRobotsOnceBtn,
+				moveRobotsBtn, stopRobotsBtn, speedUpButton, resetSpeedButton, resetChargeButton);
 		return menuBox;
 	}
 

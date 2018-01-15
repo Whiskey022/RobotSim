@@ -25,22 +25,11 @@ public class RobotThree extends Robot{
 	public boolean tryToMove() {
 		if (charge > 0) {
 			for (int i = 0; i < 8; i++) {
+				
 				// Set next coordinates
-				int nextX = x, nextY = y;
-				switch (direction) {
-				case NORTH:
-					nextY--;
-					break;
-				case EAST:
-					nextX++;
-					break;
-				case SOUTH:
-					nextY++;
-					break;
-				case WEST:
-					nextX--;
-					break;
-				}
+				int[] nextCoord = move();
+				int nextX = nextCoord[0], nextY = nextCoord[1];
+				
 				// If robot can move there, set next coordinates to current
 				if (robotArena.canMoveHere(nextX, nextY)) {
 					charge--;

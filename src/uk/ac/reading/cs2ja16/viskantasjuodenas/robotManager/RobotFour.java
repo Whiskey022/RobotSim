@@ -35,7 +35,6 @@ public class RobotFour extends Robot {
 	public boolean tryToMove() {
 		if (charge > 0) {
 			charge--;
-			int nextX = x, nextY = y;
 			
 			//Sometimes randomly change movement direction
 			if (new Random().nextInt(5) == 1) {
@@ -43,20 +42,9 @@ public class RobotFour extends Robot {
 			}
 			
 			// Set next coordinates
-			switch (direction) {
-			case NORTH:
-				nextY--;
-				break;
-			case EAST:
-				nextX++;
-				break;
-			case SOUTH:
-				nextY++;
-				break;
-			case WEST:
-				nextX--;
-				break;
-			}
+			int[] nextCoord = move();
+			int nextX = nextCoord[0], nextY = nextCoord[1];
+			
 			// If robot can move there, set next coordinates to current
 			if (robotArena.canMoveHere(nextX, nextY)) {
 				oldX = x;

@@ -6,7 +6,8 @@ public abstract class Robot extends ArenaObject {
 	protected int oldX, oldY;
 	protected static int robotsCount = 0; // Robots counter, to help calculate IDs
 	protected Direction direction;
-	protected int charge = 50;
+	protected int defaultCharge = 50;
+	protected int charge = defaultCharge;
 	protected RobotArena robotArena;
 	protected boolean didMove = false;
 
@@ -15,22 +16,11 @@ public abstract class Robot extends ArenaObject {
 	public boolean tryToMove() {
 		if (charge > 0) {
 			charge--;
-			int nextX = x, nextY = y;
+			
 			// Set next coordinates
-			switch (direction) {
-			case NORTH:
-				nextY--;
-				break;
-			case EAST:
-				nextX++;
-				break;
-			case SOUTH:
-				nextY++;
-				break;
-			case WEST:
-				nextX--;
-				break;
-			}
+			int[] nextCoord = move();
+			int nextX = nextCoord[0], nextY = nextCoord[1];
+			
 			// If robot can move there, set next coordinates to current
 			if (robotArena.canMoveHere(nextX, nextY)) {
 				oldX = x;
@@ -45,6 +35,30 @@ public abstract class Robot extends ArenaObject {
 		}
 		didMove = false;
 		return false;
+	}
+	
+	protected int[] move() {
+		int nextX, nextY;
+		switch (direction) {
+		case NORTH:
+			nextY = y - 1;
+			return new int[] {x, nextY};
+		case EAST:
+			nextX = x + 1;
+			return new int[] {nextX, y};
+		case SOUTH:
+			nextY = y + 1;
+			return new int[] {x, nextY};
+		case WEST:
+			nextX = x - 1;
+			return new int[] {nextX, y};
+		default:
+			return new int[] {x, y};
+		}
+	}
+	
+	public void resetCharge() {
+		charge = defaultCharge;
 	}
 	
 	public void increaseCharge() {
@@ -102,5 +116,9 @@ public abstract class Robot extends ArenaObject {
 	
 	public int getChargeLevel() {
 		return charge;
+	}
+	
+	public boolean isRobotEight() {
+		return false;
 	}
 }
