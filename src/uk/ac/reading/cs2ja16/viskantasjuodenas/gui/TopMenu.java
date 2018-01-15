@@ -59,7 +59,23 @@ public class TopMenu {
 				}
 			}
 		});
-		mArena.getItems().addAll(miNew, miSave, miLoad);
+		MenuItem miShowGrid = new MenuItem();
+		if (arenaCanvas.getShowGrid()) {
+			miShowGrid.setText("Hide Grid");
+		} else {
+			miShowGrid.setText("Show Grid");
+		}
+		miShowGrid.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				arenaCanvas.setShowGrid(!arenaCanvas.getShowGrid());
+				if (arenaCanvas.getShowGrid()) {
+					miShowGrid.setText("Hide Grid");
+				} else {
+					miShowGrid.setText("Show Grid");
+				}
+			}
+		});
+		mArena.getItems().addAll(miNew, miSave, miLoad, miShowGrid);
 
 		Menu mObject = new Menu("Add Object");
 		MenuItem miRobot = new MenuItem("Add custom Robot");
@@ -68,13 +84,13 @@ public class TopMenu {
 				AddRobotDialog.open(robotArena); // Open Dialog
 			}
 		});
-		MenuItem miObstacle = new MenuItem("Add custom Obstacle");
-		miObstacle.setOnAction(new EventHandler<ActionEvent>() {
+		MenuItem miItem = new MenuItem("Add custom Item");
+		miItem.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
 				AddItemDialog.open(robotArena); // Open Dialog
 			}
 		});
-		mObject.getItems().addAll(miRobot, miObstacle);
+		mObject.getItems().addAll(miRobot, miItem);
 
 		Menu mHelp = new Menu("Help");
 		MenuItem mAbout = new MenuItem("About");

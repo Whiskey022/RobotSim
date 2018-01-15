@@ -52,9 +52,9 @@ public class BottomToolbar {
 		});
 
 		// "Button for adding a random robot
-		Button randomObstacle = new Button("Random Obstacle");
-		randomObstacle.setGraphic(new ImageView(plusImage));
-		randomObstacle.setOnAction(new EventHandler<ActionEvent>() {
+		Button randomItem = new Button("Random Item");
+		randomItem.setGraphic(new ImageView(plusImage));
+		randomItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				addItem();
@@ -118,7 +118,7 @@ public class BottomToolbar {
 			}
 		});
 
-		menuBox.getChildren().addAll(randomRobotBtn, randomObstacle, moveRobotsOnceBtn,
+		menuBox.getChildren().addAll(randomRobotBtn, randomItem, moveRobotsOnceBtn,
 				moveRobotsBtn, stopRobotsBtn, speedUpButton, resetSpeedButton, resetChargeButton);
 		return menuBox;
 	}

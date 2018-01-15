@@ -22,6 +22,7 @@ public class ArenaCanvas {
 	private RobotArena robotArena;
 	private GraphicsContext gc;
 	private GraphicsContext gcGrid;
+	private boolean showGrid = true;
 	private double step;
 	Label arenaLabel = new Label();
 	private String defaultLabelStyle = "-fx-label-padding: -20px 20px 0px, 0px";
@@ -44,7 +45,7 @@ public class ArenaCanvas {
 		canvas = new Canvas(canvasWidth, canvasHeight);
 		gridCanvas = new Canvas(canvasWidth, canvasHeight);
 		gcGrid = gridCanvas.getGraphicsContext2D();
-		createCanvasGrid(canvasWidth, canvasHeight);
+		createCanvasGrid();
 		root.getChildren().addAll(arenaLabel, gridCanvas, canvas);
 		gc = canvas.getGraphicsContext2D();
 
@@ -238,23 +239,24 @@ public class ArenaCanvas {
 	}
 
 	// https://stackoverflow.com/questions/27846659/how-to-draw-an-1-pixel-line-using-javafx-canvas
-	private void createCanvasGrid(int width, int height) {
+	private void createCanvasGrid() {
 		gcGrid.setLineWidth(1.0);
 
 		gcGrid.beginPath();
 		gcGrid.clearRect(0, 0, canvasWidth, canvasHeight);
-
-		for (int x = 0; x < width; x += objectSize) {
-			gcGrid.moveTo(x + 0.5, 0);
-			gcGrid.lineTo(x + 0.5, height);
-			gcGrid.stroke();
-		}
-
-		for (int y = 0; y < height; y += objectSize) {
-
-			gcGrid.moveTo(0, y + 0.5);
-			gcGrid.lineTo(width, y + 0.5);
-			gcGrid.stroke();
+		if (showGrid) {
+			for (int x = 0; x < canvasWidth; x += objectSize) {
+				gcGrid.moveTo(x + 0.5, 0);
+				gcGrid.lineTo(x + 0.5, canvasHeight);
+				gcGrid.stroke();
+			}
+	
+			for (int y = 0; y < canvasHeight; y += objectSize) {
+	
+				gcGrid.moveTo(0, y + 0.5);
+				gcGrid.lineTo(canvasWidth, y + 0.5);
+				gcGrid.stroke();
+			}
 		}
 		gcGrid.setStroke(Color.BLACK);
 		gcGrid.strokeRect(1, 1, canvasWidth - 2, canvasHeight - 2);
@@ -284,9 +286,18 @@ public class ArenaCanvas {
 		gc = canvas.getGraphicsContext2D();
 		gcGrid = gridCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, canvasWidth, canvasHeight);
-		createCanvasGrid(canvasWidth, canvasHeight);
+		createCanvasGrid();
 
 		ArenaObject.setObjectCount(0);
+	}
+	
+	public void setShowGrid(boolean value) {
+		showGrid = value;
+		createCanvasGrid();
+	}
+	
+	public boolean getShowGrid() {
+		return showGrid;
 	}
 
 	/**

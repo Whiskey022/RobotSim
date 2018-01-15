@@ -1,7 +1,7 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
 public class Charger extends ArenaObject {
-	
+
 	public Charger(int x, int y, RobotArena robotArena) {
 		this.x = x;
 		this.y = y;
@@ -10,7 +10,7 @@ public class Charger extends ArenaObject {
 		countId();
 		type = "Charger";
 	}
-	
+
 	public boolean isCharger() {
 		return true;
 	}
@@ -32,5 +32,5 @@ public class Charger extends ArenaObject {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 }

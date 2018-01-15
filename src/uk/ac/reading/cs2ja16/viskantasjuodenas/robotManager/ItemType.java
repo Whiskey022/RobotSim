@@ -12,7 +12,17 @@ public class ItemType {
 	}
 
 	public static String getRandom() {
-		return items[new Random().nextInt(items.length)];
+		int rnd = new Random().nextInt(100);
+		if (rnd < 40) {
+			return items[0];			//Wall
+		}
+		if (rnd < 70) {
+			return items[1];			//Charger
+		}
+		if (rnd < 80) {
+			return items[2];			//Trap
+		}
+		return items[3];				//Light
 	}
 
 	public static String get(int index) {

@@ -14,9 +14,7 @@ public class ArenaImage {
 			new Image(getClass().getResourceAsStream("robot_04.png")),
 			new Image(getClass().getResourceAsStream("robot_05.png")),
 			new Image(getClass().getResourceAsStream("robot_06.png")),
-			new Image(getClass().getResourceAsStream("robot_07.png")),
-			new Image(getClass().getResourceAsStream("robot_08.png")),
-			new Image(getClass().getResourceAsStream("robot_09.png")), };
+			new Image(getClass().getResourceAsStream("robot_07.png"))};
 	private Image wallImage = new Image(getClass().getResourceAsStream("wall.png"));
 	private Image chargerImage = new Image(getClass().getResourceAsStream("charger.png"));
 	private Image trapImage = new Image(getClass().getResourceAsStream("trap.png"));

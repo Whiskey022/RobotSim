@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class RobotType {
 
-	private static String[] robots = { "RobotOne", "RobotTwo", "RobotThree", "RobotFour", "RobotEight"};
+	private static String[] robots = { "RobotOne", "RobotTwo", "RobotThree", "RobotFour", "RobotFive", "RobotSix", "RobotSeven"};
 	private static String[] robotDescriptions = {
 			"Robot changes direction clockwise. Takes a turn to change a direction.",
 			"Robot changes direction clockwise. Changes direction instantly.",
@@ -13,8 +13,7 @@ public class RobotType {
 			"Robot changes direction clockwise, but can change at a random time. Changes direction instantly.",
 			"Robot changes direction clockwise. Has extra charge. Takes a turn to change direction",
 			"Robot changes direction clockwise. Removes traps. Takes a turn to change direction",
-			"Robot changes direction clockwise, can steer towards a light. Changes direction instantly",
-			"Robot changes direction clockwise, can destroy walls. Takes a turn to change direction"};
+			"Robot changes direction clockwise, can steer towards a light. Changes direction instantly"};
 
 	public static int getCount() {
 		return robots.length;
@@ -46,8 +45,14 @@ public class RobotType {
 			return new RobotThree(x, y, direction, robotArena);
 		case "RobotFour":
 			return new RobotFour(x, y, direction, robotArena);
+		case "RobotFive":
+			return new RobotFive(x, y, direction, robotArena);
+		case "RobotSix":
+			return new RobotSix(x, y, direction, robotArena);
+		case "RobotSeven":
+			return new RobotSeven(x, y, direction, robotArena);
 		case "RobotEight":
-			return new RobotEight(x, y, direction, robotArena);
+			return new RobotSeven(x, y, direction, robotArena);
 		}
 	}
 }

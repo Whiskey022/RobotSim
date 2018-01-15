@@ -218,6 +218,7 @@ public class AddRobotDialog {
 		gc.clearRect(0, 0, 90, 50); // clear canvas
 		if (robotName != "Random") {
 			// to draw centred at x,y, give top left position and x,y size
+
 			gc.drawImage(new ArenaImage().getRobotImage(RobotType.getIndex(robotName)), x - sz / 2, y - sz / 2, sz, sz);
 		}
 	}

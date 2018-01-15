@@ -181,7 +181,8 @@ public class RobotArena {
 				ArenaObject obj1 = objects.get(i);
 				ArenaObject obj2 = objects.get(j);
 				if (obj1.isHere(obj2.getX(), obj2.getY())) {
-					if (obj1.isRobot() && obj2.isCharger()) {
+					//If robot stepped on a charger
+					if (obj1.isRobot() && obj2.isCharger()) { 
 						obj1.increaseCharge();
 						message = "Robot charged at x: " + obj1.getX() + ", y: " + obj1.getY();
 						goodMessage = true;
@@ -191,16 +192,30 @@ public class RobotArena {
 						message = "Robot charged at x: " + obj2.getX() + ", y: " + obj2.getY();
 						goodMessage = true;
 						removeObject(obj1);
-					} else if ((obj1.isRobot() && obj2.isTrap()) || (obj2.isRobot() && obj1.isTrap())) {
+					}
+					//If robot who destroys traps stepped on it
+					else if ((obj1.getClass() == RobotSix.class && obj2.isTrap()) || (obj2.getClass() == RobotSix.class && obj1.isTrap())) {
+						message = "Robot removed a trap at x: " + obj1.getX() + ", y: " + obj1.getY();
+						goodMessage = true;
+						if (obj1.getClass() == RobotSix.class) {
+							removeObject(obj2);
+						} else {
+							removeObject(obj1);
+						}
+					}
+					//If other types of robot stepped on a trap
+					else if ((obj1.isRobot() && obj2.isTrap()) || (obj2.isRobot() && obj1.isTrap())) {
 						message = "Robot removed by trap at x: " + obj1.getX() + ", y: " + obj1.getY();
 						goodMessage = false;
 						removeObject(obj1);
 						removeObject(obj2);
-					} else if ((obj1.getClass() == RobotEight.class) && obj2.isLight()) {
+					}
+					//If robot who collects lights steps on one
+					else if ((obj1.getClass() == RobotSeven.class) && obj2.isLight()) {
 						message = "Robot removed light at x: " + obj1.getX() + ", y: " + obj1.getY();
 						goodMessage = true;
 						removeObject(obj2);
-					} else if ((obj2.getClass() == RobotEight.class) && obj1.isLight()) {
+					} else if ((obj2.getClass() == RobotSeven.class) && obj1.isLight()) {
 						message = "Robot removed light at x: " + obj1.getX() + ", y: " + obj1.getY();
 						goodMessage = true;
 						removeObject(obj1);
@@ -230,43 +245,18 @@ public class RobotArena {
 	}
 
 	private ArenaObject generateObject(int Id, int x, int y, String type, String direction, String charge) {
-		ArenaObject object = null;
-		switch (type) {
-		case "Wall":
-			object = new Wall(x, y, this);
-			break;
-		case "Charger":
-			object = new Charger(x, y, this);
-			break;
-		case "Trap":
-			object = new Trap(x, y, this);
-			break;
-		case "Light":
-			object = new Light(x, y, this);
-			break;
-		case "RobotOne":
-			object = new RobotOne(x, y, Direction.valueOf(direction), this);
-			break;
-		case "RobotTwo":
-			object = new RobotTwo(x, y, Direction.valueOf(direction), this);
-			break;
-		case "RobotThree":
-			object = new RobotThree(x, y, Direction.valueOf(direction), this);
-			break;
-		case "RobotFour":
-			object = new RobotFour(x, y, Direction.valueOf(direction), this);
-			break;
-		case "RobotEight":
-			object = new RobotEight(x, y, Direction.valueOf(direction), this);
-			break;
-		}
-		if (object.isRobot()) {
-			((Robot) object).setCharge(Integer.parseInt(charge));
-		}
-		if (object != null) {
+		
+		//If direction is none, it's an item, not a robot
+		if (direction != "None") {
+			ArenaObject object = ItemType.getItemObject(x, y, type, this);
 			object.setId(Id);
+			return object;
+		} else {
+			ArenaObject object = RobotType.getRobotObject(x, y, Direction.valueOf(direction), type, this);
+			object.setId(Id);
+			((Robot) object).setCharge(Integer.parseInt(charge));
+			return object;
 		}
-		return object;
 	}
 
 	private int checkIfValidX(int x) {
