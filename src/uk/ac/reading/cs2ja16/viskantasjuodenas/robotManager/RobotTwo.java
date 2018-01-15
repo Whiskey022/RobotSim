@@ -22,41 +22,41 @@ public class RobotTwo extends Robot{
 	}
 	
 	//Function to move
-		@Override
-		public boolean tryToMove() {
-			if (charge > 0) {
-				for (int i = 0; i < 4; i++) {
-					// Set next coordinates
-					int nextX = x, nextY = y;
-					switch (direction) {
-					case NORTH:
-						nextY--;
-						break;
-					case EAST:
-						nextX++;
-						break;
-					case SOUTH:
-						nextY++;
-						break;
-					case WEST:
-						nextX--;
-						break;
-					}
-					// If robot can move there, set next coordinates to current
-					if (robotArena.canMoveHere(nextX, nextY)) {
-						charge--;
-						oldX = x;
-						oldY = y;
-						x = nextX;
-						y = nextY;
-						didMove = true;
-						return true;
-					}
-					direction = direction.getNextDirection();
+	@Override
+	public boolean tryToMove() {
+		if (charge > 0) {
+			for (int i = 0; i < 4; i++) {
+				// Set next coordinates
+				int nextX = x, nextY = y;
+				switch (direction) {
+				case NORTH:
+					nextY--;
+					break;
+				case EAST:
+					nextX++;
+					break;
+				case SOUTH:
+					nextY++;
+					break;
+				case WEST:
+					nextX--;
+					break;
 				}
+				// If robot can move there, set next coordinates to current
+				if (robotArena.canMoveHere(nextX, nextY)) {
+					charge--;
+					oldX = x;
+					oldY = y;
+					x = nextX;
+					y = nextY;
+					didMove = true;
+					return true;
+				}
+				direction = direction.getNextDirection();
 			}
-			charge--;
-			didMove = false;
-			return false;
 		}
+		charge--;
+		didMove = false;
+		return false;
+	}
 }

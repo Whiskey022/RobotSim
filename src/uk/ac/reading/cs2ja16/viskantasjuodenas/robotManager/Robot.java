@@ -6,7 +6,7 @@ public abstract class Robot extends ArenaObject {
 	protected int oldX, oldY;
 	protected static int robotsCount = 0; // Robots counter, to help calculate IDs
 	protected Direction direction;
-	protected int charge = 10;
+	protected int charge = 50;
 	protected RobotArena robotArena;
 	protected boolean didMove = false;
 

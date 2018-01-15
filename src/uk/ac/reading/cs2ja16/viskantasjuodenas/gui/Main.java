@@ -1,16 +1,20 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 
 public class Main extends Application {
 
-	private int robotSize = 40;
-	private int arenaWidth = 10;
-	private int arenaHeight = 5;
+	private int arenaWidth = 15;
+	private int arenaHeight = 15;
+	private int robotSize = (int) (150/Math.sqrt((Math.sqrt(arenaHeight * arenaWidth))));
 	private int canvasWitdh = arenaWidth*robotSize;
 	private int canvasHeight = arenaHeight*robotSize;
 	private RobotArena robotArena;
@@ -22,6 +26,9 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		calculateDimensions();
+		
 		robotArena = new RobotArena(arenaWidth, arenaHeight);
 		robotCanvas = new ArenaCanvas(canvasWitdh, canvasHeight, robotSize, robotArena);
 
@@ -35,7 +42,14 @@ public class Main extends Application {
 
 		Scene scene = new Scene(bp, canvasWitdh*1.2, canvasHeight*1.4);
 		primaryStage.setScene(scene);
+		primaryStage.setMaximized(true);
 		primaryStage.show();
+	}
+	
+	private void calculateDimensions() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double screenHeight = screenSize.getHeight();
+		double screenWidth = screenSize.getWidth();
 	}
 
 }

@@ -46,7 +46,8 @@ public class RobotArena {
 
 			// If position not taken, add robot there
 			if (!objectIsHere(x, y)) {
-				objects.add(RobotType.getRobotObject(x, y, Direction.getRandomDirection(), RobotType.getRandom(), this));
+				objects.add(
+						RobotType.getRobotObject(x, y, Direction.getRandomDirection(), RobotType.getRandom(), this));
 				return "success";
 			}
 		}
@@ -117,7 +118,7 @@ public class RobotArena {
 		System.out.println("ERROR: position already taken");
 		return "Position already taken";
 	}
-	
+
 	public void removeObject(ArenaObject obj, int index) {
 		objects.remove(index);
 		ArenaObject.setObjectCount(ArenaObject.getObjectsCount() - 1);
@@ -168,26 +169,26 @@ public class RobotArena {
 
 	// Try to move every robot
 	public void moveAllRobots() {
-		int countOfRobotsMoved = 0, timesTried= 0;
+		int countOfRobotsMoved = 0, timesTried = 0;
 		while (countOfRobotsMoved == 0 && timesTried < 10) {
 			for (ArenaObject object : objects) {
 				if (object.isRobot()) {
 					if (object.tryToMove()) {
 						countOfRobotsMoved++;
-					} else if (((Robot) object).getChargeLevel() < 1){
+					} else if (((Robot) object).getChargeLevel() < 1) {
 						message = "Robot run out of juice at x: " + object.getX() + ", y: " + object.getY();
 					}
 				}
-				
+
 			}
 			timesTried++;
 		}
 	}
-	
-	public boolean checkCollisions(){
+
+	public boolean checkCollisions() {
 		boolean collisionsFound = false;
 		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
-			for (int j=i+1; j < ArenaObject.getObjectsCount(); j++) {
+			for (int j = i + 1; j < ArenaObject.getObjectsCount(); j++) {
 				ArenaObject obj1 = objects.get(i);
 				ArenaObject obj2 = objects.get(j);
 				if (obj1.isHere(obj2.getX(), obj2.getY())) {
@@ -214,7 +215,7 @@ public class RobotArena {
 	public void setYSize(int y) {
 		this.y = y;
 	}
-	
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
@@ -238,7 +239,7 @@ public class RobotArena {
 	public String getStatus() {
 		return status;
 	}
-	
+
 	public String getMessage() {
 		return message;
 	}
