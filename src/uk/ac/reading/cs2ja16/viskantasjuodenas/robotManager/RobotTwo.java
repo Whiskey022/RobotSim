@@ -1,5 +1,9 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
+/**
+ * RobotTwo changes direction without getting stuck for a turn
+ *
+ */
 public class RobotTwo extends Robot{
 
 	/**
@@ -25,7 +29,9 @@ public class RobotTwo extends Robot{
 	//Function to move
 	@Override
 	public boolean tryToMove() {
+		//Move if charged
 		if (charge > 0) {
+			//Try to move/ change direction 4 times
 			for (int i = 0; i < 4; i++) {
 				
 				// Set next coordinates
@@ -42,6 +48,7 @@ public class RobotTwo extends Robot{
 					didMove = true;
 					return true;
 				}
+				//else change direction
 				direction = direction.getNextDirection();
 			}
 		}

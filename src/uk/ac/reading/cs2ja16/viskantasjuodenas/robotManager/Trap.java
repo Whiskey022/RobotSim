@@ -1,7 +1,21 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
-public class Trap extends ArenaObject{
-		
+/**
+ * Trap object, kills robots
+ *
+ */
+public class Trap extends ArenaObject {
+
+	/**
+	 * Constructor for trap
+	 * 
+	 * @param x
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 * @param robotArena
+	 *            Trap's robot arena
+	 */
 	public Trap(int x, int y, RobotArena robotArena) {
 		this.x = x;
 		this.y = y;
@@ -10,12 +24,12 @@ public class Trap extends ArenaObject{
 		countId();
 		type = "Trap";
 	}
-	
+
 	@Override
 	public boolean isTrap() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean tryToMove() {
 		// TODO Auto-generated method stub

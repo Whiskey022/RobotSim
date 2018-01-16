@@ -3,6 +3,10 @@ package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * 
+ * Robot arena object which stores robots and moves them around
+ */
 public class RobotArena {
 
 	private int x, y;
@@ -29,11 +33,9 @@ public class RobotArena {
 	}
 
 	/**
-	 * Adds a new robot at random location with random image index
+	 * Adds a new random robot at random location
 	 * 
-	 * @param robotImagesCount
-	 *            Provide the count of how many robot images there are available to
-	 *            calculate a random image index
+	 * @return status was adding was successful
 	 */
 	public String addRobot() {
 
@@ -58,8 +60,22 @@ public class RobotArena {
 		return "Failed to add a robot";
 	}
 
+	/**
+	 * Add a robot
+	 * 
+	 * @param x
+	 *            x coordinates
+	 * @param y
+	 *            y coordinates
+	 * @param direction
+	 *            its direction
+	 * @param robotType
+	 *            robot type
+	 * @return status was adding was successful
+	 */
 	public String addRobot(int x, int y, Direction direction, String robotType) {
 
+		// Check if provided coordinates are valid, change if necessary
 		x = checkIfValidX(x);
 		y = checkIfValidY(y);
 
@@ -68,10 +84,14 @@ public class RobotArena {
 			objects.add(RobotType.getRobotObject(x, y, direction, robotType, this));
 			return "success";
 		}
-		System.out.println("ERROR: position already taken");
 		return "Position already taken";
 	}
 
+	/**
+	 * Adds a new random item at random location
+	 * 
+	 * @return status was adding was successful
+	 */
 	public String addItem() {
 		// Initialise some values for adding a robot
 		Random rand = new Random();
@@ -93,8 +113,20 @@ public class RobotArena {
 		return "Failed to add a robot";
 	}
 
+	/**
+	 * Add an item
+	 * 
+	 * @param x
+	 *            x coordinates
+	 * @param y
+	 *            y coordinates
+	 * @param robotType
+	 *            item type
+	 * @return status was adding was successful
+	 */
 	public String addItem(int x, int y, String type) {
 
+		// Check if provided coordinates are valid, change if necessary
 		x = checkIfValidX(x);
 		y = checkIfValidY(y);
 
@@ -103,38 +135,52 @@ public class RobotArena {
 			objects.add(ItemType.getItemObject(x, y, type, this));
 			return "success";
 		}
-		System.out.println("ERROR: position already taken");
 		return "Position already taken";
 	}
 
+	/**
+	 * Remove object from arena
+	 * 
+	 * @param obj
+	 *            object to remove
+	 */
 	public void removeObject(ArenaObject obj) {
 		objects.remove(objects.indexOf(obj));
+		// Also decrease object count
 		ArenaObject.setObjectCount(ArenaObject.getObjectsCount() - 1);
 	}
 
-	public String toString() {
-		String res = "";
-
-		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
-			res += "\n";
-		}
-
-		return res;
-	}
-
-	// Function to check if robot can move into position
+	/**
+	 * Check if object can move here
+	 * 
+	 * @param x
+	 *            x coordinate to check
+	 * @param y
+	 *            y coordinate to check
+	 * @return true if can move there
+	 */
 	public boolean canMoveHere(int x, int y) {
-		// Check if its a wall in front
+		// Check if its a border is in front
 		if (x >= this.x || y >= this.y || x < 0 || y < 0) {
 			return false;
-			// Check if a robot is in front
-		} else if (objectIsBlocking(x, y)) {
+
+		}
+		// Check if an object is blocking the location
+		else if (objectIsBlocking(x, y)) {
 			return false;
 		}
 		return true;
 	}
 
-	// Function to check if robot is at position
+	/**
+	 * Check if any object is on that location
+	 * 
+	 * @param x
+	 *            x to check
+	 * @param y
+	 *            y to check
+	 * @return true if object is there
+	 */
 	private boolean objectIsHere(int x, int y) {
 		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
 			if (objects.get(i).isHere(x, y)) {
@@ -144,10 +190,19 @@ public class RobotArena {
 		return false;
 	}
 
-	// Function to check if robot is at position
+	/**
+	 * Check if an object is blocking the path
+	 * 
+	 * @param x
+	 *            x to check
+	 * @param y
+	 *            y to check
+	 * @return true if object is blocking the path
+	 */
 	private boolean objectIsBlocking(int x, int y) {
 		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
 			ArenaObject object = objects.get(i);
+			// Path is blocked if robot or wall is on location
 			if (object.isHere(x, y) && (object.isRobot() || object.isWall())) {
 				return true;
 			}
@@ -155,196 +210,25 @@ public class RobotArena {
 		return false;
 	}
 
-	// Try to move every robot
+	/**
+	 * Try to move all robots
+	 */
 	public void moveAllRobots() {
-		int countOfRobotsMoved = 0, timesTried = 0;
-		while (countOfRobotsMoved == 0 && timesTried < 10) {
-			for (ArenaObject object : objects) {
-				if (object.isRobot()) {
-					if (object.tryToMove()) {
-						countOfRobotsMoved++;
-					} else if (((Robot) object).getChargeLevel() < 1) {
-						message = "Robot ran out of juice at x: " + object.getX() + ", y: " + object.getY();
-						goodMessage = false;
-					}
-				}
-
-			}
-			timesTried++;
-		}
-	}
-
-	public boolean checkCollisions() {
-		boolean collisionsFound = false;
-		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
-			for (int j = i + 1; j < ArenaObject.getObjectsCount(); j++) {
-				ArenaObject obj1 = objects.get(i);
-				ArenaObject obj2 = objects.get(j);
-				if (obj1.isHere(obj2.getX(), obj2.getY())) {
-					//If robot stepped on a charger
-					if (obj1.isRobot() && obj2.isCharger()) { 
-						obj1.increaseCharge();
-						message = "Robot charged at x: " + obj1.getX() + ", y: " + obj1.getY();
-						goodMessage = true;
-						removeObject(obj2);
-					} else if (obj2.isRobot() && obj1.isCharger()) {
-						obj2.increaseCharge();
-						message = "Robot charged at x: " + obj2.getX() + ", y: " + obj2.getY();
-						goodMessage = true;
-						removeObject(obj1);
-					}
-					//If robot who destroys traps stepped on it
-					else if ((obj1.getClass() == RobotSix.class && obj2.isTrap()) || (obj2.getClass() == RobotSix.class && obj1.isTrap())) {
-						message = "Robot removed a trap at x: " + obj1.getX() + ", y: " + obj1.getY();
-						goodMessage = true;
-						if (obj1.getClass() == RobotSix.class) {
-							removeObject(obj2);
-						} else {
-							removeObject(obj1);
-						}
-					}
-					//If other types of robot stepped on a trap
-					else if ((obj1.isRobot() && obj2.isTrap()) || (obj2.isRobot() && obj1.isTrap())) {
-						message = "Robot removed by trap at x: " + obj1.getX() + ", y: " + obj1.getY();
-						goodMessage = false;
-						removeObject(obj1);
-						removeObject(obj2);
-					}
-					//If robot who collects lights steps on one
-					else if ((obj1.getClass() == RobotSeven.class) && obj2.isLight()) {
-						message = "Robot removed light at x: " + obj1.getX() + ", y: " + obj1.getY();
-						goodMessage = true;
-						removeObject(obj2);
-					} else if ((obj2.getClass() == RobotSeven.class) && obj1.isLight()) {
-						message = "Robot removed light at x: " + obj1.getX() + ", y: " + obj1.getY();
-						goodMessage = true;
-						removeObject(obj1);
-					}
-					collisionsFound = true;
-				}
-			}
-		}
-		return collisionsFound;
-	}
-
-	// Function to open browser in load mode, and update arena details
-	public void loadArena(String loadedData) {
-		String[] lines = loadedData.split("\\|");
-
-		// Extract arena details
-		String[] values = lines[0].split(":");
-
-		objects.clear();
-		
-		// Loop to create new robots with extracted details
-		for (int i = 0; i < lines.length - 2; i++) {
-			values = lines[i + 1].split(":");
-			objects.add(generateObject(Integer.parseInt(values[0]), Integer.parseInt(values[1]),
-					Integer.parseInt(values[2]), values[3], values[4], values[5]));
-		}
-	}
-
-	private ArenaObject generateObject(int Id, int x, int y, String type, String direction, String charge) {
-		
-		//If direction is none, it's an item, not a robot
-		if (direction.equals("None")) {
-			ArenaObject object = ItemType.getItemObject(x, y, type, this);
-			object.setId(Id);
-			return object;
-		} else {
-			ArenaObject object = RobotType.getRobotObject(x, y, Direction.valueOf(direction), type, this);
-			object.setId(Id);
-			((Robot) object).setCharge(Integer.parseInt(charge));
-			return object;
-		}
-	}
-
-	private int checkIfValidX(int x) {
-		if (x >= this.x) {
-			x = this.x;
-		} else if (x < 0) {
-			x = 0;
-		}
-		return x;
-	}
-
-	private int checkIfValidY(int y) {
-		if (y >= this.y) {
-			y = this.y;
-		} else if (y < 0) {
-			y = 0;
-		}
-		return y;
-	}
-
-	public void resetCharge() {
 		for (ArenaObject object : objects) {
 			if (object.isRobot()) {
-				((Robot) object).resetCharge();
+				object.tryToMove();
+				if (object.isRobot() && ((Robot) object).getChargeLevel() < 1) {
+					message = "Robot ran out of juice at x: " + object.getX() + ", y: " + object.getY();
+					goodMessage = false;
+				}
 			}
 		}
-		message = "Charge reset for all robots.";
-		goodMessage = true;
 	}
-
-	public void reset() {
-		objects = new ArrayList<ArenaObject>();
-		ArenaObject.setObjectCount(0);
-		speed = 0.02;
-		status = "not-drawn";
-		message = "";
-		goodMessage = true;
-	}
-
-	public void setXSize(int x) {
-		this.x = x;
-	}
-
-	public void setYSize(int y) {
-		this.y = y;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public void setSpeed(double speed) {
-		this.speed = speed;
-	}
-
-	public int getXSize() {
-		return x;
-	}
-
-	public int getYSize() {
-		return y;
-	}
-
-	public ArrayList<ArenaObject> getObjects() {
-		return objects;
-	}
-
-	public int getObjectCount() {
-		return ArenaObject.getObjectsCount();
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public boolean isGoodMessage() {
-		return goodMessage;
-	}
-
-	public double getSpeed() {
-		return speed;
-	}
-
-	// Convert all arena details to a string for saving into file
+	
+	/**
+	 * convert arena's details for saving to file
+	 * @return aren's details as String
+	 */
 	public String getDetails() {
 		String details = "";
 
@@ -364,5 +248,255 @@ public class RobotArena {
 		}
 
 		return details;
+	}
+
+	/**
+	 * Check objects which have moved to the same location
+	 * 
+	 * @return true if collision was found
+	 */
+	public boolean checkCollisions() {
+		boolean collisionsFound = false;
+		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
+			for (int j = i + 1; j < ArenaObject.getObjectsCount(); j++) {
+				ArenaObject obj1 = objects.get(i);
+				ArenaObject obj2 = objects.get(j);
+				if (obj1.isHere(obj2.getX(), obj2.getY())) {
+					// If robot stepped on a charger
+					if (obj1.isRobot() && obj2.isCharger()) {
+						obj1.increaseCharge();
+						message = "Robot charged at x: " + obj1.getX() + ", y: " + obj1.getY();
+						goodMessage = true;
+						removeObject(obj2);
+					} else if (obj2.isRobot() && obj1.isCharger()) {
+						obj2.increaseCharge();
+						message = "Robot charged at x: " + obj2.getX() + ", y: " + obj2.getY();
+						goodMessage = true;
+						removeObject(obj1);
+					}
+					// If robot who destroys traps stepped on it
+					else if ((obj1.getClass() == RobotSix.class && obj2.isTrap())
+							|| (obj2.getClass() == RobotSix.class && obj1.isTrap())) {
+						message = "Robot removed a trap at x: " + obj1.getX() + ", y: " + obj1.getY();
+						goodMessage = true;
+						if (obj1.getClass() == RobotSix.class) {
+							removeObject(obj2);
+						} else {
+							removeObject(obj1);
+						}
+					}
+					// If other types of robot stepped on a trap
+					else if ((obj1.isRobot() && obj2.isTrap()) || (obj2.isRobot() && obj1.isTrap())) {
+						message = "Robot removed by trap at x: " + obj1.getX() + ", y: " + obj1.getY();
+						goodMessage = false;
+						removeObject(obj1);
+						removeObject(obj2);
+					}
+					// If robot who collects lights steps on one
+					else if ((obj1.getClass() == RobotSeven.class) && obj2.isLight()) {
+						message = "Robot removed light at x: " + obj1.getX() + ", y: " + obj1.getY();
+						goodMessage = true;
+						removeObject(obj2);
+					} else if ((obj2.getClass() == RobotSeven.class) && obj1.isLight()) {
+						message = "Robot removed light at x: " + obj1.getX() + ", y: " + obj1.getY();
+						goodMessage = true;
+						removeObject(obj1);
+					}
+					collisionsFound = true;
+				}
+			}
+		}
+		return collisionsFound;
+	}
+
+	/**
+	 * Load arena with loaded data
+	 * 
+	 * @param loadedData
+	 *            String format data from a file
+	 */
+	public void loadArena(String loadedData) {
+		// Split lines
+		String[] lines = loadedData.split("\\|");
+		String[] values;
+
+		// Remove all objects
+		objects.clear();
+
+		// Loop to create new objects with extracted details
+		for (int i = 0; i < lines.length - 2; i++) {
+			values = lines[i + 1].split(":");
+			// Adding new object will all saved data
+			objects.add(generateObject(Integer.parseInt(values[0]), Integer.parseInt(values[1]),
+					Integer.parseInt(values[2]), values[3], values[4], values[5]));
+		}
+	}
+
+	/**
+	 * Create an object by given type
+	 * 
+	 * @param Id
+	 * @param x
+	 * @param y
+	 * @param type
+	 * @param direction
+	 * @param charge
+	 * @return created object
+	 */
+	private ArenaObject generateObject(int Id, int x, int y, String type, String direction, String charge) {
+
+		// If direction is none, it's an item, not a robot
+		if (direction.equals("None")) {
+			ArenaObject object = ItemType.getItemObject(x, y, type, this);
+			object.setId(Id);
+			return object;
+		} else {
+			ArenaObject object = RobotType.getRobotObject(x, y, Direction.valueOf(direction), type, this);
+			object.setId(Id);
+			((Robot) object).setCharge(Integer.parseInt(charge));
+			return object;
+		}
+	}
+
+	/**
+	 * Check if valid x coordinate, if not change it
+	 * 
+	 * @param x
+	 * @return x coordinate
+	 */
+	private int checkIfValidX(int x) {
+		if (x >= this.x) {
+			x = this.x;
+		} else if (x < 0) {
+			x = 0;
+		}
+		return x;
+	}
+
+	/**
+	 * Check if valid y coordinate, if not change it 
+	 * @param y
+	 * @return
+	 */
+	private int checkIfValidY(int y) {
+		if (y >= this.y) {
+			y = this.y;
+		} else if (y < 0) {
+			y = 0;
+		}
+		return y;
+	}
+
+	/**
+	 * Reset charge for all robots
+	 */
+	public void resetCharge() {
+		for (ArenaObject object : objects) {
+			if (object.isRobot()) {
+				((Robot) object).resetCharge();
+			}
+		}
+		message = "Charge reset for all robots.";
+		goodMessage = true;
+	}
+
+	/**
+	 * Reset arena
+	 */
+	public void reset() {
+		objects = new ArrayList<ArenaObject>();
+		ArenaObject.setObjectCount(0);
+		speed = 0.02;
+		status = "not-drawn";
+		message = "";
+		goodMessage = true;
+	}
+
+	/**
+	 * Set width of arena
+	 * @param x
+	 */
+	public void setXSize(int x) {
+		this.x = x;
+	}
+
+	/**
+	 * set height of arena
+	 * @param y
+	 */
+	public void setYSize(int y) {
+		this.y = y;
+	}
+
+	/**
+	 * set status of arena
+	 * @param status
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	/**
+	 * set speed of arena
+	 * @param speed
+	 */
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
+	/**
+	 * get width of arena
+	 * @return
+	 */
+	public int getXSize() {
+		return x;
+	}
+
+	/**
+	 * get height of arena
+	 * @return
+	 */
+	public int getYSize() {
+		return y;
+	}
+
+	/**
+	 * get all arena's objects
+	 * @return
+	 */
+	public ArrayList<ArenaObject> getObjects() {
+		return objects;
+	}
+
+	/**
+	 * get arena's status
+	 * @return
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * get arena's message
+	 * @return
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * get arena's message type
+	 * @return
+	 */
+	public boolean isGoodMessage() {
+		return goodMessage;
+	}
+
+	/**
+	 * get arena's speed
+	 * @return
+	 */
+	public double getSpeed() {
+		return speed;
 	}
 }

@@ -3,6 +3,10 @@ package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * Class to store robot names and descriptions
+ *
+ */
 public class RobotType {
 
 	private static String[] robots = { "RobotOne", "RobotTwo", "RobotThree", "RobotFour", "RobotFive", "RobotSix", "RobotSeven"};
@@ -15,26 +19,58 @@ public class RobotType {
 			"Robot changes direction clockwise. Removes traps. Takes a turn to change direction",
 			"Robot changes direction clockwise, can steer towards a light. Changes direction instantly"};
 
+	/**
+	 * 
+	 * @return count of different robot types
+	 */
 	public static int getCount() {
 		return robots.length;
 	}
 
+	/**
+	 * 
+	 * @return random robot type
+	 */
 	public static String getRandom() {
 		return robots[new Random().nextInt(robots.length)];
 	}
 
+	/**
+	 * Get robot type by index
+	 * @param index
+	 * @return robot type
+	 */
 	public static String get(int index) {
 		return robots[index];
 	}
 	
+	/**
+	 * get robot description by index
+	 * @param index
+	 * @return robot description
+	 */
 	public static String getDescription(int index) {
 		return robotDescriptions[index];
 	}
 
+	/**
+	 * get index of a robot type by name
+	 * @param name
+	 * @return index of robot type
+	 */
 	public static int getIndex(String name) {
 		return Arrays.asList(robots).indexOf(name);
 	}
 
+	/**
+	 * get a robot object by providing its name
+	 * @param x
+	 * @param y
+	 * @param direction
+	 * @param type
+	 * @param robotArena
+	 * @return robot object
+	 */
 	public static Robot getRobotObject(int x, int y, Direction direction, String type, RobotArena robotArena) {
 		switch (type) {
 		default:

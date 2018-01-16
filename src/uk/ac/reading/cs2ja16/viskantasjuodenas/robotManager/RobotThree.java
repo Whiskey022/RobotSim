@@ -1,5 +1,9 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
+/**
+ * RobotThree, changes direction to a random one
+ *
+ */
 public class RobotThree extends Robot{
 
 	/**
@@ -25,7 +29,9 @@ public class RobotThree extends Robot{
 	//Function to move
 	@Override
 	public boolean tryToMove() {
+		//Move if charged
 		if (charge > 0) {
+			//Try 8 times to move/ change direction
 			for (int i = 0; i < 8; i++) {
 				
 				// Set next coordinates
@@ -45,7 +51,9 @@ public class RobotThree extends Robot{
 				// First 4 attempts try to get random direction
 				if (i < 4) {
 					direction = Direction.getRandomDirection();
-				} else {
+				}
+				//Otherwise also try next directions
+				else {
 					direction = direction.getNextDirection();
 				}
 			}

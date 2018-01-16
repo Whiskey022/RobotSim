@@ -2,8 +2,12 @@ package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
 import java.util.Random;
 
+/**
+ * RobotFour class, occasionally changes direction at a random time
+ *
+ */
 public class RobotFour extends Robot {
-	
+
 	/**
 	 * Robot constructor, sets up his location, direction, robotArena, Id, and
 	 * imageIndex
@@ -16,8 +20,6 @@ public class RobotFour extends Robot {
 	 *            robot's initial direction
 	 * @param robotArena
 	 *            robotArena the robot belongs to
-	 * @param imageIndex
-	 *            robot's image index, stored to have a consistent image
 	 */
 	public RobotFour(int x, int y, Direction direction, RobotArena robotArena) {
 		this.initialX = x;
@@ -34,18 +36,19 @@ public class RobotFour extends Robot {
 	// Function to move
 	@Override
 	public boolean tryToMove() {
+		//If below charge don't move
 		if (charge > 0) {
 			charge--;
-			
-			//Sometimes randomly change movement direction
+
+			// Sometimes randomly change movement direction
 			if (new Random().nextInt(5) == 1) {
 				direction = Direction.getRandomDirection();
 			}
-			
+
 			// Set next coordinates
 			int[] nextCoord = move();
 			int nextX = nextCoord[0], nextY = nextCoord[1];
-			
+
 			// If robot can move there, set next coordinates to current
 			if (robotArena.canMoveHere(nextX, nextY)) {
 				oldX = x;

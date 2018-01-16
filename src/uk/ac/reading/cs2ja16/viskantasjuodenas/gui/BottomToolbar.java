@@ -8,10 +8,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 
+/**
+ * Button toolBar for GUI
+ */
 public class BottomToolbar {
 
 	private HBox menuBox;
 	private RobotArena robotArena;
+	// Some icons for buttons
 	private Image plusImage = new Image(getClass().getResourceAsStream("plus.png"));
 	private Image arrowImage = new Image(getClass().getResourceAsStream("arrow.png"));
 	private Image doubleArrowImage = new Image(getClass().getResourceAsStream("double_arrow.png"));
@@ -19,7 +23,7 @@ public class BottomToolbar {
 	private double defaultSpeed = 0.02;
 
 	/**
-	 * BottomMenu constructor, sets up a box of buttons
+	 * BottomMenu constructor, sets up an HBox of buttons
 	 * 
 	 * @param RobotArena
 	 *            object
@@ -34,7 +38,7 @@ public class BottomToolbar {
 	}
 
 	/**
-	 * set up the bottom menu of buttons
+	 * Create the bottom menu of buttons
 	 * 
 	 * @return a VBox of menu buttons
 	 */
@@ -108,7 +112,7 @@ public class BottomToolbar {
 				robotArena.setSpeed(defaultSpeed);
 			}
 		});
-		
+
 		// Button to reset speed
 		Button resetChargeButton = new Button("Reset charge");
 		resetChargeButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -118,11 +122,15 @@ public class BottomToolbar {
 			}
 		});
 
-		menuBox.getChildren().addAll(randomRobotBtn, randomItem, moveRobotsOnceBtn,
-				moveRobotsBtn, stopRobotsBtn, speedUpButton, resetSpeedButton, resetChargeButton);
+		//Add all buttons to HBox
+		menuBox.getChildren().addAll(randomRobotBtn, randomItem, moveRobotsOnceBtn, moveRobotsBtn, stopRobotsBtn,
+				speedUpButton, resetSpeedButton, resetChargeButton);
 		return menuBox;
 	}
 
+	/**
+	 * Adding robot method, changes arena's status
+	 */
 	private void addRobot() {
 		String addObjectOutput = robotArena.addRobot();
 		if (addObjectOutput == "success") {
@@ -132,6 +140,9 @@ public class BottomToolbar {
 		}
 	}
 
+	/**
+	 * Adding item method, changes arena's status
+	 */
 	private void addItem() {
 		String addObjectOutput = robotArena.addItem();
 		if (addObjectOutput == "success") {
@@ -142,7 +153,7 @@ public class BottomToolbar {
 	}
 
 	/**
-	 * @return menuBox
+	 * @return button toolbar
 	 */
 	public HBox getMenuBar() {
 		return menuBox;

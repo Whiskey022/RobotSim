@@ -23,7 +23,7 @@ import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ItemType;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 
 /**
- * Class to open "Add Custom Robot" dialog
+ * Class to open "Add Custom Item" dialog
  */
 public class AddItemDialog {
 
@@ -34,10 +34,11 @@ public class AddItemDialog {
 	private static RobotArena robotArena;
 
 	/**
-	 * Open "Add Custom Robot" dialog
+	 * Open "Add Custom Item" dialog
 	 */
 	public static void open(RobotArena arena) {
 		robotArena = arena;
+		
 		// Create the custom dialog.
 		Dialog<Pair<String, String>> dialog = new Dialog<>();
 		dialog.setTitle("Add a custom item");
@@ -92,7 +93,7 @@ public class AddItemDialog {
 		// https://stackoverflow.com/questions/14522680/javafx-choicebox-events
 		objectBox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable,
 				String oldValue, String newValue) -> drawIt(newValue, 40, 20, 40));
-		// Set up Group object to draw robot image
+		// Set up Group object to draw Item image
 		Group root = new Group();
 		Canvas canvas = new Canvas(90, 50);
 		root.getChildren().add(canvas);
@@ -117,7 +118,7 @@ public class AddItemDialog {
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == addBtnType) {
 				setResults(xField.getText(), yField.getText(), objectBox.getValue());
-				addRobot();
+				addItem();
 				robotArena.setStatus("not-drawn");
 			}
 			return null;
@@ -126,17 +127,17 @@ public class AddItemDialog {
 		dialog.showAndWait();
 	}
 
-	private static void addRobot() {
-		String addRobotOutput = robotArena.addItem(x, y, objectType);
-		if (addRobotOutput == "success") {
+	private static void addItem() {
+		String addItemOutput = robotArena.addItem(x, y, objectType);
+		if (addItemOutput == "success") {
 			robotArena.setStatus("not-drawn");
 		} else {
-			AlertMessage.show("Error", addRobotOutput, true);
+			AlertMessage.show("Error", addItemOutput, true);
 		}
 	}
 
 	/**
-	 * Convert dialog results from string to values Robot object can accept
+	 * Convert dialog results from string to values ArenaObject can accept
 	 * 
 	 * @param xVal
 	 *            x coordinate

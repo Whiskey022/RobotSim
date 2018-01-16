@@ -11,6 +11,9 @@ import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ArenaObject;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.Robot;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 
+/**
+ * Robot arena's canvas, all objects are drawn and animated in this class
+ */
 public class ArenaCanvas {
 
 	private Group root;
@@ -22,18 +25,21 @@ public class ArenaCanvas {
 	private RobotArena robotArena;
 	private GraphicsContext gc;
 	private GraphicsContext gcGrid;
-	private boolean showGrid = true;
-	private double step;
-	Label arenaLabel = new Label();
+	private boolean showGrid = true; // Draw grid or not
+	private double step; // How fast the robots move to their direction
+	Label arenaLabel = new Label(); // Label for arena's messages
+	// Label's style
 	private String defaultLabelStyle = "-fx-label-padding: -20px 20px 0px, 0px";
 
 	/**
-	 * RobotCanvas constructor, sets up a new canvas
+	 * RobotCanvas constructor, sets up new canvas
 	 * 
 	 * @param canvasWidth
 	 *            canvas width
 	 * @param canvasHeight
 	 *            canvas height
+	 * @param roboArena
+	 *            robotArena to draw
 	 */
 	public ArenaCanvas(int canvasWidth, int canvasHeight, int robotSize, RobotArena robotArena) {
 		this.canvasWidth = canvasWidth;
@@ -43,28 +49,23 @@ public class ArenaCanvas {
 
 		root = new Group();
 		canvas = new Canvas(canvasWidth, canvasHeight);
-		gridCanvas = new Canvas(canvasWidth, canvasHeight);
+		gridCanvas = new Canvas(canvasWidth, canvasHeight); // Separate canvas for drawing a grid
 		gcGrid = gridCanvas.getGraphicsContext2D();
-		createCanvasGrid();
+		createCanvasGrid(); // Draw grid
 		root.getChildren().addAll(arenaLabel, gridCanvas, canvas);
 		gc = canvas.getGraphicsContext2D();
 
-		animateRobots();
+		animateRobots(); // Start animation
 	}
 
 	/**
-	 * Move robots by drawing them with animation
-	 * 
-	 * @param robots
-	 *            array of robots to move
-	 * @param robotsCounter
-	 *            robot count
+	 * Constantly draw robots
 	 */
 	public void animateRobots() {
 		// Starting movement step
 		step = 0.0;
 
-		// Drawing animation
+		// Animation constantly running, does stuff according to what is arena's status
 		new AnimationTimer() {
 			public void handle(long l) {
 
@@ -76,23 +77,24 @@ public class ArenaCanvas {
 					moveRobots();
 					break;
 				case "move-continuous":
-					if (step == 0)
+					if (step == 0) // Move robots only if they are not moving
 						moveRobots();
 					else
-						robotArena.setStatus("draw-movement-continuous");
+						robotArena.setStatus("draw-movement-continuous"); // Else continue drawing
 					break;
 				case "draw-movement":
 				case "draw-movement-continuous":
 					animateMovingRobots();
 					break;
 				case "stop-movement":
-					if (step > 0)
+					if (step > 0) // Step drawing movement after robots finish their current move
 						animateMovingRobots();
 					break;
 				default:
 					break;
 				}
 
+				// Update arena's message
 				updateArenaLabel();
 			}
 		}.start();
@@ -102,19 +104,23 @@ public class ArenaCanvas {
 	 * Draw standing robots
 	 */
 	private void drawObjects() {
+		// Clear canvas
 		resetCanvas();
+
 		// Draw each robot
 		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
 			ArenaObject object = robotArena.getObjects().get(i);
 			drawIt(object.getImage(), object.getX() * objectSize, object.getY() * objectSize, objectSize);
 		}
+
+		// Stop drawing if status is not continuous movement
 		if (robotArena.getStatus() != "draw-movement-continuous") {
 			robotArena.setStatus("stand");
 		}
 	}
 
 	/**
-	 * Start moving robots
+	 * Move robots, change status to 'draw-movement' according to previous status
 	 */
 	private void moveRobots() {
 		robotArena.moveAllRobots();
@@ -123,28 +129,33 @@ public class ArenaCanvas {
 		} else {
 			robotArena.setStatus("draw-movement-continuous");
 		}
-		
+
 	}
 
 	/**
-	 * Draw moving robots
+	 * Animate all moving robots
 	 */
 	private void animateMovingRobots() {
+		// Count for how many objects are moving
 		int robotsMoving = ArenaObject.getObjectsCount();
+
+		// Step keeps increasing (they get closer to their next location)
 		step += robotArena.getSpeed();
 
-		// clear canvas and reset stroke
+		// clear canvas
 		resetCanvas();
 
 		// Loop to draw all robots
 		for (int i = 0; i < ArenaObject.getObjectsCount(); i++) {
-			if (drawMovingRobot(robotArena.getObjects().get(i), step)) {
+			if (drawMovingRobot(robotArena.getObjects().get(i), step)) { // If object reached its position, remove count
+																			// of robotsMoving
 				robotsMoving--;
 			}
 		}
 
-		// If position reached
+		// If no robots are moving
 		if (robotsMoving == 0) {
+
 			// Check if any of the robots stepped on an item, update them if necessary
 			if (robotArena.checkCollisions()) {
 				drawObjects();
@@ -153,6 +164,7 @@ public class ArenaCanvas {
 			// Reset step
 			step = 0.0;
 
+			// Change arena's status
 			switch (robotArena.getStatus()) {
 			case "draw-movement-continuous":
 				robotArena.setStatus("move-continuous"); // If move continuous, move robots again
@@ -169,12 +181,8 @@ public class ArenaCanvas {
 	 * 
 	 * @param object
 	 *            Robot to draw
-	 * @param currentNanoTime
-	 *            current time
-	 * @param startNanoTime
-	 *            time when started drawing
-	 * @param self
-	 *            AnimationTimer object
+	 * @param step
+	 *            How far has the robot moved towards new location
 	 */
 	private boolean drawMovingRobot(ArenaObject object, double step) {
 		// Boolean to check if robot already reached his position
@@ -183,17 +191,23 @@ public class ArenaCanvas {
 		int newX = object.getX(), newY = object.getY(); // New coordinates
 		double xToDraw, yToDraw; // Coordinates to draw at
 
+		// Calculate animation only if the robot has moved
 		if (object.getDidMove()) {
-			int oldX = ((Robot) object).getOldX(), oldY = ((Robot) object).getOldY(); // Previous coordinates
-			// If robot has moved to new coordinates, calculate coordinates for drawing
+			// Previous coordinates
+			int oldX = ((Robot) object).getOldX(), oldY = ((Robot) object).getOldY();
+
+			// Calculate coordinates for drawing
 			xToDraw = oldX + (newX - oldX) * step;
 			yToDraw = oldY + (newY - oldY) * step;
 
-			// Check if coordinates reached
+			// Check if robot reached its location
 			if (step > 1 || coordinateReached(xToDraw, newX) && coordinateReached(yToDraw, newY)) {
 				positionReached = true;
 			}
-		} else {
+		}
+		// If object isn't moving, no need for animation calculation, just draw its
+		// current position
+		else {
 			xToDraw = newX;
 			yToDraw = newY;
 			positionReached = true;
@@ -205,8 +219,12 @@ public class ArenaCanvas {
 		return positionReached;
 	}
 
+	/**
+	 * Function to update arena's message
+	 */
 	private void updateArenaLabel() {
 		arenaLabel.setText(robotArena.getMessage());
+		// Change text colour according to message type
 		if (robotArena.isGoodMessage()) {
 			arenaLabel.setStyle(defaultLabelStyle + "; -fx-text-fill: blue");
 		} else {
@@ -246,25 +264,31 @@ public class ArenaCanvas {
 	}
 
 	// https://stackoverflow.com/questions/27846659/how-to-draw-an-1-pixel-line-using-javafx-canvas
+	/**
+	 * Draw grid if settings for it is true
+	 */
 	private void createCanvasGrid() {
 		gcGrid.setLineWidth(1.0);
-
 		gcGrid.beginPath();
 		gcGrid.clearRect(0, 0, canvasWidth, canvasHeight);
+		
+		//Draw only if showGrid is true
 		if (showGrid) {
+			//Draw vertically
 			for (int x = 0; x < canvasWidth; x += objectSize) {
 				gcGrid.moveTo(x + 0.5, 0);
 				gcGrid.lineTo(x + 0.5, canvasHeight);
 				gcGrid.stroke();
 			}
-	
+
+			//Draw horizontally
 			for (int y = 0; y < canvasHeight; y += objectSize) {
-	
 				gcGrid.moveTo(0, y + 0.5);
 				gcGrid.lineTo(canvasWidth, y + 0.5);
 				gcGrid.stroke();
 			}
 		}
+		//Draw borders
 		gcGrid.setStroke(Color.BLACK);
 		gcGrid.strokeRect(1, 1, canvasWidth - 2, canvasHeight - 2);
 	}
@@ -278,11 +302,18 @@ public class ArenaCanvas {
 		gc.strokeRect(0, 0, canvasWidth, canvasHeight);
 	}
 
+	/**
+	 * Create a new arena, and canvas for it
+	 * @param arenaWidth	width of new arena
+	 * @param arenaHeight	height of new arena
+	 */
 	public void newArena(int arenaWidth, int arenaHeight) {
+		//Calculate object size so arena fits into GUI
 		objectSize = calculateObjectSize(arenaWidth, arenaHeight);
 		canvasWidth = arenaWidth * objectSize;
 		canvasHeight = arenaHeight * objectSize;
 
+		//Reset canvas and graphicsContext
 		robotArena.reset();
 		robotArena.setXSize(arenaWidth);
 		robotArena.setYSize(arenaHeight);
@@ -295,24 +326,40 @@ public class ArenaCanvas {
 		gc.clearRect(0, 0, canvasWidth, canvasHeight);
 		createCanvasGrid();
 
+		//Set objects count to 0
 		ArenaObject.setObjectCount(0);
 	}
-	
+
+	/**
+	 * Calculate object size so the arena would fit onto GUI
+	 * @param arenaWidth	arena width
+	 * @param arenaHeight	arena height
+	 * @return	object's new size
+	 */
 	private int calculateObjectSize(int arenaWidth, int arenaHeight) {
 		int objectSize = 100;
 		int width = arenaWidth;
 		int height = arenaHeight;
+		//Loop to get object small enough so arena's dimensions are not too big
 		while (width * objectSize > 900 || height * objectSize > 500) {
 			objectSize--;
 		}
 		return objectSize;
 	}
-	
+
+	/**
+	 * Set showGrid
+	 * @param value true or false
+	 */
 	public void setShowGrid(boolean value) {
 		showGrid = value;
-		createCanvasGrid();
+		createCanvasGrid();		//Create grid canvas immediately
 	}
-	
+
+	/**
+	 * 
+	 * @return showGrid value
+	 */
 	public boolean getShowGrid() {
 		return showGrid;
 	}

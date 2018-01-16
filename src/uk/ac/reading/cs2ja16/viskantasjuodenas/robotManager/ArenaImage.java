@@ -4,7 +4,7 @@ import java.util.Random;
 import javafx.scene.image.Image;
 
 /**
- * Simple class to easily store and retrieve robot images
+ * Simple class to easily store and retrieve object images
  */
 public class ArenaImage {
 
@@ -14,12 +14,12 @@ public class ArenaImage {
 			new Image(getClass().getResourceAsStream("robot_04.png")),
 			new Image(getClass().getResourceAsStream("robot_05.png")),
 			new Image(getClass().getResourceAsStream("robot_06.png")),
-			new Image(getClass().getResourceAsStream("robot_07.png"))};
+			new Image(getClass().getResourceAsStream("robot_07.png")) };
 	private Image wallImage = new Image(getClass().getResourceAsStream("wall.png"));
 	private Image chargerImage = new Image(getClass().getResourceAsStream("charger.png"));
 	private Image trapImage = new Image(getClass().getResourceAsStream("trap.png"));
 	private Image lightImage = new Image(getClass().getResourceAsStream("light.png"));
-	
+
 	/**
 	 * Get image with provided with item type
 	 * 
@@ -28,7 +28,7 @@ public class ArenaImage {
 	 * @return return item image
 	 */
 	public Image getByItemType(String itemType) {
-		switch(itemType) {
+		switch (itemType) {
 		default:
 			return wallImage;
 		case "Charger":
@@ -41,7 +41,7 @@ public class ArenaImage {
 	}
 
 	/**
-	 * Get image with provided index
+	 * Get robot image with provided index
 	 * 
 	 * @param index
 	 *            provide image index
@@ -52,7 +52,6 @@ public class ArenaImage {
 	}
 
 	/**
-	 * 
 	 * @return Image of a wall
 	 */
 	public Image getWallImage() {
@@ -66,7 +65,7 @@ public class ArenaImage {
 	public Image getChargerImage() {
 		return chargerImage;
 	}
-	
+
 	/**
 	 * 
 	 * @return Image of a trap
@@ -74,7 +73,7 @@ public class ArenaImage {
 	public Image getTrapImage() {
 		return trapImage;
 	}
-	
+
 	/**
 	 * 
 	 * @return Image of a light
@@ -82,7 +81,6 @@ public class ArenaImage {
 	public Image getLightImage() {
 		return lightImage;
 	}
-
 
 	/**
 	 * Get a random robot image
@@ -94,9 +92,9 @@ public class ArenaImage {
 	}
 
 	/**
-	 * Get size of images array
+	 * Get size of robot images array
 	 * 
-	 * @return size of images array
+	 * @return size of robot images array
 	 */
 	public int getSize() {
 		return robotImages.length;

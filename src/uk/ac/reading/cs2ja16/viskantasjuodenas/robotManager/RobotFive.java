@@ -1,6 +1,9 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
-
+/**
+ * 
+ * RobotFive class, double the charge
+ */
 public class RobotFive extends Robot {
 
 	/**
@@ -15,8 +18,6 @@ public class RobotFive extends Robot {
 	 *            robot's initial direction
 	 * @param robotArena
 	 *            robotArena the robot belongs to
-	 * @param imageIndex
-	 *            robot's image index, stored to have a consistent image
 	 */
 	public RobotFive(int x, int y, Direction direction, RobotArena robotArena) {
 		this.initialX = x;

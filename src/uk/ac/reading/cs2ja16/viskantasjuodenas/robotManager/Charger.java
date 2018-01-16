@@ -1,5 +1,9 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
+/**
+ * 
+ * Charger Class
+ */
 public class Charger extends ArenaObject {
 
 	public Charger(int x, int y, RobotArena robotArena) {
@@ -11,6 +15,7 @@ public class Charger extends ArenaObject {
 		type = "Charger";
 	}
 
+	@Override
 	public boolean isCharger() {
 		return true;
 	}

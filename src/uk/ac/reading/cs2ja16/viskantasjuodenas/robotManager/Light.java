@@ -1,7 +1,10 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
-public class Light extends ArenaObject{
-			
+/**
+ * Class for Light object
+ */
+public class Light extends ArenaObject {
+
 	public Light(int x, int y, RobotArena robotArena) {
 		this.x = x;
 		this.y = y;
@@ -10,12 +13,12 @@ public class Light extends ArenaObject{
 		countId();
 		type = "Light";
 	}
-	
+
 	@Override
 	public boolean isLight() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean tryToMove() {
 		// TODO Auto-generated method stub

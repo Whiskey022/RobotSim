@@ -13,7 +13,7 @@ import javafx.util.Pair;
 
 
 /**
- * Class to open "Add Custom Robot" dialog
+ * Class to open "New Arena" dialog
  */
 public class NewArenaDialog {
 
@@ -22,7 +22,7 @@ public class NewArenaDialog {
 	private static ArenaCanvas arenaCanvas;
 
 	/**
-	 * Open "Add Custom Robot" dialog
+	 * Open "New Arena" dialog
 	 */
 	public static void open(ArenaCanvas canvas) {
 		arenaCanvas = canvas;
@@ -89,14 +89,12 @@ public class NewArenaDialog {
 	}
 	
 	/**
-	 * Convert dialog results from string to values Robot object can accept
+	 * Convert dialog results from string to values RobotArena object can accept
 	 * 
 	 * @param widthVal
-	 *            x coordinate
+	 *            width
 	 * @param heightVal
-	 *            y coordinate
-	 * @param type
-	 *            object type
+	 *            height
 	 */
 	private static void setResults(String widthVal, String heightVal) {
 		width = Integer.parseInt(widthVal);

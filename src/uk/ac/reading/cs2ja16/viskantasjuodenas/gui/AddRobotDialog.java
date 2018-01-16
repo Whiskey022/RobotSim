@@ -153,6 +153,9 @@ public class AddRobotDialog {
 		dialog.showAndWait();
 	}
 
+	/**
+	 * Add robot to arena
+	 */
 	private static void addRobot() {
 		String addRobotOutput = robotArena.addRobot(x, y, direction, robotSelection);
 		if (addRobotOutput == "success") {
@@ -171,8 +174,8 @@ public class AddRobotDialog {
 	 *            y coordinate
 	 * @param dir
 	 *            direction
-	 * @param imgIndex
-	 *            image index
+	 * @param typeSelection
+	 *            type of robot
 	 */
 	private static void setResults(String xVal, String yVal, String dir, String typeSelection) {
 		// Set x
@@ -222,6 +225,10 @@ public class AddRobotDialog {
 		}
 	}
 	
+	/**
+	 * Set robot's description
+	 * @param robotName	for which robot to get description
+	 */
 	private static void setDescription(String robotName) {
 		descLabel.setText(RobotType.getDescription(RobotType.getIndex(robotName)));
 	}
