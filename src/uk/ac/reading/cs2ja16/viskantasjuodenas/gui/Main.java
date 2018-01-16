@@ -14,43 +14,30 @@ public class Main extends Application {
 	private int canvasWitdh = arenaWidth*objectSize;
 	private int canvasHeight = arenaHeight*objectSize;
 	private RobotArena robotArena;
-	private ArenaCanvas robotCanvas;
-	private static Stage primaryStage;
+	private ArenaCanvas arenaCanvas;
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	@Override
-	public void start(Stage stage) throws Exception {
+	public void start(Stage primaryStage) throws Exception {
+		primaryStage.setTitle("Robot Sim");
 		
-		primaryStage = stage;
-				
+		//Set up robot arena and a canvas to draw it on
 		robotArena = new RobotArena(arenaWidth, arenaHeight);
-		robotCanvas = new ArenaCanvas(canvasWitdh, canvasHeight, objectSize, robotArena);
-
-		primaryStage.setTitle("Robot Simulator");
-
+		arenaCanvas = new ArenaCanvas(canvasWitdh, canvasHeight, objectSize, robotArena);
+	
 		BorderPane bp = new BorderPane();
 
-		bp.setTop(TopMenu.get(robotArena, robotCanvas));
-		bp.setCenter(robotCanvas.getGroup()); // put group in centre pane
-		bp.setBottom(new BottomToolbar(robotArena, robotCanvas).getMenuBar()); /// add button to bottom
+		bp.setTop(TopMenu.get(robotArena, arenaCanvas));							//Adding top menu
+		bp.setCenter(arenaCanvas.getGroup());										//Adding arena canvas where robots are drawn
+		bp.setBottom(new BottomToolbar(robotArena, arenaCanvas).getMenuBar());		//Adding button toolBar
 
 		Scene scene = new Scene(bp, canvasWitdh*1.2, canvasHeight*1.4);
 		primaryStage.setScene(scene);
 		primaryStage.setMaximized(true);
 		primaryStage.show();
-	}
-	
-	public void newArena(int arenaWidth, int arenaHeight) {
-		this.arenaWidth = arenaWidth;
-		this.arenaHeight = arenaHeight;
-		robotArena = new RobotArena(arenaWidth, arenaHeight);
-	}
-	
-	public static Stage getPrimaryStage() {
-		return primaryStage;
 	}
 
 }
