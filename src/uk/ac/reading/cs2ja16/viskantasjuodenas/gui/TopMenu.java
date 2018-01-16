@@ -7,59 +7,80 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 
+/**
+ * Creates the top menu for GUI
+ */
 public class TopMenu {
 
-	private MenuBar menuBar;
-	private RobotArena robotArena;
-	private ArenaCanvas arenaCanvas;
-	private FileBrowser fileBrowser = new FileBrowser();
+	private static RobotArena robotArena;
+	private static ArenaCanvas arenaCanvas;
+	private static FileBrowser fileBrowser = new FileBrowser();
 
 	/**
-	 * MenuBar constructor, sets up MenuBar
+	 * Create and get top menu bar
+	 * 
+	 * @param arena
+	 *            robotArena object to access
+	 * @param canvas
+	 *            arenaCanvas object to access
+	 * @return returns the MenuBar for the GUI
 	 */
-	public TopMenu(RobotArena robotArena, ArenaCanvas arenaCanvas) {
-		this.robotArena = robotArena;
-		this.arenaCanvas = arenaCanvas;
-		menuBar = setMenu();
+	public static MenuBar get(RobotArena arena, ArenaCanvas canvas) {
+		robotArena = arena;
+		arenaCanvas = canvas;
+		MenuBar menuBar = new MenuBar();
+		//Add all menu sections to the menu bar
+		menuBar.getMenus().addAll(arenaMenu(), objectMenu(), helpMenu());
+		return menuBar;
 	}
 
 	/**
-	 * Function to set up the MenuBar
-	 * 
-	 * @return returns MenuBar
+	 * @return a menu for changing robots arena
 	 */
-	private MenuBar setMenu() {
-		MenuBar menuBar = new MenuBar(); // create menu
-
+	private static Menu arenaMenu() {
 		Menu mArena = new Menu("Arena");
+		
+		//Menu item for new arena
 		MenuItem miNew = new MenuItem("New Arena");
 		miNew.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
 				NewArenaDialog.open(arenaCanvas);
 			}
 		});
+		
+		//Menu item for saving arena
 		MenuItem miSave = new MenuItem("Save Arena");
 		miSave.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
+				//Open file browser to save file
 				fileBrowser.browse(FileBrowser.BrowserMode.SAVE);
 				fileBrowser.saveFile(robotArena.getDetails());
 			}
 		});
+		
+		//Menu item for loading arena
 		MenuItem miLoad = new MenuItem("Load Arena");
 		miLoad.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
+				//Open file browser to load file
 				fileBrowser.browse(FileBrowser.BrowserMode.LOAD);
 				String loadedData = fileBrowser.loadFile();
+				//If it did load some data
 				if (loadedData.length() > 0) {
+					//Split text to get arena dimensions
 					String[] lines = loadedData.split("\\|");
-					// Extract arena details
+					// Separate x and y 
 					String[] values = lines[0].split(":");
+					//Create new arena and load objects data to it
 					arenaCanvas.newArena(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					robotArena.loadArena(loadedData);
 				}
 			}
 		});
+		
+		//Menu item for showing or hiding grid
 		MenuItem miShowGrid = new MenuItem();
+		//Change menu item text according to the current setting
 		if (arenaCanvas.getShowGrid()) {
 			miShowGrid.setText("Hide Grid");
 		} else {
@@ -67,7 +88,9 @@ public class TopMenu {
 		}
 		miShowGrid.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
+				//Change arena setting for showing grid
 				arenaCanvas.setShowGrid(!arenaCanvas.getShowGrid());
+				//Change menu item's text as well
 				if (arenaCanvas.getShowGrid()) {
 					miShowGrid.setText("Hide Grid");
 				} else {
@@ -75,24 +98,47 @@ public class TopMenu {
 				}
 			}
 		});
+		
+		//Add all menu items to menu
 		mArena.getItems().addAll(miNew, miSave, miLoad, miShowGrid);
+		return mArena;
+	}
 
+	/**
+	 * @return a menu for adding objects
+	 */
+	private static Menu objectMenu() {
 		Menu mObject = new Menu("Add Object");
+		
+		//Menu item for adding a custom robot
 		MenuItem miRobot = new MenuItem("Add custom Robot");
 		miRobot.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
 				AddRobotDialog.open(robotArena); // Open Dialog
 			}
 		});
+		
+		//Menu item for adding a custom item
 		MenuItem miItem = new MenuItem("Add custom Item");
 		miItem.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
 				AddItemDialog.open(robotArena); // Open Dialog
 			}
 		});
+		
+		//Add menu items to menu
 		mObject.getItems().addAll(miRobot, miItem);
+		return mObject;
+	}
 
+	/**
+	 * 
+	 * @return a menu for help/about
+	 */
+	private static Menu helpMenu() {
 		Menu mHelp = new Menu("Help");
+		
+		//Menu item for about alert
 		MenuItem mAbout = new MenuItem("About");
 		mAbout.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -102,6 +148,8 @@ public class TopMenu {
 						false);
 			}
 		});
+		
+		//Menu item for help alert
 		MenuItem miHelp = new MenuItem("Help");
 		miHelp.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -111,17 +159,9 @@ public class TopMenu {
 						false);
 			}
 		});
+		
+		//Add all items to menu
 		mHelp.getItems().addAll(mAbout, miHelp); // add sub-menus to Help
-
-		menuBar.getMenus().addAll(mArena, mObject, mHelp);
-
-		return menuBar;
-	}
-
-	/**
-	 * @return menuBar
-	 */
-	public MenuBar getMenuBar() {
-		return menuBar;
+		return mHelp;
 	}
 }
