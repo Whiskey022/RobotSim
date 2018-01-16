@@ -51,8 +51,6 @@ public class RobotType {
 			return new RobotSix(x, y, direction, robotArena);
 		case "RobotSeven":
 			return new RobotSeven(x, y, direction, robotArena);
-		case "RobotEight":
-			return new RobotSeven(x, y, direction, robotArena);
 		}
 	}
 }

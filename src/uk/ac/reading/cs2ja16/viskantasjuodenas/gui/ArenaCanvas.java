@@ -78,6 +78,8 @@ public class ArenaCanvas {
 				case "move-continuous":
 					if (step == 0)
 						moveRobots();
+					else
+						robotArena.setStatus("draw-movement-continuous");
 					break;
 				case "draw-movement":
 				case "draw-movement-continuous":

@@ -247,7 +247,7 @@ public class RobotArena {
 	private ArenaObject generateObject(int Id, int x, int y, String type, String direction, String charge) {
 		
 		//If direction is none, it's an item, not a robot
-		if (direction != "None") {
+		if (direction.equals("None")) {
 			ArenaObject object = ItemType.getItemObject(x, y, type, this);
 			object.setId(Id);
 			return object;

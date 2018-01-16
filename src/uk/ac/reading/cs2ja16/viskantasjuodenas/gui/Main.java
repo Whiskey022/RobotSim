@@ -33,7 +33,7 @@ public class Main extends Application {
 
 		BorderPane bp = new BorderPane();
 
-		bp.setTop(new TopMenu(robotArena, robotCanvas).getMenuBar());
+		bp.setTop(TopMenu.get(robotArena, robotCanvas));
 		bp.setCenter(robotCanvas.getGroup()); // put group in centre pane
 		bp.setBottom(new BottomToolbar(robotArena, robotCanvas).getMenuBar()); /// add button to bottom
 
