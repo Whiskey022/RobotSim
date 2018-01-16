@@ -10,7 +10,7 @@ public class Main extends Application {
 
 	private int arenaWidth = 15;
 	private int arenaHeight = 15;
-	private int objectSize = (int) (140/Math.sqrt((Math.sqrt(arenaHeight * arenaWidth))));
+	private int objectSize = 35;
 	private int canvasWitdh = arenaWidth*objectSize;
 	private int canvasHeight = arenaHeight*objectSize;
 	private RobotArena robotArena;

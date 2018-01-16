@@ -279,16 +279,16 @@ public class ArenaCanvas {
 	}
 
 	public void newArena(int arenaWidth, int arenaHeight) {
-		objectSize = (int) (140 / Math.sqrt((Math.sqrt(arenaHeight * arenaWidth))));
+		objectSize = calculateObjectSize(arenaWidth, arenaHeight);
 		canvasWidth = arenaWidth * objectSize;
 		canvasHeight = arenaHeight * objectSize;
 
 		robotArena.reset();
 		robotArena.setXSize(arenaWidth);
 		robotArena.setYSize(arenaHeight);
-		canvas.setHeight(canvasWidth);
+		canvas.setHeight(canvasHeight);
 		canvas.setWidth(canvasWidth);
-		gridCanvas.setHeight(canvasWidth);
+		gridCanvas.setHeight(canvasHeight);
 		gridCanvas.setWidth(canvasWidth);
 		gc = canvas.getGraphicsContext2D();
 		gcGrid = gridCanvas.getGraphicsContext2D();
@@ -296,6 +296,16 @@ public class ArenaCanvas {
 		createCanvasGrid();
 
 		ArenaObject.setObjectCount(0);
+	}
+	
+	private int calculateObjectSize(int arenaWidth, int arenaHeight) {
+		int objectSize = 100;
+		int width = arenaWidth;
+		int height = arenaHeight;
+		while (width * objectSize > 900 || height * objectSize > 500) {
+			objectSize--;
+		}
+		return objectSize;
 	}
 	
 	public void setShowGrid(boolean value) {
