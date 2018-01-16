@@ -127,6 +127,9 @@ public class AddItemDialog {
 		dialog.showAndWait();
 	}
 
+	/**
+	 * Add item to arena
+	 */
 	private static void addItem() {
 		String addItemOutput = robotArena.addItem(x, y, objectType);
 		if (addItemOutput == "success") {
