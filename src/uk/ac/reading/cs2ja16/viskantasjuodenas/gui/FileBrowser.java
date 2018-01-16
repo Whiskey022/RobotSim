@@ -46,7 +46,9 @@ public class FileBrowser {
 	//Function to open file browser
 	public void browse(BrowserMode browserMode) {
 		JFileChooser chooser = new JFileChooser() {
-			 @Override
+			private static final long serialVersionUID = 1L;
+
+			@Override
              protected JDialog createDialog(Component parent)
                      throws HeadlessException {
                  JDialog dialog = super.createDialog(parent);

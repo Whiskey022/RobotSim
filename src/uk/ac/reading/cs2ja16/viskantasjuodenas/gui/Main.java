@@ -1,13 +1,9 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
 
 public class Main extends Application {
@@ -29,9 +25,7 @@ public class Main extends Application {
 	public void start(Stage stage) throws Exception {
 		
 		primaryStage = stage;
-		
-		calculateDimensions();
-		
+				
 		robotArena = new RobotArena(arenaWidth, arenaHeight);
 		robotCanvas = new ArenaCanvas(canvasWitdh, canvasHeight, objectSize, robotArena);
 
@@ -57,12 +51,6 @@ public class Main extends Application {
 	
 	public static Stage getPrimaryStage() {
 		return primaryStage;
-	}
-	
-	private void calculateDimensions() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double screenHeight = screenSize.getHeight();
-		double screenWidth = screenSize.getWidth();
 	}
 
 }

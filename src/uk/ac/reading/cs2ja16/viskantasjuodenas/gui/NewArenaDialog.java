@@ -1,37 +1,24 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.gui;
 
-import java.util.Random;
-
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
-import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ArenaImage;
-import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.ItemType;
-import uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager.RobotArena;
+
 
 /**
  * Class to open "Add Custom Robot" dialog
  */
 public class NewArenaDialog {
 
-	private static GraphicsContext gc;
 	private static int width;
 	private static int height;
-	private static String objectType;
 	private static ArenaCanvas arenaCanvas;
 
 	/**

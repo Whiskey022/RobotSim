@@ -15,7 +15,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
@@ -132,8 +131,7 @@ public class AddItemDialog {
 		if (addRobotOutput == "success") {
 			robotArena.setStatus("not-drawn");
 		} else {
-			AlertMessage alertMsg = new AlertMessageError(addRobotOutput);
-			alertMsg.show();
+			AlertMessage.show("Error", addRobotOutput, true);
 		}
 	}
 

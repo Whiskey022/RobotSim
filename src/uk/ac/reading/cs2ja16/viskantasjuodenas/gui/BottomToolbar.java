@@ -124,22 +124,20 @@ public class BottomToolbar {
 	}
 
 	private void addRobot() {
-		String addRobotOutput = robotArena.addRobot();
-		if (addRobotOutput == "success") {
+		String addObjectOutput = robotArena.addRobot();
+		if (addObjectOutput == "success") {
 			robotArena.setStatus("not-drawn");
 		} else {
-			AlertMessage alertMsg = new AlertMessageError(addRobotOutput);
-			alertMsg.show();
+			AlertMessage.show("Error", addObjectOutput, true);
 		}
 	}
 
 	private void addItem() {
-		String addRobotOutput = robotArena.addItem();
-		if (addRobotOutput == "success") {
+		String addObjectOutput = robotArena.addItem();
+		if (addObjectOutput == "success") {
 			robotArena.setStatus("not-drawn");
 		} else {
-			AlertMessage alertMsg = new AlertMessageError(addRobotOutput);
-			alertMsg.show();
+			AlertMessage.show("Error", addObjectOutput, true);
 		}
 	}
 

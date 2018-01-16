@@ -158,8 +158,7 @@ public class AddRobotDialog {
 		if (addRobotOutput == "success") {
 			robotArena.setStatus("not-drawn");
 		} else {
-			AlertMessage alertMsg = new AlertMessageError(addRobotOutput);
-			alertMsg.show();
+			AlertMessage.show("Error", addRobotOutput, true);
 		}
 	}
 
