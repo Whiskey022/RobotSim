@@ -1,6 +1,5 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
-import java.util.Random;
 
 public class RobotSix extends Robot {
 	

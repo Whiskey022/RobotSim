@@ -1,5 +1,6 @@
 package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
+
 public abstract class Robot extends ArenaObject {
 
 	protected int initialX, initialY; // To keep starting positions

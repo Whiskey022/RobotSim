@@ -97,12 +97,18 @@ public class TopMenu {
 		mAbout.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
+				AlertMessage.show("About: Robot Sim",
+						"A customizable 2d robot simulator. Design your own robot arenas by adding different robots and items and see how the simulated robots' movement plays out.",
+						false);
 			}
 		});
 		MenuItem miHelp = new MenuItem("Help");
 		miHelp.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
+				AlertMessage.show("Help: Robot Sim",
+						"To add random objects please use the toolbar options 'Random Robot' and 'Random Item'.\nTo add new custom objects use 'Add Object' menu item.\nTo play robot simulation, use 'Move Once' or 'Move' toolbar buttons.\nTo change simulation speed use 'Speed Up' and 'Reset Speed' toolbar buttons.\nTo create new, save or load new arenas, use 'Arena' menu item.",
+						false);
 			}
 		});
 		mHelp.getItems().addAll(mAbout, miHelp); // add sub-menus to Help

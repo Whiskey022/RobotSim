@@ -2,8 +2,6 @@ package uk.ac.reading.cs2ja16.viskantasjuodenas.robotManager;
 
 public class RobotSeven extends Robot {
 
-	private int detectedLightX = -1;
-	private int detectedLightY = -1;
 	private int[][] northView;
 	private int[][] eastView;
 	private int[][] southView;
@@ -83,8 +81,6 @@ public class RobotSeven extends Robot {
 	private boolean lightIsHere(int x, int y) {
 		for (ArenaObject object : robotArena.getObjects()) {
 			if (object.isLight() && object.isHere(x, y)) {
-				detectedLightX = x;
-				detectedLightY = y;
 				return true;
 			}
 		}
