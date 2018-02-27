@@ -23,7 +23,7 @@ public class ArenaImage {
 	/**
 	 * Get image with provided with item type
 	 * 
-	 * @param index
+	 * @param itemType
 	 *            provide item type to get image for
 	 * @return return item image
 	 */

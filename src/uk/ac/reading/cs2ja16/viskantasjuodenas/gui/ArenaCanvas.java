@@ -38,7 +38,9 @@ public class ArenaCanvas {
 	 *            canvas width
 	 * @param canvasHeight
 	 *            canvas height
-	 * @param roboArena
+	 * @param robotSize
+	 *            robot size in pixels
+	 * @param robotArena
 	 *            robotArena to draw
 	 */
 	public ArenaCanvas(int canvasWidth, int canvasHeight, int robotSize, RobotArena robotArena) {

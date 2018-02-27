@@ -35,6 +35,7 @@ public class AddItemDialog {
 
 	/**
 	 * Open "Add Custom Item" dialog
+	 * @param arena provide RobotArena to which it should add items
 	 */
 	public static void open(RobotArena arena) {
 		robotArena = arena;
@@ -110,10 +111,10 @@ public class AddItemDialog {
 
 		dialog.getDialogPane().setContent(parentPane);
 
-		// Request focus on the username field by default.
+		// Request focus on the x field by default.
 		Platform.runLater(() -> xField.requestFocus());
 
-		// Convert the result to a username-password-pair when the login button is
+		// add item when apply clicked
 		// clicked.
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == addBtnType) {

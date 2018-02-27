@@ -37,7 +37,7 @@ public class RobotType {
 
 	/**
 	 * Get robot type by index
-	 * @param index
+	 * @param index index of robot array
 	 * @return robot type
 	 */
 	public static String get(int index) {
@@ -46,7 +46,7 @@ public class RobotType {
 	
 	/**
 	 * get robot description by index
-	 * @param index
+	 * @param index	index for description array
 	 * @return robot description
 	 */
 	public static String getDescription(int index) {
@@ -55,7 +55,7 @@ public class RobotType {
 
 	/**
 	 * get index of a robot type by name
-	 * @param name
+	 * @param name	name of robot type
 	 * @return index of robot type
 	 */
 	public static int getIndex(String name) {
@@ -64,11 +64,11 @@ public class RobotType {
 
 	/**
 	 * get a robot object by providing its name
-	 * @param x
-	 * @param y
-	 * @param direction
-	 * @param type
-	 * @param robotArena
+	 * @param x	x coordinate
+	 * @param y y coordinate
+	 * @param direction robot direction
+	 * @param type robot type
+	 * @param robotArena robotArena object
 	 * @return robot object
 	 */
 	public static Robot getRobotObject(int x, int y, Direction direction, String type, RobotArena robotArena) {

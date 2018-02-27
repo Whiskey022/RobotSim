@@ -38,6 +38,7 @@ public class AddRobotDialog {
 
 	/**
 	 * Open "Add Custom Robot" dialog
+	 * @param arena provide RobotArena to which robots should be added
 	 */
 	public static void open(RobotArena arena) {
 		robotArena = arena;

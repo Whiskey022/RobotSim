@@ -120,7 +120,7 @@ public class RobotArena {
 	 *            x coordinates
 	 * @param y
 	 *            y coordinates
-	 * @param robotType
+	 * @param type
 	 *            item type
 	 * @return status was adding was successful
 	 */
@@ -414,7 +414,7 @@ public class RobotArena {
 
 	/**
 	 * Set width of arena
-	 * @param x
+	 * @param x	width of arena
 	 */
 	public void setXSize(int x) {
 		this.x = x;
@@ -422,7 +422,7 @@ public class RobotArena {
 
 	/**
 	 * set height of arena
-	 * @param y
+	 * @param y height of arena
 	 */
 	public void setYSize(int y) {
 		this.y = y;
@@ -430,7 +430,7 @@ public class RobotArena {
 
 	/**
 	 * set status of arena
-	 * @param status
+	 * @param status status to set
 	 */
 	public void setStatus(String status) {
 		this.status = status;
@@ -438,7 +438,7 @@ public class RobotArena {
 
 	/**
 	 * set speed of arena
-	 * @param speed
+	 * @param speed speed to set
 	 */
 	public void setSpeed(double speed) {
 		this.speed = speed;
@@ -446,7 +446,7 @@ public class RobotArena {
 
 	/**
 	 * get width of arena
-	 * @return
+	 * @return	width
 	 */
 	public int getXSize() {
 		return x;
@@ -454,7 +454,7 @@ public class RobotArena {
 
 	/**
 	 * get height of arena
-	 * @return
+	 * @return	height
 	 */
 	public int getYSize() {
 		return y;
@@ -462,7 +462,7 @@ public class RobotArena {
 
 	/**
 	 * get all arena's objects
-	 * @return
+	 * @return arena's objects
 	 */
 	public ArrayList<ArenaObject> getObjects() {
 		return objects;
@@ -470,7 +470,7 @@ public class RobotArena {
 
 	/**
 	 * get arena's status
-	 * @return
+	 * @return	arena's status
 	 */
 	public String getStatus() {
 		return status;
@@ -478,7 +478,7 @@ public class RobotArena {
 
 	/**
 	 * get arena's message
-	 * @return
+	 * @return	arena's message
 	 */
 	public String getMessage() {
 		return message;
@@ -486,7 +486,7 @@ public class RobotArena {
 
 	/**
 	 * get arena's message type
-	 * @return
+	 * @return	true if good type
 	 */
 	public boolean isGoodMessage() {
 		return goodMessage;
@@ -494,7 +494,7 @@ public class RobotArena {
 
 	/**
 	 * get arena's speed
-	 * @return
+	 * @return	arena's speed
 	 */
 	public double getSpeed() {
 		return speed;

@@ -88,7 +88,7 @@ public abstract class Robot extends ArenaObject {
 
 	/**
 	 * set charge
-	 * @param charge
+	 * @param charge charge level to set
 	 */
 	public void setCharge(int charge) {
 		this.charge = charge;

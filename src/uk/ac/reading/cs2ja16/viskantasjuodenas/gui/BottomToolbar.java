@@ -25,10 +25,10 @@ public class BottomToolbar {
 	/**
 	 * BottomMenu constructor, sets up an HBox of buttons
 	 * 
-	 * @param RobotArena
-	 *            object
-	 * @param ArenaCanvas
-	 *            object to interact with
+	 * @param robotArena
+	 *            RobotArena object
+	 * @param robotCanvas
+	 *            ArenaCanvas object on which to draw
 	 */
 	public BottomToolbar(RobotArena robotArena, ArenaCanvas robotCanvas) {
 		this.robotArena = robotArena;

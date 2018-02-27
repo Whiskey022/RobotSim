@@ -23,6 +23,7 @@ public class NewArenaDialog {
 
 	/**
 	 * Open "New Arena" dialog
+	 * @param canvas provide ArenaCanvas object to which new arena will be drawn
 	 */
 	public static void open(ArenaCanvas canvas) {
 		arenaCanvas = canvas;

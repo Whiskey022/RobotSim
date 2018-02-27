@@ -40,7 +40,7 @@ public class ItemType {
 
 	/**
 	 * 
-	 * @param index
+	 * @param index index for items array
 	 * @return item by index
 	 */
 	public static String get(int index) {
@@ -49,7 +49,7 @@ public class ItemType {
 
 	/**
 	 * 
-	 * @param name
+	 * @param name	name of item type
 	 * @return index by name
 	 */
 	public static int getIndex(String name) {

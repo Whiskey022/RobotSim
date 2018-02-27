@@ -39,7 +39,7 @@ public abstract class ArenaObject {
 	
 	/**
 	 * Try to move Robot
-	 * @return
+	 * @return true if object did move
 	 */
 	public abstract boolean tryToMove();
 	
@@ -57,7 +57,7 @@ public abstract class ArenaObject {
 	
 	/**
 	 * set iD
-	 * @param id
+	 * @param id Id to set
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -65,7 +65,7 @@ public abstract class ArenaObject {
 	
 	/**
 	 * set objects count
-	 * @param count
+	 * @param count count to set
 	 */
 	public static void setObjectCount(int count) {
 		objectsCount = count;
