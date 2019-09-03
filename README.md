@@ -2,5 +2,6 @@
 
 2D robot simulator with interactive GUI
 
-To run the application in Windows command prompt:
-java -cp ./bin uk.ac.reading.cs2ja16.viskantasjuodenas.gui.Main
+To run the application:
+javac -cp .\src src\uk\ac\reading\cs2ja16\viskantasjuodenas\gui\Main.java
+java -cp .\src uk.ac.reading.cs2ja16.viskantasjuodenas.gui.Main
